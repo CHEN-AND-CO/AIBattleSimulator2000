@@ -1,4 +1,4 @@
-#Protocole#
+#Protocole# 
 
 Généralités :
     Le serveur est prioritaire sur le client, lequel doit être authentifié sur le serveur.
@@ -24,7 +24,7 @@ Généralités :
     pas durant un certain nombre de gameticks, il est alors déconnecté et devra se réauthentifier.
 
 4 - Actions (on verra dans le turfu) :
-    Pour exécuter une action custom sur la map, le client enverra "ACT:<action>", où <action> est un identifiant
+    Pour exécuter une action custom sur la map, le client enverra "ACT:<actioncode>", où <actioncode> est un identifiant
     d'une action (ramasser objet, miner un truc, ouvrir une porte...)
 
 5 - Commades (coté serveur) :
