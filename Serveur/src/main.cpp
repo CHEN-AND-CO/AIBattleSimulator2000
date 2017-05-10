@@ -3,34 +3,29 @@
 #include <iostream>
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+  sf::RenderWindow window(sf::VideoMode(200, 200), "Serveur");
   sf::CircleShape shape(100.f);
   shape.setFillColor(sf::Color::Green);
 
   sf::TcpListener listener;
 
   // bind the listener to a port
-  if (listener.listen(53000) != sf::Socket::Done)
-  {
-      std::cerr<<"Error listener\n";
-      return -1;
+  if (listener.listen(53000) != sf::Socket::Done) {
+    std::cerr << "Error listener\n";
+    return -1;
   }
-
-  // accept a new connection
-  
 
   char data[100];
   std::size_t received;
-
-  sf::TcpSocket socket;
 
   sf::SocketSelector selector;
 
   sf::TcpSocket client;
 
-  selector.add(socket);
-  selector.add(listener);
+  client.connect("127.0.0.1", 53000);
 
+  selector.add(client);
+  selector.add(listener);
 
   while (window.isOpen()) {
     sf::Event event;
@@ -45,16 +40,13 @@ int main() {
       }
     }
 
-    if(selector.wait(sf::milliseconds(10))){
-      if(selector.isReady(listener)){
+    if (selector.wait(sf::milliseconds(10))) {
+      if (selector.isReady(listener)) {
         listener.accept(client);
-      }
-      else if(selector.isReady(socket))
-        socket.receive(data, 100, received);
-        std::cout << "Received " << data << " bytes" << std::endl;
+      } else if (selector.isReady(client))
+        client.receive(data, 100, received);
+      std::cout << "Received " << received << " bytes" << std::endl;
     }
-
-    
 
     window.clear();
     window.draw(shape);
