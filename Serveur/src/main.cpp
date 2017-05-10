@@ -44,7 +44,7 @@ int main() {
       }
     }
 
-    if (selector.wait(sf::seconds(1))) {
+    if (selector.wait(sf::milliseconds(10))) {
       // Test the listener
       if (selector.isReady(listener)) {
         // The listener is ready: there is a pending connection

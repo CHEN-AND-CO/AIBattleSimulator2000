@@ -20,7 +20,6 @@ int main() {
 
   sf::Packet packet;
   packet << x << s << d;
-  std::cout<<std::boolalpha<<(socket.send(packet) == sf::Socket::Done)<<std::endl;
 
   while (window.isOpen()) {
     sf::Event event;
