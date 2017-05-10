@@ -1,4 +1,4 @@
-#Protocole#
+#Protocole# 
 
 Généralités :
     Le serveur est prioritaire sur le client, lequel doit être authentifié sur le serveur.
@@ -16,8 +16,13 @@ Généralités :
     Le serveur répond en envoyant la map comme suit : "MAP:[taille_x]:[taille_y]:[données]"
 
 3 - Actualisation :
+<<<<<<< HEAD
     A chaque gametick le client envoie sa (nouvelle) position comme ceci : "ACT:MOV:[positions]"
     Le serveur répond par "MOV:OK:[newmap]" si le déplacement est autorisé , où [newmap] est la nouvelle
+=======
+    A chaque gametick le client envoie sa (nouvelle) position comme ceci : "POS:<positions>"
+    Le serveur répond par "POS:OK:[newmap]" si le déplacement est autorisé , où [newmap] est la nouvelle
+>>>>>>> origin/pureshit
     version de la map telle que découverte par le client aprés le déplacement.
     Si le déplacement est interdit, il répondra par "MOV:NOPE"
 
@@ -27,13 +32,20 @@ Généralités :
     */
 
 4 - Actions (on verra dans le turfu) :
+<<<<<<< HEAD
     Pour exécuter une action custom sur la map, le client enverra "ACT:[action]:[paramétres]", où [action] est un identifiant
+=======
+    Pour exécuter une action custom sur la map, le client enverra "ACT:[actioncode]", où [actioncode] est un identifiant
+>>>>>>> origin/pureshit
     d'une action (ramasser objet, miner un truc, ouvrir une porte...)
 
 5 - Commades (coté serveur) :
     Le serveur peut envoyer des commandes à un client (ban, avertissement, fin de partie...)
     Cela se fait en utilisant "CMD:[commande] [param1] ... [param_n]"
+<<<<<<< HEAD
 
 6 - Ping
     Pour confirmer la connection (vérifier que le client est là ), le serveur procéde réguliérement à l'envoi de "ACK" auquels le
     client répond "ACK".
+=======
+>>>>>>> origin/pureshit
