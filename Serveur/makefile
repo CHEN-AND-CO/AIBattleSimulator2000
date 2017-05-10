@@ -1,5 +1,5 @@
 CFLAGS = -g -Wall -pedantic -std=c++17
-LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS = -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system
 #UNIT = -ftest-coverage -fprofile-arcs
 
 SRC = $(wildcard src/*.cpp)
@@ -11,7 +11,7 @@ all: AIBattleSimulatorServeur.out
 remake: clean AIBattleSimulatorServeur.out
 
 AIBattleSimulatorServeur.out : $(OBJ)
-	g++ obj/* $(LDFLAGS) -o $@ $(OBJ)
+	g++ obj/* $(LDFLAGS) -o $@ 
 
 obj/%.o: src/%.cpp
 	g++ -c $< -Iinclude -o $@ $(CFLAGS)
