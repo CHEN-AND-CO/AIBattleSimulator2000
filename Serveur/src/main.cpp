@@ -17,11 +17,10 @@ int main() {
   }
 
   // Create a list to store the future clients
-  std::list<sf::TcpSocket*> clients;
+  sf::TcpSocket client;
   // Create a selector
   sf::SocketSelector selector;
   // Add the listener to the selector
-  selector.add(listener);
 
   selector.add(listener);
 
@@ -45,32 +44,17 @@ int main() {
     }
 
     if (selector.wait(sf::milliseconds(10))) {
-      // Test the listener
-      if (selector.isReady(listener)) {
-        // The listener is ready: there is a pending connection
-        sf::TcpSocket* client = new sf::TcpSocket;
-        if (listener.accept(*client) == sf::Socket::Done) {
-          // Add the new client to the clients list
-          clients.push_back(client);
-          // Add the new client to the selector so that we will
-          // be notified when he sends something
-          selector.add(*client);
-        } else {
-          // Error, we won't get a new connection, delete the socket
-          delete client;
-        }
-      } else {
-        // The listener socket is not ready, test all other sockets (the
-        // clients)
-        for (std::list<sf::TcpSocket*>::iterator it = clients.begin();
-             it != clients.end(); ++it) {
-          sf::TcpSocket& client = **it;
-          if (selector.isReady(client)) {
-            // The client has sent some data, we can receive it
-            if (client.receive(packet) == sf::Socket::Done) {
-              packet >> x >> s >> d;
-              std::cout<<x<<s<<d<<std::endl;
-            }
+      if(selector.isReady(listener)){
+        if (listener.accept(client) == sf::Socket::Done) {
+          std::cout << "New client" << std::endl; 
+          selector.add(client);
+         }
+      }
+      else{
+        if(selector.isReady(client)){
+          if (client.receive(packet) == sf::Socket::Done) {
+            packet >> x >> s >> d;
+            std::cout<<x<<s<<d<<std::endl;
           }
         }
       }
