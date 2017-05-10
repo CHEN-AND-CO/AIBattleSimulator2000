@@ -6,12 +6,12 @@ SRC = $(wildcard src/*.cpp)
 NOM = $(basename $(notdir $(SRC)))
 OBJ = $(addprefix obj/, $(addsuffix .o, $(NOM)))
 
-all: simu.out
+all: AIBattleSimulatorServeur.out
 
-remake: clean simu.out
+remake: clean AIBattleSimulatorServeur.out
 
-simu.out : $(OBJ)
-	g++ obj/* $(LDFLAGS) -o $@ $(OBJmake)
+AIBattleSimulatorServeur.out : $(OBJ)
+	g++ obj/* $(LDFLAGS) -o $@ $(OBJ)
 
 obj/%.o: src/%.cpp
 	g++ -c $< -Iinclude -o $@ $(CFLAGS)
