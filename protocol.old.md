@@ -1,4 +1,4 @@
-#Protocole# 
+#Protocole#
 
 Généralités :
     Le serveur est prioritaire sur le client, lequel doit être authentifié sur le serveur.
