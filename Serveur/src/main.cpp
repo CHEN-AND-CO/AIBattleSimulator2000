@@ -15,15 +15,18 @@ int main() {
     return -1;
   }
 
-  char data[100];
-  std::size_t received;
-
   sf::SocketSelector selector;
 
   sf::TcpSocket client;
 
   selector.add(client);
   selector.add(listener);
+
+  sf::Uint16 x;
+  std::string s;
+  double d;
+
+  sf::Packet packet;
 
   while (window.isOpen()) {
     sf::Event event;
@@ -41,10 +44,11 @@ int main() {
     if (selector.wait(sf::milliseconds(10))) {
       if (selector.isReady(listener)) {
         listener.accept(client);
+        std::cout << "New Client \n";
       } else if (selector.isReady(client)) {
-        client.receive(data, 100, received);
-
-        std::cout << "Received " << received << " bytes" << std::endl;
+        client.receive(packet);
+        packet >> x >> s >> d;
+        std::cout << "Received " << x << s << d << std::endl;
       }
     }
 

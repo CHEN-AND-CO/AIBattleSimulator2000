@@ -14,7 +14,12 @@ int main() {
     return -1;
   }
 
-  char data[100] = "Hello";
+  sf::Uint16 x = 10;
+  std::string s = "hello";
+  double d = 0.6;
+
+  sf::Packet packet;
+  packet << x << s << d;
 
   while (window.isOpen()) {
     sf::Event event;
@@ -25,7 +30,7 @@ int main() {
           break;
 
         case sf::Event::KeyPressed:
-          socket.send(data, 100);
+          socket.send(packet);
           break;
 
         default:
