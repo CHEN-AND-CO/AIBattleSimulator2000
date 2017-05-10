@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
+#include <list>
 
 int main() {
   sf::RenderWindow window(sf::VideoMode(200, 200), "Serveur");
@@ -15,11 +16,13 @@ int main() {
     return -1;
   }
 
+  // Create a list to store the future clients
+  std::list<sf::TcpSocket*> clients;
+  // Create a selector
   sf::SocketSelector selector;
+  // Add the listener to the selector
+  selector.add(listener);
 
-  sf::TcpSocket client;
-
-  selector.add(client);
   selector.add(listener);
 
   sf::Uint16 x;
@@ -41,14 +44,35 @@ int main() {
       }
     }
 
-    if (selector.wait(sf::milliseconds(10))) {
+    if (selector.wait(sf::seconds(1))) {
+      // Test the listener
       if (selector.isReady(listener)) {
-        listener.accept(client);
-        std::cout << "New Client \n";
-      } else if (selector.isReady(client)) {
-        client.receive(packet);
-        packet >> x >> s >> d;
-        std::cout << "Received " << x << s << d << std::endl;
+        // The listener is ready: there is a pending connection
+        sf::TcpSocket* client = new sf::TcpSocket;
+        if (listener.accept(*client) == sf::Socket::Done) {
+          // Add the new client to the clients list
+          clients.push_back(client);
+          // Add the new client to the selector so that we will
+          // be notified when he sends something
+          selector.add(*client);
+        } else {
+          // Error, we won't get a new connection, delete the socket
+          delete client;
+        }
+      } else {
+        // The listener socket is not ready, test all other sockets (the
+        // clients)
+        for (std::list<sf::TcpSocket*>::iterator it = clients.begin();
+             it != clients.end(); ++it) {
+          sf::TcpSocket& client = **it;
+          if (selector.isReady(client)) {
+            // The client has sent some data, we can receive it
+            if (client.receive(packet) == sf::Socket::Done) {
+              packet >> x >> s >> d;
+              std::cout<<x<<s<<d<<std::endl;
+            }
+          }
+        }
       }
     }
 
