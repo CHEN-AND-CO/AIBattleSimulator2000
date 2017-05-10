@@ -30,7 +30,8 @@ int main() {
           break;
 
         case sf::Event::KeyPressed:
-          std::cout<<std::boolalpha<<(socket.send(packet) == sf::Socket::Done)<<std::endl;
+          std::cout << std::boolalpha
+                    << (socket.send(packet) == sf::Socket::Done) << std::endl;
           break;
 
         default:

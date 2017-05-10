@@ -44,17 +44,16 @@ int main() {
     }
 
     if (selector.wait(sf::milliseconds(10))) {
-      if(selector.isReady(listener)){
+      if (selector.isReady(listener)) {
         if (listener.accept(client) == sf::Socket::Done) {
-          std::cout << "New client" << std::endl; 
+          std::cout << "New client" << std::endl;
           selector.add(client);
-         }
-      }
-      else{
-        if(selector.isReady(client)){
+        }
+      } else {
+        if (selector.isReady(client)) {
           if (client.receive(packet) == sf::Socket::Done) {
             packet >> x >> s >> d;
-            std::cout<<x<<s<<d<<std::endl;
+            std::cout << x << s << d << std::endl;
           }
         }
       }
