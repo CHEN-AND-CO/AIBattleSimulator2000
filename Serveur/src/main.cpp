@@ -22,8 +22,6 @@ int main() {
 
   sf::TcpSocket client;
 
-  client.connect("127.0.0.1", 53000);
-
   selector.add(client);
   selector.add(listener);
 
@@ -43,9 +41,11 @@ int main() {
     if (selector.wait(sf::milliseconds(10))) {
       if (selector.isReady(listener)) {
         listener.accept(client);
-      } else if (selector.isReady(client))
+      } else if (selector.isReady(client)) {
         client.receive(data, 100, received);
-      std::cout << "Received " << received << " bytes" << std::endl;
+
+        std::cout << "Received " << received << " bytes" << std::endl;
+      }
     }
 
     window.clear();
