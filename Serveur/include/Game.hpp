@@ -5,8 +5,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include "Entity.hpp"
 #include "Building.hpp"
+#include "Entity.hpp"
 
 /*
                 CONVENTION MAP
@@ -31,11 +31,12 @@ class Game {
   bool loadFile(const std::string& fileName);
 
   dVector<int> getMap() const { return mMap; }
-  std::vector<Building> getBuildings() const {
-    return mBuilding;
-  }
-  std::vector<Entity> getEntities() const {
-    return mEntities;
+  std::vector<Building> getBuildings() const { return mBuilding; }
+  std::vector<Entity> getEntities() const { return mEntities; }
+
+  void addEntity(const EntityType& entT, const sf::Color& col,
+                 const sf::Vector2f& pos) {
+    mEntities.push_back(Entity(entT, col, pos));
   }
 
  private:
