@@ -2,11 +2,11 @@
 #define BUILDING_HPP
 
 #include <SFML/Graphics.hpp>
-#include "Entity.hpp"
+#include "Type.hpp"
+
+class Entity;
 
 class Game;
-
-enum class BuildingType { Town, MaxBuildingType };
 
 class Building {
  public:

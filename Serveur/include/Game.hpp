@@ -23,10 +23,10 @@
 2: Fort
 */
 
-template <typename T>  // define a vector of vector
-using dVector = typename std::vector<std::vector<T>>;
-
 class Game {
+  template <typename T>  // define a vector of vector
+  using dVector = typename std::vector<std::vector<T>>;
+
  public:
   bool loadFile(const std::string& fileName);
 
@@ -37,6 +37,11 @@ class Game {
   void addEntity(const EntityType& entT, const sf::Color& col,
                  const sf::Vector2f& pos) {
     mEntities.push_back(Entity(entT, col, pos));
+  }
+
+  void addBuilding(const BuildingType& entT, const sf::Color& col,
+                 const sf::Vector2f& pos) {
+    mBuilding.push_back(Building(entT, col, pos));
   }
 
  private:
