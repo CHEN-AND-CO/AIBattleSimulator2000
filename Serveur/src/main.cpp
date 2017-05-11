@@ -2,6 +2,7 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include "Game.hpp"
+#include "Network.hpp"
 
 int main() {
   sf::RenderWindow window;
