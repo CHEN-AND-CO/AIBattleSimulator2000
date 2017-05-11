@@ -13,7 +13,6 @@ class Entity {
   EntityType getType() { return mType; }
   sf::Color getColor() { return mColor; }
   sf::Vector2f getPosition() { return mPos; }
-  sf::Vector2f getSize() { return mSize; }
 
  private:
   EntityType mType;
