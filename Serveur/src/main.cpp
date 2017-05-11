@@ -22,9 +22,9 @@ int main() {
   for (unsigned i{0}; i < n; i++) {
     for (unsigned j{0}; j < m; j++) {
       sf::RectangleShape rect(sf::Vector2f(32, 32));
-      if (map[j][i] == 1) rect.setFillColor(sf::Color(70,190,70));
-      if (map[j][i] == 2) rect.setFillColor(sf::Color(0,50,10));
-      if (map[j][i] == 3) rect.setFillColor(sf::Color(0,50,255));
+      if (map[j][i] == 1) rect.setFillColor(sf::Color(70, 190, 70));
+      if (map[j][i] == 2) rect.setFillColor(sf::Color(0, 50, 10));
+      if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 50, 255));
       rect.setPosition(sf::Vector2f(i * 32, j * 32));
       rects.push_back(rect);
     }

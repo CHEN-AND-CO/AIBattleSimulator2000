@@ -11,7 +11,6 @@ bool Game::loadFile(const std::string& fileName) {
   file >> n;
   for (int i{0}; i < n; i++) {
     mMap.push_back(std::vector<int>(n));
-    mMapBuilding.push_back(std::vector<std::pair<sf::Color, int>>(n));
     for (int j{0}; j < n; j++) {
       file >> tmp;
       mMap[i][j] = tmp;
