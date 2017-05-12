@@ -1,3 +1,2 @@
 # AIBattleSimulator2000
-
-# TODO : préciser le projet de façon précise ici.
+Ce projet a pour but de creer un environnement afin de faire combattre des IA dans un jeu du style age of empire
