@@ -16,13 +16,6 @@
 3: Riviere, Infranchissable
 */
 
-/*
-                CONVENTION BUILDING
-
-1: Town
-2: Fort
-*/
-
 class Game {
   template <typename T>  // define a vector of vector
   using dVector = typename std::vector<std::vector<T>>;
@@ -40,9 +33,21 @@ class Game {
   }
 
   void addBuilding(const BuildingType& entT, const sf::Color& col,
-                 const sf::Vector2f& pos) {
+                   const sf::Vector2f& pos) {
     mBuilding.push_back(Building(entT, col, pos));
   }
+
+  bool isGameFinish() const {
+    sf::Color tmp = mBuilding[0].getColor();
+    for (const auto& b : mBuilding) {
+      if (b.getColor() != tmp) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  sf::Color getWinner() const { return mBuilding[0].getColor(); }
 
  private:
   dVector<int> mMap;

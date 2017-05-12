@@ -25,10 +25,10 @@ class Building {
 
   void addEntity(Game& game, const EntityType& entT);
 
-  BuildingType getType() { return mType; }
-  sf::Color getColor() { return mColor; }
-  sf::Vector2f getPosition() { return mPos; }
-  sf::Vector2f getSize() { return mSize; }
+  BuildingType getType() const { return mType; }
+  sf::Color getColor() const { return mColor; }
+  sf::Vector2f getPosition() const { return mPos; }
+  sf::Vector2f getSize() const { return mSize; }
 
  private:
   BuildingType mType;

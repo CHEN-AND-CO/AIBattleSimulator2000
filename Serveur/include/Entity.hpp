@@ -8,16 +8,21 @@ class Building;
 
 class Game;
 
+/*
+Define an entity which can interact with the world
+Can Construct building, collect ressources and attack
+*/
+
 class Entity {
  public:
   Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos)
       : mType{entT}, mColor{col}, mPos{pos} {}
 
-  void addBuilding(Game& game, const BuildingType& type);
+  void addBuilding(Game& game, const BuildingType& buildT);
 
-  EntityType getType() { return mType; }
-  sf::Color getColor() { return mColor; }
-  sf::Vector2f getPosition() { return mPos; }
+  EntityType getType() const { return mType; }
+  sf::Color getColor() const { return mColor; }
+  sf::Vector2f getPosition() const { return mPos; }
 
  private:
   EntityType mType;
