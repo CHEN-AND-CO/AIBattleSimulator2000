@@ -11,7 +11,7 @@ class Game;
 class Building {
  public:
   Building(BuildingType bT, sf::Color color, sf::Vector2f pos)
-      : mType{bT}, mColor{color}, mPos{pos} {
+      : mType{bT}, mColor{color}, mPos{pos}, mHealth{1000} {
     switch (mType) {
       case BuildingType::Town:
         mSize = sf::Vector2f(3, 3);
@@ -35,6 +35,7 @@ class Building {
   sf::Color mColor;
   sf::Vector2f mPos;
   sf::Vector2f mSize;
+  int mHealth;
 };
 
 #endif

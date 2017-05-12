@@ -16,7 +16,7 @@ Can Construct building, collect ressources and attack
 class Entity {
  public:
   Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos)
-      : mType{entT}, mColor{col}, mPos{pos} {}
+      : mType{entT}, mColor{col}, mPos{pos}, mHealth{100} {}
 
   void addBuilding(Game& game, const BuildingType& buildT);
 
@@ -28,6 +28,7 @@ class Entity {
   EntityType mType;
   sf::Color mColor;
   sf::Vector2f mPos;
+  int mHealth;
 };
 
 #endif

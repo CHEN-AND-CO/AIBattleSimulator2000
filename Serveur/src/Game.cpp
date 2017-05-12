@@ -18,3 +18,20 @@ bool Game::loadFile(const std::string& fileName) {
   }
   return true;
 }
+
+bool Game::isGameFinish() const {
+  sf::Color tmp = mBuilding[0].getColor();
+  for (const auto& b : mBuilding) {
+    if (b.getColor() != tmp) {
+      return false;
+    }
+  }
+  return true;
+}
+
+sf::Color Game::getWinner() const {
+  if (isGameFinish()) {
+    return mBuilding[0].getColor();
+  }
+  return sf::Color::Black;
+}

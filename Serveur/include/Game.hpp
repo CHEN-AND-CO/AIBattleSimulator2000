@@ -37,17 +37,8 @@ class Game {
     mBuilding.push_back(Building(entT, col, pos));
   }
 
-  bool isGameFinish() const {
-    sf::Color tmp = mBuilding[0].getColor();
-    for (const auto& b : mBuilding) {
-      if (b.getColor() != tmp) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  sf::Color getWinner() const { return mBuilding[0].getColor(); }
+  bool isGameFinish() const;
+  sf::Color getWinner() const;
 
  private:
   dVector<int> mMap;
