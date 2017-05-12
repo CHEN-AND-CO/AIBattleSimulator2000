@@ -24,6 +24,9 @@ class Entity {
   sf::Color getColor() const { return mColor; }
   sf::Vector2f getPosition() const { return mPos; }
 
+  void receiveDamage(int damage) { mHealth =- damage; };
+  bool isAlive() { return mHealth > 0; }
+
  private:
   EntityType mType;
   sf::Color mColor;
