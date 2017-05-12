@@ -9,4 +9,3 @@ enum class BuildingType { Town, Fort, MaxBuildingType };
 enum class EntityType { Villager, Warrior, MaxEntityType };
 
 #endif
-
