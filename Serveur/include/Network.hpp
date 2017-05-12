@@ -6,9 +6,10 @@
 
 class Network {
  public:
- 	Network( int port );
- 	void send(std::string message);
+ 	Network( const int port );
+ 	void send(const std::string message);
  	void receive();
+ 	sf::SocketSelector getSelector();
  	//~Network();
  private:
   sf::TcpListener listener;
