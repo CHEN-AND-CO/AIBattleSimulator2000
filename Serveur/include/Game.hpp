@@ -37,6 +37,8 @@ class Game {
     mBuilding.push_back(Building(entT, col, pos));
   }
 
+  void clearMaps();
+
   bool isGameFinish() const;
   sf::Color getWinner() const;
 

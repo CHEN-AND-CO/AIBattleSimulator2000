@@ -30,7 +30,7 @@ class Building {
   sf::Vector2f getPosition() const { return mPos; }
   sf::Vector2f getSize() const { return mSize; }
 
-  void receiveDamage(int damage) { mHealth =- damage; };
+  void receiveDamage(int damage) { mHealth = -damage; };
   bool isAlive() { return mHealth > 0; }
 
  private:

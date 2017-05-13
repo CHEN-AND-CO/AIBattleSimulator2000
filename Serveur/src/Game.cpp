@@ -35,3 +35,26 @@ sf::Color Game::getWinner() const {
   }
   return sf::Color::Black;
 }
+
+//Clear the maps from the dead units
+void Game::clearMaps() {
+  std::vector<int> index;
+  for (unsigned i{0}; i < mBuilding.size(); i++) {
+    if (!mBuilding[i].isAlive()) {
+      index.push_back(i);
+    }
+  }
+  for (int i : index) {
+    mBuilding.erase(mBuilding.begin() + i);
+  }
+
+  index.clear();
+  for (unsigned i{0}; i < mEntities.size(); i++) {
+    if (!mEntities[i].isAlive()) {
+      index.push_back(i);
+    }
+  }
+  for (int i : index) {
+    mEntities.erase(mEntities.begin() + i);
+  }
+}
