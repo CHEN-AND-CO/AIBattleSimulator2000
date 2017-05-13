@@ -39,6 +39,7 @@ class Game {
 
   void clearMaps();
 
+
   bool isGameFinish() const;
   sf::Color getWinner() const;
 
