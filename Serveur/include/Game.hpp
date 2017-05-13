@@ -4,9 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <string>
-#include <vector>
-#include "Building.hpp"
-#include "Entity.hpp"
+#include "Player.hpp"
 
 /*
                 CONVENTION MAP
@@ -24,17 +22,25 @@ class Game {
   bool loadFile(const std::string& fileName);
 
   dVector<int> getMap() const { return mMap; }
-  std::vector<Building> getBuildings() const { return mBuilding; }
-  std::vector<Entity> getEntities() const { return mEntities; }
+  std::vector<Building> getBuildings() const;
+  std::vector<Entity> getEntities() const;
 
   void addEntity(const EntityType& entT, const sf::Color& col,
                  const sf::Vector2f& pos) {
-    mEntities.push_back(Entity(entT, col, pos));
+    for (auto& player : mPlayer) {
+      if (player.getColor() == col) {
+        player.addEntity(entT, col, pos);
+      }
+    }
   }
 
   void addBuilding(const BuildingType& entT, const sf::Color& col,
                    const sf::Vector2f& pos) {
-    mBuilding.push_back(Building(entT, col, pos));
+    for (auto& player : mPlayer) {
+      if (player.getColor() == col) {
+        player.addBuilding(entT, col, pos);
+      }
+    }
   }
 
   void clearMaps();
@@ -43,9 +49,9 @@ class Game {
   sf::Color getWinner() const;
 
  private:
-  dVector<int> mMap;
-  std::vector<Building> mBuilding;
-  std::vector<Entity> mEntities;
+  std::vector<std::vector<int>> mMap;
+  std::vector<Player> mPlayer;
+  // std::vector<sf::Color> t;
 };
 
 #endif

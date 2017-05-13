@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <algorithm>
 #include <iostream>
 
 bool Game::loadFile(const std::string& fileName) {
@@ -19,42 +20,23 @@ bool Game::loadFile(const std::string& fileName) {
   return true;
 }
 
-bool Game::isGameFinish() const {
-  sf::Color tmp = mBuilding[0].getColor();
-  for (const auto& b : mBuilding) {
-    if (b.getColor() != tmp) {
-      return false;
-    }
+bool Game::isGameFinish() const { return true; }
+
+sf::Color Game::getWinner() const { return sf::Color::Black; }
+
+std::vector<Building> Game::getBuildings() const {
+  std::vector<Building> v;
+  for (const auto& player : mPlayer) {
+    v.insert(v.end(), player.getBuildings().begin(),
+             player.getBuildings().end());
   }
-  return true;
+  return v;
 }
 
-sf::Color Game::getWinner() const {
-  if (isGameFinish()) {
-    return mBuilding[0].getColor();
+std::vector<Entity> Game::getEntities() const {
+  std::vector<Entity> v;
+  for (const auto& player : mPlayer) {
+    v.insert(v.end(), player.getEntities().begin(), player.getEntities().end());
   }
-  return sf::Color::Black;
-}
-
-//Clear the maps from the dead units
-void Game::clearMaps() {
-  std::vector<int> index;
-  for (unsigned i{0}; i < mBuilding.size(); i++) {
-    if (!mBuilding[i].isAlive()) {
-      index.push_back(i);
-    }
-  }
-  for (int i : index) {
-    mBuilding.erase(mBuilding.begin() + i);
-  }
-
-  index.clear();
-  for (unsigned i{0}; i < mEntities.size(); i++) {
-    if (!mEntities[i].isAlive()) {
-      index.push_back(i);
-    }
-  }
-  for (int i : index) {
-    mEntities.erase(mEntities.begin() + i);
-  }
+  return v;
 }
