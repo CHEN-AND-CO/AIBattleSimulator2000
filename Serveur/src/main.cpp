@@ -7,7 +7,7 @@
 int main() {
   sf::RenderWindow window;
 
-  Network networkInterface = new Network( 53000 );
+  Network networkInterface( 53000 );
   Game g;
   g.loadFile("ressources/level.txt");
 
