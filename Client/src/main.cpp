@@ -19,7 +19,7 @@ int main() {
   double d = 0.6;
 
   sf::Packet packet;
-  packet << x << s << d;
+  packet << s;
 
   while (window.isOpen()) {
     sf::Event event;

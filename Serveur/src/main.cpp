@@ -2,12 +2,13 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include "Game.hpp"
-#include "Network.hpp"
+#include "Server.hpp"
 
 int main() {
   sf::RenderWindow window;
 
-  Network networkInterface = new Network( 53000 );
+  Server server(53000);
+
   Game g;
   g.loadFile("ressources/level.txt");
 
@@ -42,9 +43,7 @@ int main() {
       }
     }
 
-    if (selector.wait(sf::milliseconds(10))) {
-      networkInterface.receive();
-    }
+    server.receive();
 
     window.clear();
     for (auto& r : rects) {
