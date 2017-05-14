@@ -14,7 +14,7 @@ class Building {
       : mType{bT}, mColor{color}, mPos{pos}, mHealth{1000} {
     switch (mType) {
       case BuildingType::Town:
-        mSize = sf::Vector2f(3, 3);
+        mSize = sf::Vector2f(2*32, 2*32);
         break;
 
       case BuildingType::MaxBuildingType:

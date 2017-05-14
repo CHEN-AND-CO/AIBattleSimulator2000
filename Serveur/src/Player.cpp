@@ -41,13 +41,13 @@ void Player::addBuilding(const BuildingType& buildT, const sf::Color& col,
       }
       break;
     case BuildingType::Fort:
-    	if (mWood < 200) {
+      if (mWood < 200) {
         std::cout << "Not enought wood to construct Fort\n";
       } else {
         mBuildings.push_back(Building(buildT, col, pos));
         mWood -= 200;
       }
     default:
-    	break;
+      break;
   }
 }

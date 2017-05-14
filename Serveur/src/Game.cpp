@@ -30,18 +30,23 @@ sf::Color Game::getWinner() const {
 }
 
 std::vector<Building> Game::getBuildings() const {
-  std::vector<Building> v;
+  std::vector<Building> v,build;
   for (const auto& player : mPlayer) {
-    v.insert(v.end(), player.getBuildings().begin(),
-             player.getBuildings().end());
+    build = player.getBuildings();
+    for(const auto& b: build){
+      v.push_back(b);
+    }
   }
   return v;
 }
 
 std::vector<Entity> Game::getEntities() const {
-  std::vector<Entity> v;
+  std::vector<Entity> v,ent;
   for (const auto& player : mPlayer) {
-    v.insert(v.end(), player.getEntities().begin(), player.getEntities().end());
+    ent = player.getEntities();
+    for(const auto& b: ent){
+      v.push_back(b);
+    }
   }
   return v;
 }

@@ -8,7 +8,8 @@ int main() {
 
   Game g;
   g.loadFile("ressources/level.txt");
-  g.addPlayer(sf::Color::Blue,sf::Vector2f(32*5,32*7));
+  g.addPlayer(sf::Color::Blue,sf::Vector2f(32*2,32*7));
+  g.addPlayer(sf::Color::Red,sf::Vector2f(32*16,32*13));
 
   std::vector<sf::RectangleShape> rects;
 
@@ -20,7 +21,7 @@ int main() {
       sf::RectangleShape rect(sf::Vector2f(32, 32));
       if (map[j][i] == 1) rect.setFillColor(sf::Color(70, 190, 70));
       if (map[j][i] == 2) rect.setFillColor(sf::Color(0, 50, 10));
-      if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 50, 255));
+      if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 100, 255));
       rect.setPosition(sf::Vector2f(i * 32, j * 32));
       rects.push_back(rect);
     }
@@ -49,7 +50,15 @@ int main() {
     for (auto& b : buildings) {
       sf::RectangleShape r(b.getSize());
       r.setFillColor(b.getColor());
+      r.setPosition(b.getPosition());
       window.draw(r);
+    }
+    auto enttity = g.getEntities();
+    for (auto& e : enttity) {
+      sf::CircleShape c(16);
+      c.setFillColor(e.getColor());
+      c.setPosition(e.getPosition());
+      window.draw(c);
     }
     window.display();
   }
