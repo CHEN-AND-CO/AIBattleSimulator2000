@@ -32,3 +32,26 @@ void Entity::addBuilding(Game& game, const BuildingType& buildT) {
       break;
   }
 }
+
+void Entity::move(Direction dir, Game& game){
+  if(dir == Direction::Up){
+    if(game.getMap()[mPos.x][mPos.y-1] != 3){
+      mPos.y--;
+    }
+  }
+  else if(dir == Direction::Down){
+    if(game.getMap()[mPos.x][mPos.y+1] != 3){
+      mPos.y++;
+    }
+  }
+  else if(dir == Direction::Left){
+    if(game.getMap()[mPos.x-1][mPos.y] != 3){
+      mPos.x--;
+    }
+  }
+  else if(dir == Direction::Right){
+    if(game.getMap()[mPos.x+1][mPos.y] != 3){
+      mPos.x--;
+    }
+  }
+}

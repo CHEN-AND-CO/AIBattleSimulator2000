@@ -34,7 +34,7 @@ void Player::addBuilding(const BuildingType& buildT, const sf::Color& col,
   switch (buildT) {
     case BuildingType::Town:
       if (mWood < 600) {
-        std::cout << "Not enought wood to construct Town\n";
+        std::cout << "Not enought ressources to construct Town\n";
       } else {
         mBuildings.push_back(Building(buildT, col, pos));
         mWood -= 600;
@@ -42,7 +42,7 @@ void Player::addBuilding(const BuildingType& buildT, const sf::Color& col,
       break;
     case BuildingType::Fort:
       if (mWood < 200) {
-        std::cout << "Not enought wood to construct Fort\n";
+        std::cout << "Not enought ressources to construct Fort\n";
       } else {
         mBuildings.push_back(Building(buildT, col, pos));
         mWood -= 200;

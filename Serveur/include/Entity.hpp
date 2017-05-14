@@ -2,7 +2,7 @@
 #define ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
-#include "Type.hpp"
+#include "Define.hpp"
 
 class Building;
 
@@ -24,6 +24,7 @@ class Entity {
   sf::Color getColor() const { return mColor; }
   sf::Vector2f getPosition() const { return mPos; }
 
+  void move(Direction dir, Game& game);
   void receiveDamage(int damage) { mHealth =- damage; };
   bool isAlive() { return mHealth > 0; }
 
