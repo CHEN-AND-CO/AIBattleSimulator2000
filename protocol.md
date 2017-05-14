@@ -36,3 +36,7 @@ Les commandes qui sont envoyés au serveur qui n'ont pas l'id du serveur sont en
              permet d'obtenir la map connue/vue par id à la position du client
          id@message:1 message
              permet d'envoyer un message à id
+         id@move:3 entity x y
+            Réalise une demande de déplacement à la position x,y de l'entité entity
+         id@auth:1 clientName
+            Authentifie le client sur le serveur (ie. qu'il peut se connecter). Valeur de retour du serveur : id@reply: 2 auth ok
