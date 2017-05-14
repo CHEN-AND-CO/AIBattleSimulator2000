@@ -15,13 +15,10 @@
 */
 
 class Game {
-  template <typename T>  // define a vector of vector
-  using dVector = typename std::vector<std::vector<T>>;
-
  public:
   bool loadFile(const std::string& fileName);
 
-  dVector<int> getMap() const { return mMap; }
+  std::vector<std::vector<int>> getMap() const { return mMap; }
   std::vector<Building> getBuildings() const;
   std::vector<Entity> getEntities() const;
 
@@ -49,8 +46,10 @@ class Game {
         return;
       }
     }
-    mPlayer.push_back(Player(col,pos));
+    mPlayer.push_back(Player(col, pos));
   }
+
+  void moveEntity(Direction dir, const sf::Color& col, int i);
 
   void clearPlayer() {
     for (auto& play : mPlayer) {

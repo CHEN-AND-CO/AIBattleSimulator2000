@@ -30,10 +30,10 @@ sf::Color Game::getWinner() const {
 }
 
 std::vector<Building> Game::getBuildings() const {
-  std::vector<Building> v,build;
+  std::vector<Building> v, build;
   for (const auto& player : mPlayer) {
     build = player.getBuildings();
-    for(const auto& b: build){
+    for (const auto& b : build) {
       v.push_back(b);
     }
   }
@@ -41,12 +41,35 @@ std::vector<Building> Game::getBuildings() const {
 }
 
 std::vector<Entity> Game::getEntities() const {
-  std::vector<Entity> v,ent;
+  std::vector<Entity> v, ent;
   for (const auto& player : mPlayer) {
     ent = player.getEntities();
-    for(const auto& b: ent){
+    for (const auto& b : ent) {
       v.push_back(b);
     }
   }
   return v;
+}
+
+void Game::moveEntity(Direction dir, const sf::Color& col, int i) {
+  for (auto& player : mPlayer) {
+    if (player.getColor() == col) {
+      // Verification des limites de la map
+      sf::Vector2f pos = player.getEntities()[i].getPosition();
+      std::cout<<pos.x<<" "<<pos.y<<" "<<mMap.size()<<std::endl;
+      if (dir == Direction::Up && pos.y == 0) {
+        return;
+      }
+      else if (dir == Direction::Left && pos.x == 0) {
+        return;
+      }
+      else if (dir == Direction::Down && pos.y == mMap.size()) {
+        return;
+      }
+      else if (dir == Direction::Right && pos.x == mMap[0].size()) {
+        return;
+      }
+      player.moveEntity(dir, *this, i);
+    }
+  }
 }

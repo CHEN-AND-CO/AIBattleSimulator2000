@@ -8,8 +8,8 @@ int main() {
 
   Game g;
   g.loadFile("ressources/level.txt");
-  g.addPlayer(sf::Color::Blue, sf::Vector2f(2 * TILESIZE, 7 * TILESIZE));
-  g.addPlayer(sf::Color::Red, sf::Vector2f(16 * TILESIZE, 13 * TILESIZE));
+  g.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
+  g.addPlayer(sf::Color::Red, sf::Vector2f(16, 13));
 
   std::vector<sf::RectangleShape> rects;
 
@@ -37,8 +37,24 @@ int main() {
           window.close();
           break;
 
-          case sf::Event::KeyPressed:
-            
+        case sf::Event::KeyPressed:
+          switch (event.key.code) {
+            case sf::Keyboard::Up:
+              g.moveEntity(Direction::Up, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::Down:
+              g.moveEntity(Direction::Down, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::Left:
+              g.moveEntity(Direction::Left, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::Right:
+              g.moveEntity(Direction::Right, sf::Color::Blue, 0);
+              break;
+            default:
+              break;
+          }
+          break;
 
         default:
           break;
@@ -49,21 +65,24 @@ int main() {
     for (auto& r : rects) {
       window.draw(r);
     }
+
     auto buildings = g.getBuildings();
     for (auto& b : buildings) {
       sf::RectangleShape r(
           sf::Vector2f(b.getSize().x * TILESIZE, b.getSize().y * TILESIZE));
       r.setFillColor(b.getColor());
-      r.setPosition(b.getPosition());
+      r.setPosition(b.getPosition().x * TILESIZE, b.getPosition().y * TILESIZE);
       window.draw(r);
     }
+
     auto enttity = g.getEntities();
     for (auto& e : enttity) {
       sf::CircleShape c(TILESIZE / 2);
       c.setFillColor(e.getColor());
-      c.setPosition(e.getPosition());
+      c.setPosition(e.getPosition().x * TILESIZE, e.getPosition().y * TILESIZE);
       window.draw(c);
     }
+
     window.display();
 
     g.clearPlayer();

@@ -33,25 +33,34 @@ void Entity::addBuilding(Game& game, const BuildingType& buildT) {
   }
 }
 
-void Entity::move(Direction dir, Game& game){
-  if(dir == Direction::Up){
-    if(game.getMap()[mPos.x][mPos.y-1] != 3){
+// Deplacemant d'une unite
+void Entity::move(Direction dir, const Game& game) {
+  // Mouvement en Haut
+  if (dir == Direction::Up) {
+    int futurePos = game.getMap()[mPos.y - 1][mPos.x];
+    if (futurePos == 1) {  // Verifie si la position est valide (terrain)
       mPos.y--;
     }
-  }
-  else if(dir == Direction::Down){
-    if(game.getMap()[mPos.x][mPos.y+1] != 3){
+
+    // Mouvement en bas
+  } else if (dir == Direction::Down) {
+    int futurePos = game.getMap()[mPos.y + 1][mPos.x];
+    if (futurePos == 1) {  // Verifie si la position est valide (terrain)
       mPos.y++;
     }
-  }
-  else if(dir == Direction::Left){
-    if(game.getMap()[mPos.x-1][mPos.y] != 3){
+
+    // Mouvement a gauche
+  } else if (dir == Direction::Left) {
+    int futurePos = game.getMap()[mPos.y][mPos.x - 1];
+    if (futurePos == 1) {  // Verifie si la position est valide (terrain)
       mPos.x--;
     }
-  }
-  else if(dir == Direction::Right){
-    if(game.getMap()[mPos.x+1][mPos.y] != 3){
-      mPos.x--;
+
+    // Mouvement a droite
+  } else if (dir == Direction::Right) {
+    int futurePos = game.getMap()[mPos.y][mPos.x + 1];
+    if (futurePos == 1) {  // Verifie si la position est valide (terrain)
+      mPos.x++;
     }
   }
 }
