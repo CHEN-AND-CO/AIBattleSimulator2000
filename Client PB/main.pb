@@ -1,7 +1,6 @@
 ﻿
 IncludeFile "definitions.pbi"
-IncludeFile "protocol.pbi"
-IncludeFile "client_ui.pbi"
+
 
 #Port = 53000
 
@@ -20,9 +19,11 @@ If InitNetwork()
     ;TODO: des trucs
   Else
     MessageRequester("Error","Unable to open a connection to the game server",#PB_MessageRequester_Error) : End
+  EndIf
+  
 Else
     MessageRequester("Error","Unable to initialize the network component. Check your network.",#PB_MessageRequester_Error) : End
 EndIf
 ; IDE Options = PureBasic 5.60 (Windows - x64)
-; CursorPosition = 15
+; CursorPosition = 22
 ; EnableXP
