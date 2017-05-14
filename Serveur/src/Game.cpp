@@ -20,9 +20,14 @@ bool Game::loadFile(const std::string& fileName) {
   return true;
 }
 
-bool Game::isGameFinish() const { return true; }
+bool Game::isGameFinish() const { return mPlayer.size() == 1; }
 
-sf::Color Game::getWinner() const { return sf::Color::Black; }
+sf::Color Game::getWinner() const {
+  if (isGameFinish()) {
+    return mPlayer[0].getColor();
+  }
+  return sf::Color::Black;
+}
 
 std::vector<Building> Game::getBuildings() const {
   std::vector<Building> v;

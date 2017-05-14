@@ -34,16 +34,29 @@ class Game {
     }
   }
 
-  void addBuilding(const BuildingType& entT, const sf::Color& col,
+  void addBuilding(const BuildingType& buildT, const sf::Color& col,
                    const sf::Vector2f& pos) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addBuilding(entT, col, pos);
+        player.addBuilding(buildT, col, pos);
       }
     }
   }
 
-  void clearMaps();
+  void addPlayer(const sf::Color& col, const sf::Vector2f pos) {
+    for (auto& player : mPlayer) {
+      if (player.getColor() == col) {
+        return;
+      }
+    }
+    mPlayer.push_back(Player(col,pos));
+  }
+
+  void clearPlayer() {
+    for (auto& play : mPlayer) {
+      play.clearMaps();
+    }
+  }
 
   bool isGameFinish() const;
   sf::Color getWinner() const;
@@ -51,7 +64,6 @@ class Game {
  private:
   std::vector<std::vector<int>> mMap;
   std::vector<Player> mPlayer;
-  // std::vector<sf::Color> t;
 };
 
 #endif

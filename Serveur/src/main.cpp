@@ -5,14 +5,10 @@
 
 int main() {
   sf::RenderWindow window;
-  sf::TcpListener listener;
-  sf::TcpSocket client;
-  sf::SocketSelector selector;
-
-  selector.add(listener);
 
   Game g;
   g.loadFile("ressources/level.txt");
+  g.addPlayer(sf::Color::Blue,sf::Vector2f(32*5,32*7));
 
   std::vector<sf::RectangleShape> rects;
 
@@ -32,13 +28,6 @@ int main() {
 
   window.create(sf::VideoMode(n * 32, m * 32), "Serveur");
 
-  if (listener.listen(53000) != sf::Socket::Done) {
-    std::cerr << "Error listener\n";
-    return -1;
-  }
-
-  sf::Packet packet;
-
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -52,22 +41,14 @@ int main() {
       }
     }
 
-    if (selector.wait(sf::milliseconds(10))) {
-      if (selector.isReady(listener)) {
-        if (listener.accept(client) == sf::Socket::Done) {
-          std::cout << "New client" << std::endl;
-          selector.add(client);
-        }
-      } else {
-        if (selector.isReady(client)) {
-          if (client.receive(packet) == sf::Socket::Done) {
-          }
-        }
-      }
-    }
-
     window.clear();
     for (auto& r : rects) {
+      window.draw(r);
+    }
+    auto buildings = g.getBuildings();
+    for (auto& b : buildings) {
+      sf::RectangleShape r(b.getSize());
+      r.setFillColor(b.getColor());
       window.draw(r);
     }
     window.display();
