@@ -31,7 +31,7 @@ class Player {
     return mEntities[index].collectRessource(game, *this, dir);
   }
 
-  bool putRessourcesInTown(int index){
+  bool putRessourcesInTown(int index) {
     return mEntities[index].putRessourcesInTown(*this);
   }
 

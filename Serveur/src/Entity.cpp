@@ -94,13 +94,14 @@ bool Entity::collectRessource(const Game& game, const Player& p,
       break;
   }
   switch (caseValue) {
-    case 3:
+    case 2:
       if (currentRessource != Ressource::Wood) {
         currentRessource = Ressource::Wood;
         currentTransportedRessources = 0;
         break;
       }
       currentTransportedRessources++;
+      std::cout << "ent : " << currentTransportedRessources << std::endl;
       return true;
       break;
 
@@ -112,6 +113,7 @@ bool Entity::collectRessource(const Game& game, const Player& p,
 
 bool Entity::putRessourcesInTown(Player& player) {
   if (currentTransportedRessources != 0) {
+    std::cout << "h\n";
     player.addRessource(currentRessource, currentTransportedRessources);
     currentTransportedRessources = 0;
     return true;
