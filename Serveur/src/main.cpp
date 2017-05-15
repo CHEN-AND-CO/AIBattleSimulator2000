@@ -1,35 +1,33 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
-#include <list>
+#include "Game.hpp"
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(200, 200), "Serveur");
-  sf::CircleShape shape(100.f);
-  shape.setFillColor(sf::Color::Green);
+  sf::RenderWindow window;
 
-  sf::TcpListener listener;
+  Game g;
+  g.loadFile("ressources/level.txt");
+  g.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
+  g.addPlayer(sf::Color::Red, sf::Vector2f(16, 13));
 
-  // bind the listener to a port
-  if (listener.listen(53000) != sf::Socket::Done) {
-    std::cerr << "Error listener\n";
-    return -1;
+  std::vector<sf::RectangleShape> rects;
+
+  auto map = g.getMap();
+  auto n = map.size();
+  auto m = map[0].size();
+  for (unsigned i{0}; i < n; i++) {
+    for (unsigned j{0}; j < m; j++) {
+      sf::RectangleShape rect(sf::Vector2f(TILESIZE, TILESIZE));
+      if (map[j][i] == 1) rect.setFillColor(sf::Color(70, 190, 70));
+      if (map[j][i] == 2) rect.setFillColor(sf::Color(0, 50, 10));
+      if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 100, 255));
+      rect.setPosition(sf::Vector2f(i * TILESIZE, j * TILESIZE));
+      rects.push_back(rect);
+    }
   }
 
-  // Create a list to store the future clients
-  std::list<sf::TcpSocket*> clients;
-  // Create a selector
-  sf::SocketSelector selector;
-  // Add the listener to the selector
-  selector.add(listener);
-
-  selector.add(listener);
-
-  sf::Uint16 x;
-  std::string s;
-  double d;
-
-  sf::Packet packet;
+  window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
   while (window.isOpen()) {
     sf::Event event;
@@ -39,46 +37,55 @@ int main() {
           window.close();
           break;
 
+        case sf::Event::KeyPressed:
+          switch (event.key.code) {
+            case sf::Keyboard::Up:
+              g.moveEntity(Direction::Up, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::Down:
+              g.moveEntity(Direction::Down, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::Left:
+              g.moveEntity(Direction::Left, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::Right:
+              g.moveEntity(Direction::Right, sf::Color::Blue, 0);
+              break;
+            default:
+              break;
+          }
+          break;
+
         default:
           break;
       }
     }
 
-    if (selector.wait(sf::seconds(1))) {
-      // Test the listener
-      if (selector.isReady(listener)) {
-        // The listener is ready: there is a pending connection
-        sf::TcpSocket* client = new sf::TcpSocket;
-        if (listener.accept(*client) == sf::Socket::Done) {
-          // Add the new client to the clients list
-          clients.push_back(client);
-          // Add the new client to the selector so that we will
-          // be notified when he sends something
-          selector.add(*client);
-        } else {
-          // Error, we won't get a new connection, delete the socket
-          delete client;
-        }
-      } else {
-        // The listener socket is not ready, test all other sockets (the
-        // clients)
-        for (std::list<sf::TcpSocket*>::iterator it = clients.begin();
-             it != clients.end(); ++it) {
-          sf::TcpSocket& client = **it;
-          if (selector.isReady(client)) {
-            // The client has sent some data, we can receive it
-            if (client.receive(packet) == sf::Socket::Done) {
-              packet >> x >> s >> d;
-              std::cout<<x<<s<<d<<std::endl;
-            }
-          }
-        }
-      }
+    window.clear();
+    for (auto& r : rects) {
+      window.draw(r);
     }
 
-    window.clear();
-    window.draw(shape);
+    auto buildings = g.getBuildings();
+    for (auto& b : buildings) {
+      sf::RectangleShape r(
+          sf::Vector2f(b.getSize().x * TILESIZE, b.getSize().y * TILESIZE));
+      r.setFillColor(b.getColor());
+      r.setPosition(b.getPosition().x * TILESIZE, b.getPosition().y * TILESIZE);
+      window.draw(r);
+    }
+
+    auto enttity = g.getEntities();
+    for (auto& e : enttity) {
+      sf::CircleShape c(TILESIZE / 2);
+      c.setFillColor(e.getColor());
+      c.setPosition(e.getPosition().x * TILESIZE, e.getPosition().y * TILESIZE);
+      window.draw(c);
+    }
+
     window.display();
+
+    g.clearPlayer();
   }
   return 0;
 }
