@@ -55,19 +55,25 @@ void Game::moveEntity(Direction dir, const sf::Color& col, int i) {
   for (auto& player : mPlayer) {
     if (player.getColor() == col) {
       // Verification des limites de la map
-      sf::Vector2f pos = player.getEntities()[i].getPosition();
-      std::cout<<pos.x<<" "<<pos.y<<" "<<mMap.size()<<std::endl;
-      if (dir == Direction::Up && pos.y == 0) {
+      auto ent = player.getEntities()[i];
+      sf::Vector2f pos = ent.getPosition();
+      if (dir == Direction::Up && pos.y <= 0) {
+        return;
+      } else if (dir == Direction::Left && pos.x <= 0) {
+        return;
+      } else if (dir == Direction::Down && pos.y >= mMap.size() - 1) {
+        return;
+      } else if (dir == Direction::Right && pos.x >= mMap[0].size() - 1) {
         return;
       }
-      else if (dir == Direction::Left && pos.x == 0) {
-        return;
-      }
-      else if (dir == Direction::Down && pos.y == mMap.size()) {
-        return;
-      }
-      else if (dir == Direction::Right && pos.x == mMap[0].size()) {
-        return;
+      // Verification de collision avec entites
+      for (auto& p : getEntities()) {
+        if (p != ent) {
+          sf::Vector2f unit(1, 1);
+          if (rectCollide(p.getPosition(), unit, ent.getPosition(), unit)) {
+            return;
+          }
+        }
       }
       player.moveEntity(dir, *this, i);
     }

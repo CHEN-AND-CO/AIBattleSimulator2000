@@ -64,3 +64,10 @@ void Entity::move(Direction dir, const Game& game) {
     }
   }
 }
+
+bool operator==(const Entity& left, const Entity& right) {
+  return left.getID() == right.getID();
+}
+bool operator!=(const Entity& left, const Entity& right) {
+  return !(left == right);
+}

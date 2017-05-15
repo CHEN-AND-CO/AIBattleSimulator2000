@@ -8,11 +8,8 @@
 
 class Player {
  public:
-  Player(const sf::Color& col, const sf::Vector2f& pos)
-      : mColor{col}, mWood{600} {
-    addBuilding(BuildingType::Town, mColor, pos);
-    addEntity(EntityType::Villager, mColor, pos + sf::Vector2f(2, 0));
-  }
+  Player(const sf::Color& col, const sf::Vector2f& pos);
+
   std::vector<Building> getBuildings() const { return mBuildings; }
   std::vector<Entity> getEntities() const { return mEntities; }
   sf::Color getColor() const { return mColor; }
@@ -22,8 +19,8 @@ class Player {
   void addBuilding(const BuildingType& buildT, const sf::Color& col,
                    const sf::Vector2f& pos);
 
-  void moveEntity(Direction dir, const Game& game, int i){
-    mEntities[i].move(dir,game);
+  void moveEntity(Direction dir, const Game& game, int i) {
+    mEntities[i].move(dir, game);
   }
 
   void clearMaps();
@@ -33,6 +30,7 @@ class Player {
   std::vector<Entity> mEntities;
   sf::Color mColor;
   int mWood;
+  int mEntID, mBuildID;
 };
 
 #endif

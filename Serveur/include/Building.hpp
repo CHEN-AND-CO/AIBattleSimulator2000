@@ -10,7 +10,7 @@ class Game;
 
 class Building {
  public:
-  Building(BuildingType bT, sf::Color color, sf::Vector2f pos);
+  Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id);
 
   void addEntity(Game& game, const EntityType& entT);
 
@@ -18,6 +18,8 @@ class Building {
   sf::Color getColor() const { return mColor; }
   sf::Vector2f getPosition() const { return mPos; }
   sf::Vector2f getSize() const { return mSize; }
+  int getID() const { return mID; }
+  int getHealth() const { return mHealth; }
 
   void receiveDamage(int damage) { mHealth = -damage; };
   bool isAlive() { return mHealth > 0; }
@@ -28,6 +30,7 @@ class Building {
   sf::Vector2f mPos;
   sf::Vector2f mSize;
   int mHealth;
+  int mID;
 };
 
 #endif

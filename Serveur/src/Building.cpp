@@ -8,8 +8,8 @@ Function which create an entity if this building can create it
 depending of the types of both of them
 */
 
-Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos)
-    : mType{bT}, mColor{color}, mPos{pos}, mHealth{1000} {
+Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
+    : mType{bT}, mColor{color}, mPos{pos}, mHealth{1000}, mID{id} {
   switch (mType) {
     case BuildingType::Town:
       mSize = sf::Vector2f(2, 2);
