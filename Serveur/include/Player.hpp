@@ -39,6 +39,10 @@ class Player {
     return mEntities[index].putRessourcesInTown(*this);
   }
 
+  void receiveDamage(int index, int domage) {
+    mEntities[index].receiveDamage(domage);
+  }
+
   void clearMaps();
 
  private:

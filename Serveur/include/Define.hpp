@@ -16,5 +16,6 @@ enum class Ressource { Wood, MaxRessources };
 
 bool rectCollide(const sf::Vector2f& pos1, const sf::Vector2f& size1,
                  const sf::Vector2f& pos2, const sf::Vector2f& size2);
+bool rectCollide(const sf::Vector2f& pos1, const sf::Vector2f& pos2);
 
 #endif

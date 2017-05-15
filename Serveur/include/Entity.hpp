@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Define.hpp"
+#include <iostream>
 
 class Building;
 
@@ -17,8 +18,7 @@ Can Construct building, collect ressources and attack
 
 class Entity {
  public:
-  Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos, int id)
-      : mType{entT}, mColor{col}, mPos{pos}, mHealth{100}, mID{id} {}
+  Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos, int id);
 
   void addBuilding(Player& player, const BuildingType& buildT);
 
@@ -27,9 +27,13 @@ class Entity {
   sf::Vector2f getPosition() const { return mPos; }
   int getID() const { return mID; }
   int getHealth() const { return mHealth; }
+  int getDamage() { return mDamage; }
 
   bool move(Direction dir, const Game& game);
-  void receiveDamage(int damage) { mHealth = -damage; };
+  void receiveDamage(int damage) {
+    mHealth = -damage;
+    std::cout << mHealth << std::endl;
+  }
   bool isAlive() { return mHealth > 0; }
 
   bool collectRessource(const Game& game, const Player& p, Direction dir);
@@ -43,6 +47,7 @@ class Entity {
   int mID;
   Ressource currentRessource;
   int currentTransportedRessources;
+  int mDamage;
 };
 
 bool operator==(const Entity& left, const Entity& right);

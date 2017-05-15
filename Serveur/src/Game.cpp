@@ -93,10 +93,9 @@ bool Game::moveEntity(const Direction& dir, const sf::Color& col, int i) {
       // Verification de collision avec entites
       for (const auto& ent : getEntities()) {
         if (ent != entToMove) {
-          sf::Vector2f unit(1, 1);
           Entity e = entToMove;
           e.move(dir, *this);
-          if (rectCollide(ent.getPosition(), unit, e.getPosition(), unit)) {
+          if (rectCollide(ent.getPosition(), e.getPosition())) {
             return false;
           }
         }
@@ -147,6 +146,73 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
                           b.getSize())) {
             return p.putRessourcesInTown(index);
           }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool Game::attack(const sf::Color& col, int index) {
+  for (auto& player : mPlayer) {
+    sf::Color pCol = player.getColor();
+    if (pCol != col) {
+      return false;
+    }
+    for (auto& ent : getEntities()) {
+      if (pCol != ent.getColor()) {
+        if (rectCollide(
+                player.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
+                ent.getPosition())) {
+          ent.receiveDamage(player.getEntities()[index].getDamage());
+          std::cout<<ent.getHealth()<<std::endl;
+          return true;
+        } else if (rectCollide(player.getEntities()[index].getPosition() +
+                                   sf::Vector2f(-1, 0),
+                               ent.getPosition())) {
+          ent.receiveDamage(player.getEntities()[index].getDamage());
+          std::cout<<ent.getHealth()<<std::endl;
+          return true;
+        } else if (rectCollide(player.getEntities()[index].getPosition() +
+                                   sf::Vector2f(0, 1),
+                               ent.getPosition())) {
+          ent.receiveDamage(player.getEntities()[index].getDamage());
+          std::cout<<ent.getHealth()<<std::endl;
+          return true;
+        } else if (rectCollide(player.getEntities()[index].getPosition() +
+                                   sf::Vector2f(0, -1),
+                               ent.getPosition())) {
+          ent.receiveDamage(player.getEntities()[index].getDamage());
+          std::cout<<ent.getHealth()<<std::endl;
+          return true;
+        }
+      }
+    }
+    for (auto& build : getBuildings()) {
+      if (pCol != build.getColor()) {
+        if (rectCollide(
+                player.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
+                sf::Vector2f(1, 1), build.getPosition(), build.getSize())) {
+          build.receiveDamage(player.getEntities()[index].getDamage());
+          return true;
+        } else if (rectCollide(player.getEntities()[index].getPosition() +
+                                   sf::Vector2f(-1, 0),
+                               sf::Vector2f(1, 1), build.getPosition(),
+                               build.getSize())) {
+          build.receiveDamage(player.getEntities()[index].getDamage());
+          return true;
+        } else if (rectCollide(player.getEntities()[index].getPosition() +
+                                   sf::Vector2f(0, 1),
+                               sf::Vector2f(1, 1), build.getPosition(),
+                               build.getSize())) {
+          build.receiveDamage(player.getEntities()[index].getDamage());
+          return true;
+        } else if (rectCollide(player.getEntities()[index].getPosition() +
+                                   sf::Vector2f(0, -1),
+                               sf::Vector2f(1, 1), build.getPosition(),
+                               build.getSize())) {
+          build.receiveDamage(player.getEntities()[index].getDamage());
+          return true;
         }
       }
     }

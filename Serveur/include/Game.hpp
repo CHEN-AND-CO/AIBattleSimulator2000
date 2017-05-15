@@ -73,6 +73,8 @@ class Game {
     }
   }
 
+  bool attack(const sf::Color& col1, int index1);
+
   bool isGameFinish() const;
   sf::Color getWinner() const;
 

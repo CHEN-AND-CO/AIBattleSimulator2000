@@ -9,6 +9,20 @@ Function which create a building if this entity can create it
 depending of the types of both of them
 */
 
+Entity::Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos, int id)
+    : mType{entT}, mColor{col}, mPos{pos}, mHealth{100}, mID{id} {
+  switch (mType) {
+    case EntityType::Villager:
+      mDamage = 5;
+      break;
+    case EntityType::Warrior:
+      mDamage = 60;
+      break;
+    default:
+      break;
+  }
+}
+
 void Entity::addBuilding(Player& player, const BuildingType& buildT) {
   if (mType != EntityType::Villager) {
     std::cout << "This entity cannot construct buildings\n";
@@ -84,7 +98,7 @@ bool Entity::collectRessource(const Game& game, const Player& p,
         currentTransportedRessources = 0;
         break;
       }
-      if (currentTransportedRessources >= 20) {
+      if (currentTransportedRessources >= 100) {
         return false;
       }
       currentTransportedRessources++;

@@ -43,15 +43,19 @@ int main() {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
               break;
+
             case sf::Keyboard::Down:
               game.moveEntity(Direction::Down, sf::Color::Blue, currentId);
               break;
+
             case sf::Keyboard::Left:
               game.moveEntity(Direction::Left, sf::Color::Blue, currentId);
               break;
+
             case sf::Keyboard::Right:
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
               break;
+
             case sf::Keyboard::Space:
               game.collectRessource(Direction::Up, sf::Color::Blue, currentId);
               game.collectRessource(Direction::Down, sf::Color::Blue,
@@ -61,6 +65,7 @@ int main() {
               game.collectRessource(Direction::Right, sf::Color::Blue,
                                     currentId);
               break;
+
             case sf::Keyboard::Return:
               game.putRessourcesInTown(Direction::Up, sf::Color::Blue,
                                        currentId);
@@ -75,6 +80,7 @@ int main() {
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
+
             case sf::Keyboard::B:
               game.addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
               std::cout << "player wood : "
@@ -82,6 +88,7 @@ int main() {
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
+
             case sf::Keyboard::V:
               game.addEntity(EntityType::Villager, sf::Color::Blue, 0);
               std::cout << "player wood : "
@@ -89,6 +96,7 @@ int main() {
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
+
             case sf::Keyboard::W:
               game.addEntity(EntityType::Warrior, sf::Color::Blue, 1);
               std::cout << "player wood : "
@@ -96,6 +104,11 @@ int main() {
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
+
+            case sf::Keyboard::A:
+              game.attack(sf::Color::Blue, currentId);
+              break;
+
             case sf::Keyboard::Add:
               currentId++;
               if (currentId >=
@@ -103,6 +116,7 @@ int main() {
                 currentId = 0;
               }
               break;
+
             case sf::Keyboard::Subtract:
               currentId--;
               if (currentId < 0) {
@@ -110,6 +124,7 @@ int main() {
                     game.getPlayer(sf::Color::Blue).getEntities().size() - 1;
               }
               break;
+
             default:
               break;
           }
