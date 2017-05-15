@@ -1,7 +1,7 @@
 ﻿
 IncludeFile "definitions.pbi"
 
-
+ServerURI$ = "127.0.0.1"
 #Port = 53000
 
 If InitNetwork()
@@ -25,5 +25,5 @@ Else
     MessageRequester("Error","Unable to initialize the network component. Check your network.",#PB_MessageRequester_Error) : End
 EndIf
 ; IDE Options = PureBasic 5.60 (Windows - x64)
-; CursorPosition = 22
+; CursorPosition = 3
 ; EnableXP
