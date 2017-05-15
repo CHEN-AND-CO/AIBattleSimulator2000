@@ -55,8 +55,8 @@ void Game::moveEntity(Direction dir, const sf::Color& col, int i) {
   for (auto& player : mPlayer) {
     if (player.getColor() == col) {
       // Verification des limites de la map
-      auto ent = player.getEntities()[i];
-      sf::Vector2f pos = ent.getPosition();
+      auto entToMove = player.getEntities()[i];
+      sf::Vector2f pos = entToMove.getPosition();
       if (dir == Direction::Up && pos.y <= 0) {
         return;
       } else if (dir == Direction::Left && pos.x <= 0) {
@@ -67,15 +67,27 @@ void Game::moveEntity(Direction dir, const sf::Color& col, int i) {
         return;
       }
       // Verification de collision avec entites
-      for (auto& p : getEntities()) {
-        if (p != ent) {
+      for (const auto& ent : getEntities()) {
+        if (ent != entToMove) {
           sf::Vector2f unit(1, 1);
-          if (rectCollide(p.getPosition(), unit, ent.getPosition(), unit)) {
+          Entity e = entToMove;
+          e.move(dir, *this);
+          if (rectCollide(ent.getPosition(), unit, e.getPosition(), unit)) {
             return;
           }
         }
       }
+      // Verification de collision avec building
+      for (const auto& build : getBuildings()) {
+        Entity e = entToMove;
+        e.move(dir, *this);
+        if (rectCollide(build.getPosition(), build.getSize(), e.getPosition(),
+                        sf::Vector2f(1, 1))) {
+          return;
+        }
+      }
       player.moveEntity(dir, *this, i);
+      return;
     }
   }
 }

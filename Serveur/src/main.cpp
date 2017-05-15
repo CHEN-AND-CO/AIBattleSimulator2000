@@ -9,7 +9,7 @@ int main() {
   Game g;
   g.loadFile("ressources/level.txt");
   g.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
-  g.addPlayer(sf::Color::Red, sf::Vector2f(16, 13));
+  g.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
 
   std::vector<sf::RectangleShape> rects;
 

@@ -66,7 +66,7 @@ void Entity::move(Direction dir, const Game& game) {
 }
 
 bool operator==(const Entity& left, const Entity& right) {
-  return left.getID() == right.getID();
+  return left.getID() == right.getID() && left.getColor() == right.getColor();
 }
 bool operator!=(const Entity& left, const Entity& right) {
   return !(left == right);
