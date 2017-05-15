@@ -48,6 +48,7 @@ int main() {
 
     server.receive(message);
     if( message.length() >0){
+      //server action here
       message.clear();
     }
 
