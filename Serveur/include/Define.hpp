@@ -6,7 +6,6 @@ Define the type of the buildings and entities used in the game
 */
 
 #include <SFML/System.hpp>
-#include <iostream>
 
 enum class BuildingType { TownCenter, Fort, MaxBuildingType };
 enum class EntityType { Villager, Warrior, MaxEntityType };
