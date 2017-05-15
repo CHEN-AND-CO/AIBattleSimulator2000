@@ -8,6 +8,8 @@ class Building;
 
 class Game;
 
+class Player;
+
 /*
 Define an entity which can interact with the world
 Can Construct building, collect ressources and attack
@@ -26,9 +28,12 @@ class Entity {
   int getID() const { return mID; }
   int getHealth() const { return mHealth; }
 
-  void move(Direction dir, const Game& game);
+  bool move(Direction dir, const Game& game);
   void receiveDamage(int damage) { mHealth = -damage; };
   bool isAlive() { return mHealth > 0; }
+
+  bool collectRessource(const Game& game, const Player& p, Direction dir);
+  bool putRessourcesInTown(Player& player);
 
  private:
   EntityType mType;
@@ -36,6 +41,8 @@ class Entity {
   sf::Vector2f mPos;
   int mHealth;
   int mID;
+  Ressource currentRessource;
+  int currentTransportedRessources;
 };
 
 bool operator==(const Entity& left, const Entity& right);

@@ -11,7 +11,7 @@ depending of the types of both of them
 Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
     : mType{bT}, mColor{color}, mPos{pos}, mHealth{1000}, mID{id} {
   switch (mType) {
-    case BuildingType::Town:
+    case BuildingType::TownCenter:
       mSize = sf::Vector2f(2, 2);
       break;
 
@@ -27,7 +27,7 @@ Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
 
 void Building::addEntity(Game& game, const EntityType& entT) {
   switch (mType) {
-    case BuildingType::Town:
+    case BuildingType::TownCenter:
       switch (entT) {
         case EntityType::Villager:
           game.addEntity(entT, mColor, mPos);

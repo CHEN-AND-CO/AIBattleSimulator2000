@@ -51,20 +51,44 @@ std::vector<Entity> Game::getEntities() const {
   return v;
 }
 
-void Game::moveEntity(Direction dir, const sf::Color& col, int i) {
+Player Game::getPlayer(const sf::Color& col) const {
+  for (unsigned i{0}; i < mPlayer.size(); i++) {
+    if (mPlayer[i].getColor() == col) {
+      return mPlayer[i];
+    }
+  }
+}
+
+std::vector<Building> Game::getBuildings(const sf::Color& col) const {
+  for (unsigned i{0}; i < mPlayer.size(); i++) {
+    if (mPlayer[i].getColor() == col) {
+      return mPlayer[i].getBuildings();
+    }
+  }
+}
+
+std::vector<Entity> Game::getEntities(const sf::Color& col) const {
+  for (unsigned i{0}; i < mPlayer.size(); i++) {
+    if (mPlayer[i].getColor() == col) {
+      return mPlayer[i].getEntities();
+    }
+  }
+}
+
+bool Game::moveEntity(const Direction& dir, const sf::Color& col, int i) {
   for (auto& player : mPlayer) {
     if (player.getColor() == col) {
       // Verification des limites de la map
       auto entToMove = player.getEntities()[i];
       sf::Vector2f pos = entToMove.getPosition();
       if (dir == Direction::Up && pos.y <= 0) {
-        return;
+        return false;
       } else if (dir == Direction::Left && pos.x <= 0) {
-        return;
+        return false;
       } else if (dir == Direction::Down && pos.y >= mMap.size() - 1) {
-        return;
+        return false;
       } else if (dir == Direction::Right && pos.x >= mMap[0].size() - 1) {
-        return;
+        return false;
       }
       // Verification de collision avec entites
       for (const auto& ent : getEntities()) {
@@ -73,7 +97,7 @@ void Game::moveEntity(Direction dir, const sf::Color& col, int i) {
           Entity e = entToMove;
           e.move(dir, *this);
           if (rectCollide(ent.getPosition(), unit, e.getPosition(), unit)) {
-            return;
+            return false;
           }
         }
       }
@@ -83,11 +107,46 @@ void Game::moveEntity(Direction dir, const sf::Color& col, int i) {
         e.move(dir, *this);
         if (rectCollide(build.getPosition(), build.getSize(), e.getPosition(),
                         sf::Vector2f(1, 1))) {
-          return;
+          return false;
         }
       }
-      player.moveEntity(dir, *this, i);
-      return;
+      return player.moveEntity(dir, *this, i);
     }
   }
+  return false;
+}
+
+bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
+                               int index) {
+  for (auto& p : mPlayer) {
+    if (p.getColor() == col) {
+      sf::Vector2f pos = p.getEntities()[index].getPosition();
+      switch (dir) {
+        case Direction::Up:
+          pos.y--;
+          break;
+
+        case Direction::Down:
+          pos.y++;
+          break;
+
+        case Direction::Left:
+          pos.x--;
+          break;
+
+        case Direction::Right:
+          pos.x++;
+          break;
+      }
+      for (auto& b : p.getBuildings()) {
+        if (b.getType() == BuildingType::TownCenter) {
+          if (rectCollide(pos, sf::Vector2f(1, 1), b.getPosition(),
+                          b.getSize())) {
+            return p.putRessourcesInTown(index);
+          }
+        }
+      }
+    }
+  }
+  return false;
 }

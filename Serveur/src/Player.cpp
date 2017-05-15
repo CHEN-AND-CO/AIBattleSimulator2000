@@ -2,8 +2,9 @@
 #include <iostream>
 
 Player::Player(const sf::Color& col, const sf::Vector2f& pos)
-    : mColor{col}, mWood{600}, mEntID{0}, mBuildID{0} {
-  addBuilding(BuildingType::Town, mColor, pos);
+    : mColor{col}, mEntID{0}, mBuildID{0} {
+  mRessources[Ressource::Wood] = 600;
+  addBuilding(BuildingType::TownCenter, mColor, pos);
   addEntity(EntityType::Villager, mColor, pos + sf::Vector2f(2, 0));
 }
 
@@ -38,20 +39,20 @@ void Player::addEntity(const EntityType& entT, const sf::Color& col,
 void Player::addBuilding(const BuildingType& buildT, const sf::Color& col,
                          const sf::Vector2f& pos) {
   switch (buildT) {
-    case BuildingType::Town:
-      if (mWood < 600) {
+    case BuildingType::TownCenter:
+      if (mRessources[Ressource::Wood] < 600) {
         std::cout << "Not enought ressources to construct Town\n";
       } else {
         mBuildings.push_back(Building(buildT, col, pos, mBuildID++));
-        mWood -= 600;
+        mRessources[Ressource::Wood] -= 600;
       }
       break;
     case BuildingType::Fort:
-      if (mWood < 200) {
+      if (mRessources[Ressource::Wood] < 200) {
         std::cout << "Not enought ressources to construct Fort\n";
       } else {
         mBuildings.push_back(Building(buildT, col, pos, mBuildID++));
-        mWood -= 200;
+        mRessources[Ressource::Wood] -= 200;
       }
     default:
       break;

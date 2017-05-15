@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Building.hpp"
 #include "Game.hpp"
+#include "Player.hpp"
 
 /*
 Function which create a building if this entity can create it
@@ -34,12 +35,13 @@ void Entity::addBuilding(Game& game, const BuildingType& buildT) {
 }
 
 // Deplacemant d'une unite
-void Entity::move(Direction dir, const Game& game) {
+bool Entity::move(Direction dir, const Game& game) {
   // Mouvement en Haut
   if (dir == Direction::Up) {
     int futurePos = game.getMap()[mPos.y - 1][mPos.x];
     if (futurePos == 1) {  // Verifie si la position est valide (terrain)
       mPos.y--;
+      return true;
     }
 
     // Mouvement en bas
@@ -47,6 +49,7 @@ void Entity::move(Direction dir, const Game& game) {
     int futurePos = game.getMap()[mPos.y + 1][mPos.x];
     if (futurePos == 1) {  // Verifie si la position est valide (terrain)
       mPos.y++;
+      return true;
     }
 
     // Mouvement a gauche
@@ -54,6 +57,7 @@ void Entity::move(Direction dir, const Game& game) {
     int futurePos = game.getMap()[mPos.y][mPos.x - 1];
     if (futurePos == 1) {  // Verifie si la position est valide (terrain)
       mPos.x--;
+      return true;
     }
 
     // Mouvement a droite
@@ -61,8 +65,58 @@ void Entity::move(Direction dir, const Game& game) {
     int futurePos = game.getMap()[mPos.y][mPos.x + 1];
     if (futurePos == 1) {  // Verifie si la position est valide (terrain)
       mPos.x++;
+      return true;
     }
   }
+  return false;
+}
+
+bool Entity::collectRessource(const Game& game, const Player& p,
+                              Direction dir) {
+  if (mType != EntityType::Villager) {
+    return false;
+  }
+  int caseValue;
+  switch (dir) {
+    case Direction::Up:
+      caseValue = game.getMap()[mPos.y - 1][mPos.x];
+      break;
+    case Direction::Down:
+      caseValue = game.getMap()[mPos.y + 1][mPos.x];
+      break;
+    case Direction::Left:
+      caseValue = game.getMap()[mPos.y][mPos.x - 1];
+      break;
+    case Direction::Right:
+      caseValue = game.getMap()[mPos.y][mPos.x + 1];
+      break;
+    default:
+      break;
+  }
+  switch (caseValue) {
+    case 3:
+      if (currentRessource != Ressource::Wood) {
+        currentRessource = Ressource::Wood;
+        currentTransportedRessources = 0;
+        break;
+      }
+      currentTransportedRessources++;
+      return true;
+      break;
+
+    default:
+      return false;
+      break;
+  }
+}
+
+bool Entity::putRessourcesInTown(Player& player) {
+  if (currentTransportedRessources != 0) {
+    player.addRessource(currentRessource, currentTransportedRessources);
+    currentTransportedRessources = 0;
+    return true;
+  }
+  return false;
 }
 
 bool operator==(const Entity& left, const Entity& right) {

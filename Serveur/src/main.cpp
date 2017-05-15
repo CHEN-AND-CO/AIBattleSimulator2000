@@ -38,6 +38,9 @@ int main() {
           break;
 
         case sf::Event::KeyPressed:
+          std::cout
+              << g.getPlayer(sf::Color::Blue).getRessources(Ressource::Wood)
+              << std::endl;
           switch (event.key.code) {
             case sf::Keyboard::Up:
               g.moveEntity(Direction::Up, sf::Color::Blue, 0);
@@ -50,6 +53,18 @@ int main() {
               break;
             case sf::Keyboard::Right:
               g.moveEntity(Direction::Right, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::Space:
+              g.collectRessource(Direction::Up, sf::Color::Blue, 0);
+              //g.collectRessource(Direction::Down, sf::Color::Blue, 0);
+              //g.collectRessource(Direction::Left, sf::Color::Blue, 0);
+              //g.collectRessource(Direction::Right, sf::Color::Blue, 0);
+              break;
+            case sf::Keyboard::V:
+              //g.putRessourcesInTown(Direction::Up, sf::Color::Blue, 0);
+              //g.putRessourcesInTown(Direction::Down, sf::Color::Blue, 0);
+              g.putRessourcesInTown(Direction::Left, sf::Color::Blue, 0);
+              //g.putRessourcesInTown(Direction::Right, sf::Color::Blue, 0);
               break;
             default:
               break;

@@ -19,8 +19,13 @@ class Game {
   bool loadFile(const std::string& fileName);
 
   std::vector<std::vector<int>> getMap() const { return mMap; }
+  std::vector<Player> getPlayer() const { return mPlayer; }
   std::vector<Building> getBuildings() const;
   std::vector<Entity> getEntities() const;
+
+  Player getPlayer(const sf::Color&) const;
+  std::vector<Building> getBuildings(const sf::Color&) const;
+  std::vector<Entity> getEntities(const sf::Color&) const;
 
   void addEntity(const EntityType& entT, const sf::Color& col,
                  const sf::Vector2f& pos) {
@@ -49,7 +54,16 @@ class Game {
     mPlayer.push_back(Player(col, pos));
   }
 
-  void moveEntity(Direction dir, const sf::Color& col, int i);
+  bool moveEntity(const Direction& dir, const sf::Color& col, int i);
+  bool collectRessource(const Direction& dir, const sf::Color& col, int index) {
+    for (auto& p : mPlayer) {
+      if (p.getColor() == col) {
+        return p.collectRessource(*this, dir, index);
+      }
+    }
+  }
+  bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
+                           int index);
 
   void clearPlayer() {
     for (auto& play : mPlayer) {
