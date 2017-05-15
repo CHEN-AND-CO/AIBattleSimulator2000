@@ -29,6 +29,7 @@ int main() {
   }
 
   window.create(sf::VideoMode(n * 32, m * 32), "Serveur");
+  std::string input;
 
   while (window.isOpen()) {
     sf::Event event;
@@ -36,6 +37,11 @@ int main() {
       switch (event.type) {
         case sf::Event::Closed:
           window.close();
+          break;
+        case sf::Event::KeyPressed:
+          std::getline(std::cin, input);
+          server.send("0", input);
+          input.clear();
           break;
 
         default:

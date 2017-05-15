@@ -9,14 +9,15 @@
 
 class Server {
  public:
-  Server(unsigned short port);
+  Server( const unsigned short port);
 
   void receive();
+  void send( const std::string& i, const std::string& msg );
   void broadCast(const std::string &msg);
   void receivePackets();
 
  private:
-  typedef std::unordered_map<sf::TcpSocket *, std::string> Clients;
+  typedef std::unordered_map<std::string, sf::TcpSocket *> Clients;
   Clients clients;
   sf::TcpListener listner;
 };
