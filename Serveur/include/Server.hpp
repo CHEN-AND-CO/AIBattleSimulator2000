@@ -1,20 +1,20 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include <unordered_map>
 #include <SFML/Network.hpp>
-#include <vector>
 #include <iostream>
+#include <unordered_map>
+#include <vector>
 #include "Client.hpp"
 
 class Server {
  public:
-  Server( const unsigned short port);
+  Server(const unsigned short port);
 
-  void receive();
-  void send( const std::string& i, const std::string& msg );
+  void receive(std::string &msg);
+  void send(const std::string &i, const std::string &msg);
   void broadCast(const std::string &msg);
-  void receivePackets();
+  void receivePackets(std::string &msg);
 
  private:
   typedef std::unordered_map<std::string, sf::TcpSocket *> Clients;

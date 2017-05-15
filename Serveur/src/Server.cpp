@@ -1,12 +1,11 @@
 #include "Server.hpp"
 
-Server::Server( const unsigned short port) {
+Server::Server(const unsigned short port) {
   listner.listen(port);
   listner.setBlocking(false);
 }
 
-void Server::receivePackets() {
-  std::string msg;
+void Server::receivePackets(std::string& msg) {
   for (Clients::iterator it = clients.begin(); it != clients.end();) {
     sf::Packet packet;
     sf::Socket::Status status = it->second->receive(packet);
@@ -25,7 +24,7 @@ void Server::receivePackets() {
 
       default:
         ++it;
-      break;
+        break;
     }
   }
 }
@@ -38,18 +37,18 @@ void Server::broadCast(const std::string& msg) {
   }
 }
 
-void Server::send( const std::string& i, const std::string& msg ){
+void Server::send(const std::string& i, const std::string& msg) {
   sf::Packet packet;
   packet << msg;
   Clients::iterator tmp = clients.find(i);
-  if( tmp == clients.end() ){
+  if (tmp == clients.end()) {
     std::cout << "No client found \n";
     return;
   }
   tmp->second->send(packet);
 }
 
-void Server::receive() {
+void Server::receive(std::string& msg) {
   sf::TcpSocket* nextClient = nullptr;
 
   if (nextClient == nullptr) {
@@ -57,9 +56,10 @@ void Server::receive() {
     nextClient->setBlocking(false);
   }
   if (listner.accept(*nextClient) == sf::Socket::Done) {
-    clients.insert(std::make_pair(std::to_string(clients.size()),nextClient));
+    clients.insert(std::make_pair(std::to_string(clients.size()), nextClient));
+    std::cout << clients.size()-1 << " is connected\n";
     nextClient = nullptr;
   }
 
-  receivePackets();
+  receivePackets(msg);
 }
