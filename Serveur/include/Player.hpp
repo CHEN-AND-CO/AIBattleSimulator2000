@@ -16,10 +16,14 @@ class Player {
   std::map<Ressource, int> getRessources() { return mRessources; }
   int getRessources(Ressource r) { return mRessources[r]; }
 
-  void addEntity(const EntityType& entT, const sf::Color& col,
-                 const sf::Vector2f& pos);
-  void addBuilding(const BuildingType& buildT, const sf::Color& col,
-                   const sf::Vector2f& pos);
+  void addEntity(const EntityType& entT, const sf::Vector2f& pos);
+  void addBuilding(const BuildingType& buildT, const sf::Vector2f& pos);
+  void addBuilding(const BuildingType& buildT, int index) {
+    mEntities[index].addBuilding(*this, buildT);
+  }
+  void addEntity(const EntityType& entT, int index) {
+    mBuildings[index].addEntity(*this, entT);
+  }
 
   bool moveEntity(Direction dir, const Game& game, int i) {
     return mEntities[i].move(dir, game);

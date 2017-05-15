@@ -27,20 +27,21 @@ class Game {
   std::vector<Building> getBuildings(const sf::Color&) const;
   std::vector<Entity> getEntities(const sf::Color&) const;
 
-  void addEntity(const EntityType& entT, const sf::Color& col,
-                 const sf::Vector2f& pos) {
+  void addEntity(const EntityType& entT, const sf::Color& col, int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addEntity(entT, col, pos);
+        player.addEntity(entT, index);
+        return;
       }
     }
   }
 
   void addBuilding(const BuildingType& buildT, const sf::Color& col,
-                   const sf::Vector2f& pos) {
+                   int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addBuilding(buildT, col, pos);
+        player.addBuilding(buildT, index);
+        return;
       }
     }
   }
@@ -61,6 +62,7 @@ class Game {
         return p.collectRessource(*this, dir, index);
       }
     }
+    return false;
   }
   bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
                            int index);

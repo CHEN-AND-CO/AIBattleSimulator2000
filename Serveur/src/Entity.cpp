@@ -9,29 +9,12 @@ Function which create a building if this entity can create it
 depending of the types of both of them
 */
 
-void Entity::addBuilding(Game& game, const BuildingType& buildT) {
-  switch (mType) {
-    case EntityType::Villager:
-      switch (buildT) {
-        case BuildingType::Fort:
-          game.addBuilding(buildT, mColor, mPos);
-          break;
-
-        default:
-          std::cout << "Villager cannot construct this Building\n";
-      }
-      break;
-
-    case EntityType::Warrior:
-      switch (buildT) {
-        default:
-          std::cout << "Warrior cannot construct this building\n";
-      }
-      break;
-
-    default:
-      break;
+void Entity::addBuilding(Player& player, const BuildingType& buildT) {
+  if (mType != EntityType::Villager) {
+    std::cout << "This entity cannot construct buildings\n";
+    return;
   }
+  player.addBuilding(buildT, mPos + sf::Vector2f(1, 0));
 }
 
 // Deplacemant d'une unite
@@ -74,6 +57,7 @@ bool Entity::move(Direction dir, const Game& game) {
 bool Entity::collectRessource(const Game& game, const Player& p,
                               Direction dir) {
   if (mType != EntityType::Villager) {
+    std::cout << "This entity cannot collect Ressources\n";
     return false;
   }
   int caseValue;
@@ -108,9 +92,9 @@ bool Entity::collectRessource(const Game& game, const Player& p,
       break;
 
     default:
-      return false;
       break;
   }
+  return false;
 }
 
 bool Entity::putRessourcesInTown(Player& player) {

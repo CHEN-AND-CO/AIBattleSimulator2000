@@ -137,6 +137,9 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
         case Direction::Right:
           pos.x++;
           break;
+
+        default:
+          break;
       }
       for (auto& b : p.getBuildings()) {
         if (b.getType() == BuildingType::TownCenter) {

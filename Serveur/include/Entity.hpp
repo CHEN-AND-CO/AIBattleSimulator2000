@@ -20,7 +20,7 @@ class Entity {
   Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos, int id)
       : mType{entT}, mColor{col}, mPos{pos}, mHealth{100}, mID{id} {}
 
-  void addBuilding(Game& game, const BuildingType& buildT);
+  void addBuilding(Player& player, const BuildingType& buildT);
 
   EntityType getType() const { return mType; }
   sf::Color getColor() const { return mColor; }

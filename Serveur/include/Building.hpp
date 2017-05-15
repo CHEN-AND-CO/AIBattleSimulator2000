@@ -8,11 +8,13 @@ class Entity;
 
 class Game;
 
+class Player;
+
 class Building {
  public:
   Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id);
 
-  void addEntity(Game& game, const EntityType& entT);
+  void addEntity(Player& player, const EntityType& entT);
 
   BuildingType getType() const { return mType; }
   sf::Color getColor() const { return mColor; }
