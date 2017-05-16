@@ -30,12 +30,7 @@ class Entity {
   int getDamage() { return mDamage; }
 
   bool move(Direction dir, const Game& game);
-  void receiveDamage(int damage) {
-    //std::cout << damage << std::endl;
-    //std::cout << mHealth << std::endl;
-    mHealth -= damage;
-    //std::cout << mHealth << std::endl;
-  }
+  void receiveDamage(int damage) { mHealth -= damage; }
   bool isAlive() { return mHealth > 0; }
 
   bool collectRessource(const Game& game, const Player& p, Direction dir);

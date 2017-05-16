@@ -38,7 +38,7 @@ int main() {
           window.close();
           break;
 
-        case sf::Event::KeyPressed:
+        case sf::Event::KeyReleased:
           switch (event.key.code) {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
