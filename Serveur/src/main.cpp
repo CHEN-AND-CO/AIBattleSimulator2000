@@ -27,6 +27,7 @@ int main() {
       rects.push_back(rect);
     }
   }
+  
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
