@@ -2,9 +2,10 @@
 #include <iostream>
 
 Player::Player(const sf::Color& col, const sf::Vector2f& pos)
-    : mColor{col}, mWood{600}, mEntID{0}, mBuildID{0} {
-  addBuilding(BuildingType::Town, mColor, pos);
-  addEntity(EntityType::Villager, mColor, pos + sf::Vector2f(2, 0));
+    : mColor{col}, mEntID{0}, mBuildID{0} {
+  mRessources[Ressource::Wood] = 650;
+  addBuilding(BuildingType::TownCenter, pos);
+  addEntity(EntityType::Villager, pos + sf::Vector2f(2, 0));
 }
 
 void Player::clearMaps() {
@@ -30,28 +31,45 @@ void Player::clearMaps() {
   }
 }
 
-void Player::addEntity(const EntityType& entT, const sf::Color& col,
-                       const sf::Vector2f& pos) {
-  mEntities.push_back(Entity(entT, col, pos, mEntID++));
+void Player::addEntity(const EntityType& entT, const sf::Vector2f& pos) {
+  switch (entT) {
+    case EntityType::Villager:
+      if (mRessources[Ressource::Wood] < 50) {
+        std::cout << "Not enough ressources to create Villager\n";
+      } else {
+        mEntities.push_back(Entity(entT, mColor, pos, mEntID++));
+        mRessources[Ressource::Wood] -= 50;
+      }
+      break;
+    case EntityType::Warrior:
+      if (mRessources[Ressource::Wood] < 60) {
+        std::cout << "Not enough ressources to create Warrior\n";
+      } else {
+        mEntities.push_back(Entity(entT, mColor, pos, mEntID++));
+        mRessources[Ressource::Wood] -= 60;
+      }
+      break;
+    default:
+      break;
+  }
 }
 
-void Player::addBuilding(const BuildingType& buildT, const sf::Color& col,
-                         const sf::Vector2f& pos) {
+void Player::addBuilding(const BuildingType& buildT, const sf::Vector2f& pos) {
   switch (buildT) {
-    case BuildingType::Town:
-      if (mWood < 600) {
-        std::cout << "Not enought ressources to construct Town\n";
+    case BuildingType::TownCenter:
+      if (mRessources[Ressource::Wood] < 600) {
+        std::cout << "Not enough ressources to construct Town\n";
       } else {
-        mBuildings.push_back(Building(buildT, col, pos, mBuildID++));
-        mWood -= 600;
+        mBuildings.push_back(Building(buildT, mColor, pos, mBuildID++));
+        mRessources[Ressource::Wood] -= 600;
       }
       break;
     case BuildingType::Fort:
-      if (mWood < 200) {
-        std::cout << "Not enought ressources to construct Fort\n";
+      if (mRessources[Ressource::Wood] < 200) {
+        std::cout << "Not enough ressources to construct Fort\n";
       } else {
-        mBuildings.push_back(Building(buildT, col, pos, mBuildID++));
-        mWood -= 200;
+        mBuildings.push_back(Building(buildT, mColor, pos, mBuildID++));
+        mRessources[Ressource::Wood] -= 200;
       }
     default:
       break;

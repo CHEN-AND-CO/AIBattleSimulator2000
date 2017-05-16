@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Entity.hpp"
 #include "Game.hpp"
+#include "Player.hpp"
 
 /*
 Function which create an entity if this building can create it
@@ -11,7 +12,7 @@ depending of the types of both of them
 Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
     : mType{bT}, mColor{color}, mPos{pos}, mHealth{1000}, mID{id} {
   switch (mType) {
-    case BuildingType::Town:
+    case BuildingType::TownCenter:
       mSize = sf::Vector2f(2, 2);
       break;
 
@@ -25,12 +26,12 @@ Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
   }
 }
 
-void Building::addEntity(Game& game, const EntityType& entT) {
+void Building::addEntity(Player& player, const EntityType& entT) {
   switch (mType) {
-    case BuildingType::Town:
+    case BuildingType::TownCenter:
       switch (entT) {
         case EntityType::Villager:
-          game.addEntity(entT, mColor, mPos);
+          player.addEntity(entT, mPos + sf::Vector2f(mSize.x, 0));
           break;
 
         default:
@@ -41,7 +42,7 @@ void Building::addEntity(Game& game, const EntityType& entT) {
     case BuildingType::Fort:
       switch (entT) {
         case EntityType::Warrior:
-          game.addEntity(entT, mColor, mPos);
+          player.addEntity(entT, mPos + sf::Vector2f(mSize.x, 0));
           break;
 
         default:
