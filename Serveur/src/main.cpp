@@ -2,13 +2,12 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include "Game.hpp"
-#include "Server.hpp"
+#include "Network.hpp"
 
 int main() {
   sf::RenderWindow window;
 
-  Server server(53000);
-
+  Network networkInterface(53000);
   Game g;
   g.loadFile("ressources/level.txt");
 
@@ -29,7 +28,6 @@ int main() {
   }
 
   window.create(sf::VideoMode(n * 32, m * 32), "Serveur");
-  std::string message = "";
 
   while (window.isOpen()) {
     sf::Event event;
@@ -38,19 +36,13 @@ int main() {
         case sf::Event::Closed:
           window.close();
           break;
-        case sf::Event::KeyPressed:
-          break;
 
         default:
           break;
       }
     }
 
-    server.receive(message);
-    if( message.length() >0){
-      //server action here
-      message.clear();
-    }
+    networkInterface.receive();
 
     window.clear();
     for (auto& r : rects) {

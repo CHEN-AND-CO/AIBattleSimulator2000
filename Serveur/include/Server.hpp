@@ -7,6 +7,10 @@
 #include <vector>
 #include "Client.hpp"
 
+#ifndef MAX_NET_BUFFER_LENGTH
+#define MAX_NET_BUFFER_LENGTH 65536
+#endif /* MAX_NET_BUFFER_LENGTH */
+
 class Server {
  public:
   Server(const unsigned short port);

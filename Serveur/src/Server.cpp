@@ -7,12 +7,17 @@ Server::Server(const unsigned short port) {
 
 void Server::receivePackets(std::string& msg) {
   for (Clients::iterator it = clients.begin(); it != clients.end();) {
-    sf::Packet packet;
-    sf::Socket::Status status = it->second->receive(packet);
+    /*sf::Packet packet;
+    sf::Socket::Status status = it->second->receive(packet);*/
+    char buffer[MAX_NET_BUFFER_LENGTH];
+    size_t length;
+    sf::Socket::Status status =
+        it->second->receive(buffer, MAX_NET_BUFFER_LENGTH, length);
 
     switch (status) {
       case sf::Socket::Done:
-        packet >> msg;
+        /*packet >> msg;*/
+        msg=buffer;
         std::cout << it->first << ": " << msg << "\n";
         ++it;
         break;
@@ -31,21 +36,24 @@ void Server::receivePackets(std::string& msg) {
 
 void Server::broadCast(const std::string& msg) {
   for (Clients::iterator it = clients.begin(); it != clients.end(); ++it) {
-    sf::Packet packet;
+    /*sf::Packet packet;
     packet << msg;
-    it->second->send(packet);
+
+    it->second->send(packet);*/
+    it->second->send(msg.c_str(), msg.length());
   }
 }
 
 void Server::send(const std::string& i, const std::string& msg) {
-  sf::Packet packet;
-  packet << msg;
+  /*sf::Packet packet;
+  packet << msg;*/
   Clients::iterator tmp = clients.find(i);
   if (tmp == clients.end()) {
     std::cout << "No client found \n";
     return;
   }
-  tmp->second->send(packet);
+  // tmp->second->send(packet);
+  tmp->second->send(msg.c_str(), msg.length());
 }
 
 void Server::receive(std::string& msg) {
@@ -57,7 +65,7 @@ void Server::receive(std::string& msg) {
   }
   if (listner.accept(*nextClient) == sf::Socket::Done) {
     clients.insert(std::make_pair(std::to_string(clients.size()), nextClient));
-    std::cout << clients.size()-1 << " is connected\n";
+    std::cout << clients.size() - 1 << " is connected\n";
     nextClient = nullptr;
   }
 
