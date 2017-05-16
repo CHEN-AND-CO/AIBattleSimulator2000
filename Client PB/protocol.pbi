@@ -15,7 +15,7 @@ Procedure AuthClient(socket)
       Case #PB_NetworkEvent_Data
         receivedBytes = ReceiveNetworkData(socket, *inputBuffer,#InputBufferSize)
         serverResponse$ = PeekS(*inputBuffer,receivedBytes,#PB_UTF8)
-        Debug serverResponse$
+        Debug "Server said : "+serverResponse$
         
         If FindString(serverResponse$,"auth ok")
           ProcedureReturn 1
@@ -29,7 +29,7 @@ Procedure AuthClient(socket)
         cpt +1
     EndSelect
     
-  Until (cpt/10) < #MaxAuthTimeout
+  Until (cpt/10) > #MaxAuthTimeout
 EndProcedure
 
 Procedure MakeServerCommand(socket,Command$)

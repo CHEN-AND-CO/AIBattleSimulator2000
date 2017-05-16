@@ -1,7 +1,7 @@
 ﻿
 IncludeFile "definitions.pbi"
 
-ServerURI$ = "127.0.0.1"
+ServerURI$ = "192.168.0.12"
 #Port = 53000
 
 If InitNetwork()
