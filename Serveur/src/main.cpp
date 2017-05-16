@@ -28,7 +28,6 @@ int main() {
     }
   }
 
-
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
   while (window.isOpen()) {
@@ -57,12 +56,6 @@ int main() {
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
               break;
 
-            default:
-              break;
-          }
-          break;
-        case sf::Event::KeyReleased:
-          switch (event.key.code) {
             case sf::Keyboard::Space:
               game.collectRessource(Direction::Up, sf::Color::Blue, currentId);
               game.collectRessource(Direction::Down, sf::Color::Blue,

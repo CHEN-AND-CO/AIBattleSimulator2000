@@ -78,6 +78,20 @@ std::vector<Entity> Game::getEntities(const sf::Color& col) const {
   return std::vector<Entity>();
 }
 
+void Game::clearPlayer() {
+  std::vector<int> indexs;
+  for (unsigned i{0}; i < mPlayer.size(); i++) {
+    mPlayer[i].clearMaps();
+    if (mPlayer[i].getBuildings().size() == 0 &&
+        mPlayer[i].getEntities().size() == 0) {
+      indexs.push_back(i);
+    }
+  }
+  for (auto i : indexs) {
+    mPlayer.erase(mPlayer.begin() + i);
+  }
+}
+
 bool Game::moveEntity(const Direction& dir, const sf::Color& col, int i) {
   for (auto& player : mPlayer) {
     if (player.getColor() == col) {

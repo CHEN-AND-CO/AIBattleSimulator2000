@@ -70,11 +70,7 @@ class Game {
   bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
                            int index);
 
-  void clearPlayer() {
-    for (auto& play : mPlayer) {
-      play.clearMaps();
-    }
-  }
+  void clearPlayer();
 
   bool attack(const sf::Color& col1, int index1);
 
