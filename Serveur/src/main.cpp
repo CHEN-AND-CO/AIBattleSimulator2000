@@ -38,7 +38,7 @@ int main() {
           window.close();
           break;
 
-        case sf::Event::KeyReleased:
+        case sf::Event::KeyPressed:
           switch (event.key.code) {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
@@ -56,6 +56,12 @@ int main() {
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
               break;
 
+            default:
+              break;
+          }
+          break;
+        case sf::Event::KeyReleased:
+          switch (event.key.code) {
             case sf::Keyboard::Space:
               game.collectRessource(Direction::Up, sf::Color::Blue, currentId);
               game.collectRessource(Direction::Down, sf::Color::Blue,
