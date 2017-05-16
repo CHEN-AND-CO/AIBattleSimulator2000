@@ -57,6 +57,7 @@ Player Game::getPlayer(const sf::Color& col) const {
       return mPlayer[i];
     }
   }
+  return Player(sf::Color::Black, sf::Vector2f(0, 0));
 }
 
 std::vector<Building> Game::getBuildings(const sf::Color& col) const {
@@ -65,6 +66,7 @@ std::vector<Building> Game::getBuildings(const sf::Color& col) const {
       return mPlayer[i].getBuildings();
     }
   }
+  return std::vector<Building>();
 }
 
 std::vector<Entity> Game::getEntities(const sf::Color& col) const {
@@ -72,6 +74,21 @@ std::vector<Entity> Game::getEntities(const sf::Color& col) const {
     if (mPlayer[i].getColor() == col) {
       return mPlayer[i].getEntities();
     }
+  }
+  return std::vector<Entity>();
+}
+
+void Game::clearPlayer() {
+  std::vector<int> indexs;
+  for (unsigned i{0}; i < mPlayer.size(); i++) {
+    mPlayer[i].clearMaps();
+    if (mPlayer[i].getBuildings().size() == 0 &&
+        mPlayer[i].getEntities().size() == 0) {
+      indexs.push_back(i);
+    }
+  }
+  for (auto i : indexs) {
+    mPlayer.erase(mPlayer.begin() + i);
   }
 }
 
@@ -165,7 +182,7 @@ bool Game::attack(const sf::Color& col, int index) {
         continue;
       }
 
-      for (int i{0}; i < player2.getEntities().size(); i++) {
+      for (unsigned i{0}; i < player2.getEntities().size(); i++) {
         if (rectCollide(
                 player1.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
                 player2.getEntities()[i].getPosition())) {
@@ -193,7 +210,7 @@ bool Game::attack(const sf::Color& col, int index) {
         }
       }
 
-      for (int i{0}; i < player2.getBuildings().size(); i++) {
+      for (unsigned i{0}; i < player2.getBuildings().size(); i++) {
         if (rectCollide(
                 player1.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
                 sf::Vector2f(1, 1), player2.getBuildings()[i].getPosition(),

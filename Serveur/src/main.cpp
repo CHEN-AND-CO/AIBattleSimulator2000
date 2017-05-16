@@ -5,7 +5,7 @@
 
 int main() {
   sf::RenderWindow window;
-  int currentId = 0;
+  unsigned currentId = 0;
 
   Game game;
   game.loadFile("ressources/level.txt");
@@ -56,12 +56,6 @@ int main() {
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
               break;
 
-            default:
-              break;
-          }
-          break;
-        case sf::Event::KeyReleased:
-          switch (event.key.code) {
             case sf::Keyboard::Space:
               game.collectRessource(Direction::Up, sf::Color::Blue, currentId);
               game.collectRessource(Direction::Down, sf::Color::Blue,
