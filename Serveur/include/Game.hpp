@@ -27,32 +27,35 @@ class Game {
   std::vector<Building> getBuildings(const sf::Color&) const;
   std::vector<Entity> getEntities(const sf::Color&) const;
 
-  void addEntity(const EntityType& entT, const sf::Color& col, int index) {
+  bool addEntity(const EntityType& entT, const sf::Color& col, int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
         player.addEntity(entT, index);
-        return;
+        return true;
       }
     }
+    return false;
   }
 
-  void addBuilding(const BuildingType& buildT, const sf::Color& col,
+  bool addBuilding(const BuildingType& buildT, const sf::Color& col,
                    int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
         player.addBuilding(buildT, index);
-        return;
+        return true;
       }
     }
+    return false;
   }
 
-  void addPlayer(const sf::Color& col, const sf::Vector2f pos) {
+  bool addPlayer(const sf::Color& col, const sf::Vector2f pos) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        return;
+        return false;
       }
     }
     mPlayer.push_back(Player(col, pos));
+    return true;
   }
 
   bool moveEntity(const Direction& dir, const sf::Color& col, int i);

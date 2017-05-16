@@ -5,7 +5,7 @@
 
 int main() {
   sf::RenderWindow window;
-  int currentId = 0;
+  unsigned currentId = 0;
 
   Game game;
   game.loadFile("ressources/level.txt");
@@ -27,7 +27,7 @@ int main() {
       rects.push_back(rect);
     }
   }
-  
+
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
