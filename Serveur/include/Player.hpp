@@ -39,8 +39,11 @@ class Player {
     return mEntities[index].putRessourcesInTown(*this);
   }
 
-  void receiveDamage(int index, int domage) {
-    mEntities[index].receiveDamage(domage);
+  void receiveDamageEntity(int damage, int index) {
+    mEntities[index].receiveDamage(damage);
+  }
+  void receiveDamageBuilding(int damage, int index) {
+    mBuildings[index].receiveDamage(damage);
   }
 
   void clearMaps();

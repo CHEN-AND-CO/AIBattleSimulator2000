@@ -2,8 +2,8 @@
 #define ENTITY_HPP
 
 #include <SFML/Graphics.hpp>
-#include "Define.hpp"
 #include <iostream>
+#include "Define.hpp"
 
 class Building;
 
@@ -31,8 +31,10 @@ class Entity {
 
   bool move(Direction dir, const Game& game);
   void receiveDamage(int damage) {
-    mHealth = -damage;
-    std::cout << mHealth << std::endl;
+    //std::cout << damage << std::endl;
+    //std::cout << mHealth << std::endl;
+    mHealth -= damage;
+    //std::cout << mHealth << std::endl;
   }
   bool isAlive() { return mHealth > 0; }
 

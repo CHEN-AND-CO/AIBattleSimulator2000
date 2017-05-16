@@ -23,7 +23,7 @@ class Building {
   int getID() const { return mID; }
   int getHealth() const { return mHealth; }
 
-  void receiveDamage(int damage) { mHealth = -damage; };
+  void receiveDamage(int damage) { mHealth -= damage; };
   bool isAlive() { return mHealth > 0; }
 
  private:
