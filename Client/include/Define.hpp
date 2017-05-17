@@ -24,7 +24,7 @@ enum class Ressource { Wood, MaxRessources };
 #define WARRIOR_PRICE 60
 
 #define MAX_RESSOURCES 20
-#define DELAY 500
+#define DELAY 250
 #define QUIT_FIRST_STATE 5
 
 bool rectCollide(const sf::Vector2f& pos1, const sf::Vector2f& size1,

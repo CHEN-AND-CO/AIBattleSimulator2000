@@ -15,7 +15,7 @@ IA::IA(Game *game, sf::Color color){
 }
 
 void IA::close(){
-  action.clear();
+  /*action.clear();
   state.clear();
   count.clear();
   mPosition.clear();
@@ -25,7 +25,7 @@ void IA::close(){
     state.push_back(0);
     count.push_back(0);
     mPosition.push_back(sf::Vector2f(-1,-1));
-  }
+  }*/
 }
 
 void IA::run(){
@@ -90,9 +90,12 @@ void IA::run(){
             action.push_back(0);
             state.push_back(0);
             count.push_back(0);
+            mPosition.push_back(sf::Vector2f(-1,-1));
             
             if(mGame->getPlayer(mColor).getEntities().size() >= QUIT_FIRST_STATE){
-              state[i] = 1;
+              for(unsigned j{0}; j < mGame->getPlayer(mColor).getEntities().size(); j++){
+                state[j] = 1;
+              }
             }
             
             action[i] = 0;
@@ -103,6 +106,10 @@ void IA::run(){
           default:
             break;
         }
+        break;
+      
+      case 1:
+        goTo(sf::Vector2f(15, 15), i);
         break;
       
       default:
@@ -198,6 +205,7 @@ sf::Vector2f IA::findFreeTree(const sf::Vector2f pos, int index){
     aroundPoint.clear();
   }
   
+  std::cout << index << ":" << aroundMap[aroundMap.size()-1].x << "/" << aroundMap[aroundMap.size()-1].y << std::endl;
   /*Retour de la dernière position du tableau, celle de l'arbre*/
   if(finded){return aroundMap[aroundMap.size()-1];}
   else {return sf::Vector2f(-1,-1);}
