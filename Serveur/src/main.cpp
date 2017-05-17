@@ -1,12 +1,11 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
 #include <iostream>
 #include "Game.hpp"
-#include "Server.hpp"
+#include "GameServer.hpp"
 
 int main() {
   sf::RenderWindow window;
-  Server server(53000);
+  GameServer gameServer(53000);
 
   Game g;
   g.loadFile("ressources/level.txt");
@@ -28,7 +27,6 @@ int main() {
   }
 
   window.create(sf::VideoMode(n * 32, m * 32), "Serveur");
-  std::string message;
 
   while (window.isOpen()) {
     sf::Event event;
@@ -43,11 +41,7 @@ int main() {
       }
     }
 
-    server.receive(message);
-    if (message.length() > 0) {
-      // server action here
-      message.clear();
-    }
+    gameServer.receive();
 
     window.clear();
     for (auto& r : rects) {
