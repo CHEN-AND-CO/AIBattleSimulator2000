@@ -1,9 +1,8 @@
 #include "IA.hpp"
 
-IA::IA(Game *game, sf::RenderWindow *window, sf::Color color){
+IA::IA(Game *game, sf::Color color){
   mColor = color;
   mGame = game;
-  mWindow = window;
   
   delay = sf::milliseconds(DELAY);
   
@@ -40,21 +39,23 @@ void IA::run(){
       case 0:
         switch(action[i]){
           case 0:
-            std::cout << i << ":Chercher arbre" << std::endl;
             count[i]=toForest(i);
             
             if(count[i]){
               count[i] = 0;
               action[i] = 1;
+              mPosition[i] = sf::Vector2f(-1,-1);
             }
             break;
             
           case 1:
-            std::cout << i << ":Collecter" << std::endl;
             collect(i);
             count[i]++;
+            printf("%02d\b\b", mGame->getPlayer(mColor).getTransportedRessources(i));
+            fflush(stdout);
             
-            if(mGame->getPlayer(mColor).getTransportedRessources(i) >= MAX_RESSOURCES || count[i] >= MAX_RESSOURCES+1){
+            if(mGame->getPlayer(mColor).getTransportedRessources(i) >= MAX_RESSOURCES || count[i] >= MAX_RESSOURCES+5){
+              printf("\n");
               count[i] = 0;
               action[i] = 2;
               std::cout << i << ":Ressources transportées : " << mGame->getPlayer(mColor).getTransportedRessources(i) << std::endl;
@@ -62,17 +63,16 @@ void IA::run(){
             break;
             
           case 2:
-            std::cout << i << ":Rentrer" << std::endl;
             count[i]=toHome(i);
             
             if(count[i]){
               count[i] = 0;
               action[i] = 3;
+              mPosition[i] = sf::Vector2f(-1,-1);
             }
             break;
             
           case 3:
-            std::cout << i << ":Ranger" << std::endl;
             store(i);
             
             if(mGame->getPlayer(mColor).getRessources(Ressource::Wood) <= VILLAGER_PRICE){
@@ -86,14 +86,10 @@ void IA::run(){
             break;
             
           case 4:
-            std::cout << i << ":Créer villageois" << std::endl;
             mGame->addEntity(EntityType::Villager, mColor, 0);
             action.push_back(0);
             state.push_back(0);
             count.push_back(0);
-            
-            std::cout << i << ":Ressources entreposées : " << mGame->getPlayer(mColor).getRessources(Ressource::Wood) << std::endl;
-            std::cout << i << ":Villageois : " << mGame->getPlayer(mColor).getEntities().size() << std::endl;
             
             if(mGame->getPlayer(mColor).getEntities().size() >= QUIT_FIRST_STATE){
               state[i] = 1;
@@ -138,10 +134,23 @@ int IA::toForest(int index){
 }
 
 int IA::toHome(int index){
-  return 0;
+  if(mPosition[index].x == -1 && mPosition[index].y == -1){
+    mPosition[index] = findTown(mGame->getPlayer(mColor).getEntities()[index].getPosition(), index);
+  }
+  
+  return goTo(mPosition[index], index);
 }
 
 bool IA::goTo(const sf::Vector2f pos, int index){
+  sf::Vector2f player = mGame->getPlayer(mColor).getEntities()[index].getPosition();
+  
+  if(pos == player){
+    return true;
+  }
+  
+  sf::Vector2f next = findNextTile(pos, index);
+  
+  move(next, index);
   
   return false;
 }
@@ -175,13 +184,12 @@ sf::Vector2f IA::findFreeTree(const sf::Vector2f pos, int index){
         }
       } else if(mGame->getMap()[aroundPoint[j].y][aroundPoint[j].x] == TREE){
         /*Si c'est un arbre*/
-        if(isTreeFree(aroundPoint[j])){
+        if(isTileFree(aroundPoint[j])){
           /*S'il n'y a pas de joueurs autour de la case on l'ajoute*/
           aroundMap.push_back(aroundPoint[j]);
           finded = true;
           /*C'est la fin du chemin*/
           aroundMap.push_back(aroundMap[i]);
-          std::cout << "Trouvé ! x:" << aroundMap[i].x << " / y:" << aroundMap[i].y << std::endl;
           break;
         }
       }
@@ -193,6 +201,97 @@ sf::Vector2f IA::findFreeTree(const sf::Vector2f pos, int index){
   /*Retour de la dernière position du tableau, celle de l'arbre*/
   if(finded){return aroundMap[aroundMap.size()-1];}
   else {return sf::Vector2f(-1,-1);}
+}
+
+sf::Vector2f IA::findTown(const sf::Vector2f pos, int index){
+  /*Déclaration des variables*/
+  std::vector<sf::Vector2f> aroundMap;
+  std::vector<sf::Vector2f> aroundPoint;
+  bool finded = false;
+  sf::Vector2f town;
+  sf::Vector2f townSize;
+  
+  for(unsigned i{0}; i < mGame->getBuildings(mColor).size(); i++){
+    if(mGame->getBuildings(mColor)[i].getType() == BuildingType::TownCenter){
+      town = mGame->getBuildings(mColor)[i].getPosition();
+      townSize = mGame->getBuildings(mColor)[i].getSize();
+    }
+  }
+  
+  /*Ajout de la première position dans le tableau de la map, celle du joueur*/
+  aroundMap.push_back(pos);
+  
+  /*Boucle tant que i est inférieure au nombre de cases dans le tableau de la map*/
+  for(unsigned i{0}; i < aroundMap.size() && !finded; i++){
+    /*Récupération des cases autour de la position i dans le tableau aroundPoint*/ 
+    computePoints(aroundMap[i], aroundPoint);
+    
+    /*Boucle tant que j est inférieure au nombre de cases dans le tableau aroundPoint*/
+    for(unsigned j{0}; j < aroundPoint.size(); j++){
+      /*Si le point existe dans le tableau de la map, on ne l'ajoute pas*/
+      if(pointExist(aroundPoint[j], aroundMap)){
+        continue;
+      }
+      
+      /*Vérification de ce que contient cette case*/
+      if(mGame->getMap()[aroundPoint[j].y][aroundPoint[j].x] == GROUND){
+        if(isFree(aroundPoint[j])){
+          /*Si c'est du sol on l'ajoute au tableau de case de la map*/
+          aroundMap.push_back(aroundPoint[j]);
+        }
+        /*S'il est en collision avec le town center, on est arrivé*/
+        if(rectCollide(aroundPoint[j], sf::Vector2f(1, 1), town, townSize)){
+          if(isTileFree(aroundPoint[j])){
+            /*S'il n'y a pas de joueurs autour de la case on l'ajoute*/
+            aroundMap.push_back(aroundPoint[j]);
+            finded = true;
+            /*C'est la fin du chemin*/
+            aroundMap.push_back(aroundMap[i]);
+            break;
+          }
+        }
+      }
+    }
+    /*Vidage du tableau de points autour de la case*/
+    aroundPoint.clear();
+  }
+  
+  /*Retour de la dernière position du tableau, celle du center*/
+  if(finded){return aroundMap[aroundMap.size()-1];}
+  else {return sf::Vector2f(-1,-1);}
+}
+
+sf::Vector2f IA::findNextTile(const sf::Vector2f pos, int index){
+  std::vector<sf::Vector2f> aroundPoint;
+  sf::Vector2f player = mGame->getPlayer(mColor).getEntities()[index].getPosition();
+  int distance = manhattan(player, pos);
+  
+  computePoints(player, aroundPoint);
+  
+  for(unsigned j{0}; j < aroundPoint.size(); j++){
+    if(manhattan(aroundPoint[j], pos) > distance){
+      continue;
+    }
+    
+    if(mGame->getMap()[aroundPoint[j].y][aroundPoint[j].x] == GROUND){
+      if(isFree(aroundPoint[j]) && manhattan(aroundPoint[j], pos) < distance){
+        return aroundPoint[j];
+      }
+    }
+  }
+  
+  for(unsigned j{0}; j < aroundPoint.size(); j++){
+    if(manhattan(aroundPoint[j], pos) > distance){
+      continue;
+    }
+    
+    if(mGame->getMap()[aroundPoint[j].y][aroundPoint[j].x] == GROUND){
+      if(isFree(aroundPoint[j]) && manhattan(aroundPoint[j], pos) == distance){
+        return aroundPoint[j];
+      }
+    }
+  }
+  return sf::Vector2f(-1,-1);
 }
 
 bool IA::posInMap(const sf::Vector2f pos){
@@ -253,7 +352,7 @@ bool IA::isFree(const sf::Vector2f pos){
   return true;
 }
 
-bool IA::isTreeFree(const sf::Vector2f pos){
+bool IA::isTileFree(const sf::Vector2f pos){
   std::vector<sf::Vector2f> aroundPoints;
   
   computePoints(pos, aroundPoints);
@@ -274,6 +373,28 @@ bool IA::isTreeFree(const sf::Vector2f pos){
   }
   
   return true;
+}
+
+void IA::move(const sf::Vector2f pos, int index){
+  sf::Vector2f player = mGame->getPlayer(mColor).getEntities()[index].getPosition();
+  
+  if(pos.x > player.x){
+    mGame->moveEntity(Direction::Right, mColor, index);
+  } else if(pos.x < player.x){
+    mGame->moveEntity(Direction::Left, mColor, index);
+  } else if(pos.y > player.y){
+    mGame->moveEntity(Direction::Down, mColor, index);
+  } else if(pos.y < player.y){
+    mGame->moveEntity(Direction::Up, mColor, index);
+  }
+}
+
+int IA::manhattan(const sf::Vector2f pos1, const sf::Vector2f pos2){
+  return manhattan(pos1.x, pos1.y, pos2.x, pos2.y);
+}
+
+int IA::manhattan(int x1, int y1, int x2, int y2){
+  return abs(x2-x1)+abs(y2-y1);
 }
 
 void IA::pause(unsigned time){

@@ -12,8 +12,8 @@ int main() {
   game.loadFile("ressources/level.txt");
   game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
   game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
-  game.addPlayer(sf::Color::Yellow, sf::Vector2f(2, 28));
-  game.addPlayer(sf::Color(255, 0, 255), sf::Vector2f(28, 7));
+  //game.addPlayer(sf::Color::Yellow, sf::Vector2f(2, 28));
+  //game.addPlayer(sf::Color(255, 0, 255), sf::Vector2f(28, 7));
 
   std::vector<sf::RectangleShape> rects;
 
@@ -32,8 +32,8 @@ int main() {
   }
   
   bool iaLaunched = false;
-  IA test(&game, &window, sf::Color::Blue);
-  //IA test(&game, &window, sf::Color::Red);
+  //IA test(&game, sf::Color::Blue);
+  IA test(&game, sf::Color::Red);
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
