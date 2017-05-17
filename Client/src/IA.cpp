@@ -151,12 +151,11 @@ int IA::toHome(int index){
 
 bool IA::goTo(const sf::Vector2f pos, int index){
   sf::Vector2f player = mGame->getPlayer(mColor).getEntities()[index].getPosition();
+  sf::Vector2f next;
   
   if(pos == player){
     return true;
   }
-  
-  sf::Vector2f next = findNextTile(pos, index);
   
   move(next, index);
   
