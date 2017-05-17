@@ -1,6 +1,6 @@
 #include "IA.hpp"
 
-IA::IA(Game *game, sf::Color color){
+IA::IA(std::shared_ptr<Game> game, sf::Color color){
   mColor = color;
   mGame = game;
   

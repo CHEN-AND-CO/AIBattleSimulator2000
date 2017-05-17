@@ -31,7 +31,7 @@ int main() {
   
   bool iaLaunched = false;
   
-  IA test(&game, sf::Color::Red);
+  IA test(std::make_shared<Game>(game), sf::Color::Red);
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 

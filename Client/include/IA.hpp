@@ -18,7 +18,7 @@ struct Tile{
 
 class IA {
  public:
-  IA(Game *game, sf::Color color);
+  IA(std::shared_ptr<Game> game, sf::Color color);
   
   void run();
   void close();
@@ -46,7 +46,7 @@ class IA {
   void pause(unsigned time);
 
  private:
-  Game* mGame;
+  std::shared_ptr<Game> mGame;
   sf::Color mColor;
   
   std::vector<unsigned> action;
