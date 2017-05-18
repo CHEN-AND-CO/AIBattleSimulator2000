@@ -9,6 +9,7 @@ typedef struct command {
   std::string id, command;
   std::vector<std::string> args;
   int arglen;
+  bool valid;
 } command;
 
 class GameServer {
@@ -17,6 +18,7 @@ class GameServer {
   void receive();
   void action(std::string msg);
   command parseCommand(std::string entry);
+  void printCommand(command cmd);
 
  private:
   Server server;
