@@ -12,7 +12,10 @@ void GameServer::receive() {
 
 void GameServer::action(std::string msg) {
   command cmd = parseCommand(msg);
-  printCommand(cmd);
+  // printCommand(cmd);
+  if (!cmd.command.compare("auth")) {
+    authentification(cmd.args, cmd.arglen);
+  }
 }
 
 command GameServer::parseCommand(std::string entry) {

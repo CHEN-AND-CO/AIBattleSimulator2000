@@ -27,7 +27,7 @@ sf::Socket::Status Client::receive(std::string& msg) {
       socket.receive(buffer, MAX_NET_BUFFER_LENGTH, length);
   if (status == sf::Socket::Done) {
     /*packet >> msg;*/
-    msg = str(buffer);
+        msg=buffer;
     std::cout << msg << "\n";
   }
   return status;
