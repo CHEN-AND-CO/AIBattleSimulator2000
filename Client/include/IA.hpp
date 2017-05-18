@@ -18,7 +18,6 @@
 
   class IA {
    public:
-    // IA(std::shared_ptr<Game> game, sf::Color color);
     IA(std::shared_ptr<Game> game, sf::Color color);
 
     void run();
