@@ -8,14 +8,15 @@ int main() {
   sf::RenderWindow window;
   unsigned currentId = 0;
 
-  auto game = std::make_shared<Game>();
-  game->loadFile("ressources/level.txt");
-  game->addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
-  game->addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
+  //auto game = std::make_shared<Game>();
+  Game game;
+  game.loadFile("ressources/level.txt");
+  game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
+  game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
 
   std::vector<sf::RectangleShape> rects;
 
-  auto map = game->getMap();
+  auto map = game.getMap();
   auto n = map.size();
   auto m = map[0].size();
   for (unsigned i{0}; i < n; i++) {
@@ -46,82 +47,82 @@ int main() {
         case sf::Event::KeyPressed:
           switch (event.key.code) {
             case sf::Keyboard::Up:
-              game->moveEntity(Direction::Up, sf::Color::Blue, currentId);
+              game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Down:
-              game->moveEntity(Direction::Down, sf::Color::Blue, currentId);
+              game.moveEntity(Direction::Down, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Left:
-              game->moveEntity(Direction::Left, sf::Color::Blue, currentId);
+              game.moveEntity(Direction::Left, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Right:
-              game->moveEntity(Direction::Right, sf::Color::Blue, currentId);
+              game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Space:
-              game->collectRessource(Direction::Up, sf::Color::Blue, currentId);
-              game->collectRessource(Direction::Down, sf::Color::Blue,
+              game.collectRessource(Direction::Up, sf::Color::Blue, currentId);
+              game.collectRessource(Direction::Down, sf::Color::Blue,
                                     currentId);
-              game->collectRessource(Direction::Left, sf::Color::Blue,
+              game.collectRessource(Direction::Left, sf::Color::Blue,
                                     currentId);
-              game->collectRessource(Direction::Right, sf::Color::Blue,
+              game.collectRessource(Direction::Right, sf::Color::Blue,
                                     currentId);
               std::cout << "player collect wood : "
-                        << game->getPlayer(sf::Color::Blue)
+                        << game.getPlayer(sf::Color::Blue)
                                .getTransportedRessources(currentId)
                         << std::endl;
               break;
 
             case sf::Keyboard::Return:
-              game->putRessourcesInTown(Direction::Up, sf::Color::Blue,
+              game.putRessourcesInTown(Direction::Up, sf::Color::Blue,
                                        currentId);
-              game->putRessourcesInTown(Direction::Down, sf::Color::Blue,
+              game.putRessourcesInTown(Direction::Down, sf::Color::Blue,
                                        currentId);
-              game->putRessourcesInTown(Direction::Left, sf::Color::Blue,
+              game.putRessourcesInTown(Direction::Left, sf::Color::Blue,
                                        currentId);
-              game->putRessourcesInTown(Direction::Right, sf::Color::Blue,
+              game.putRessourcesInTown(Direction::Right, sf::Color::Blue,
                                        currentId);
               std::cout << "player get back wood : "
-                        << game->getPlayer(sf::Color::Blue)
+                        << game.getPlayer(sf::Color::Blue)
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
 
             case sf::Keyboard::B:
-              game->addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
+              game.addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
               std::cout << "player wood : "
-                        << game->getPlayer(sf::Color::Blue)
+                        << game.getPlayer(sf::Color::Blue)
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
 
             case sf::Keyboard::V:
-              game->addEntity(EntityType::Villager, sf::Color::Blue, 0);
+              game.addEntity(EntityType::Villager, sf::Color::Blue, 0);
               std::cout << "player wood : "
-                        << game->getPlayer(sf::Color::Blue)
+                        << game.getPlayer(sf::Color::Blue)
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
 
             case sf::Keyboard::W:
-              game->addEntity(EntityType::Warrior, sf::Color::Blue, 1);
+              game.addEntity(EntityType::Warrior, sf::Color::Blue, 1);
               std::cout << "player wood : "
-                        << game->getPlayer(sf::Color::Blue)
+                        << game.getPlayer(sf::Color::Blue)
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
 
             case sf::Keyboard::A:
-              game->attack(sf::Color::Blue, currentId);
+              game.attack(sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Add:
               currentId++;
               if (currentId >=
-                  game->getPlayer(sf::Color::Blue).getEntities().size()) {
+                  game.getPlayer(sf::Color::Blue).getEntities().size()) {
                 currentId = 0;
               }
               break;
@@ -130,7 +131,7 @@ int main() {
               currentId--;
               if (currentId < 0) {
                 currentId =
-                    game->getPlayer(sf::Color::Blue).getEntities().size() - 1;
+                    game.getPlayer(sf::Color::Blue).getEntities().size() - 1;
               }
               break;
 
@@ -160,7 +161,7 @@ int main() {
     }
 
     if (iaLaunched) {
-      test.run();
+      test.run(game);
     }
 
     window.clear();
@@ -168,7 +169,7 @@ int main() {
       window.draw(r);
     }
 
-    auto buildings = game->getBuildings();
+    auto buildings = game.getBuildings();
     for (auto& b : buildings) {
       sf::RectangleShape r(
           sf::Vector2f(b.getSize().x * TILESIZE, b.getSize().y * TILESIZE));
@@ -177,7 +178,7 @@ int main() {
       window.draw(r);
     }
 
-    auto entity = game->getEntities();
+    auto entity = game.getEntities();
     for (auto& e : entity) {
       sf::CircleShape c(TILESIZE / 2);
       c.setFillColor(e.getColor());
@@ -187,7 +188,7 @@ int main() {
 
     window.display();
 
-    game->clearPlayer();
+    game.clearPlayer();
   }
   return 0;
 }
