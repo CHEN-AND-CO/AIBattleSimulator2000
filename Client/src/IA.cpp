@@ -12,6 +12,10 @@ IA::IA(std::shared_ptr<Game> game, sf::Color color) : mColor{color} {
   }
 }
 
+/****************************/
+/*Lancement et arrêt de l'IA*/
+/****************************/
+
 void IA::close() {
   /*action.clear();
   state.clear();
@@ -55,8 +59,9 @@ void IA::run() {
                 count[i] >= MAX_RESSOURCES + 5) {
               count[i] = 0;
               action[i] = 2;
-              std::cout << i << ":Ressources transportées : "
+              std::cout << i << " transporte "
                         << mGame->getPlayer(mColor).getTransportedRessources(i)
+                        << "bois"
                         << std::endl;
             }
             break;
@@ -78,7 +83,7 @@ void IA::run() {
                 VILLAGER_PRICE) {
               count[i] = 0;
               action[i] = 0;
-              std::cout << i << ":Ressources entreposées : "
+              std::cout << "Ressources entreposées : "
                         << mGame->getPlayer(mColor).getRessources(
                                Ressource::Wood)
                         << std::endl;
@@ -215,9 +220,7 @@ sf::Vector2f IA::findFreeTree(const sf::Vector2f pos, int index) {
     /*Vidage du tableau de points autour de la case*/
     aroundPoint.clear();
   }
-
-  std::cout << index << ":" << aroundMap[aroundMap.size() - 1].x << "/"
-            << aroundMap[aroundMap.size() - 1].y << std::endl;
+  
   /*Retour de la dernière position du tableau, celle de l'arbre*/
   if (finded) {
     return aroundMap[aroundMap.size() - 1];

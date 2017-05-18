@@ -19,35 +19,63 @@
   class IA {
    public:
     IA(std::shared_ptr<Game> game, sf::Color color);
-
+    
+    /****************************/
+    /*Lancement et arrêt de l'IA*/
+    /****************************/
     void run();
     void close();
+    
+    /***********************************/
+    /*Utilisation des actions de player*/
+    /***********************************/
     bool collect(int index);
     bool store(int index);
     void move(const sf::Vector2f pos, int index);
 
+    /***************************/
+    /*Déplacements des entitées*/
+    /***************************/
     int toForest(int index);
     int toHome(int index);
     bool goTo(const sf::Vector2f pos, int index);
 
+    /*****************************/
+    /*Trouver une case sur la map*/
+    /*****************************/
     sf::Vector2f findFreeTree(const sf::Vector2f pos, int index);
     sf::Vector2f findTown(const sf::Vector2f pos, int index);
+    
+    /************************************************/
+    /*Trouver la prochane case lors d'un déplacement*/
+    /************************************************/
     sf::Vector2f findNextTile(const sf::Vector2f pos, int index);
 
+    /****************************/
+    /*Lancement et arrêt de l'IA*/
+    /****************************/
     void computePoints(const sf::Vector2f pos,
                        std::vector<sf::Vector2f>& aroundPoints);
+    /****************************/
+    /*Lancement et arrêt de l'IA*/
+    /****************************/
     int manhattan(int x1, int y1, int x2, int y2);
     int manhattan(const sf::Vector2f pos1, const sf::Vector2f pos2);
 
+    /****************************/
+    /*Lancement et arrêt de l'IA*/
+    /****************************/
     bool isFree(const sf::Vector2f pos);
     bool isTileFree(const sf::Vector2f pos);
     bool posInMap(const sf::Vector2f pos);
     bool pointExist(const sf::Vector2f pos, std::vector<sf::Vector2f> aroundMap);
 
+    /****************************/
+    /*Lancement et arrêt de l'IA*/
+    /****************************/
     void pause(unsigned time);
 
    private:
-    // std::shared_ptr<Game> mGame;
     std::shared_ptr<Game> mGame;
     sf::Color mColor;
 
