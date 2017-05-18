@@ -65,8 +65,8 @@
     /****************************/
     /*Vérifications de positions*/
     /****************************/
-    bool isFree(Game& game, const sf::Vector2f pos);
     bool isTileFree(Game& game, const sf::Vector2f pos);
+    bool isAroundFree(Game& game, const sf::Vector2f pos, unsigned index);
     bool posInMap(Game& game, const sf::Vector2f pos);
     bool pointExist(const sf::Vector2f pos, std::vector<sf::Vector2f> aroundMap);
 
@@ -76,7 +76,6 @@
     void pause(unsigned time);
 
    private:
-    std::shared_ptr<Game> mGame;
     sf::Color mColor;
 
     std::vector<unsigned> action;

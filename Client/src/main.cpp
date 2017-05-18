@@ -8,8 +8,7 @@ int main() {
   sf::RenderWindow window;
   unsigned currentId = 0;
 
-  //auto game = std::make_shared<Game>();
-  Game game;
+ 	Game game;
   game.loadFile("ressources/level.txt");
   game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
   game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
