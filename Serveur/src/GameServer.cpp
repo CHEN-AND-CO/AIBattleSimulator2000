@@ -5,31 +5,29 @@ GameServer::GameServer(const unsigned short port) {
   listner.setBlocking(false);
 }
 
-void GameServer::receive() {
-  receive(message);
-  if (message.length() > 0) {
-    action(message);
-    message.clear();
-  }
-}
-
-void GameServer::receivePackets(std::string& msg) {
+void GameServer::receivePackets() {
+	char buffer[MAX_NET_BUFFER_LENGTH];
+    size_t length;
+    sf::Socket::Status status;
   for (Clients::iterator it = clients.begin(); it != clients.end();) {
     /*sf::Packet packet;
     sf::Socket::Status status = it->second->receive(packet);*/
-    char buffer[MAX_NET_BUFFER_LENGTH];
-    size_t length;
-    sf::Socket::Status status =
+    
+    status =
         it->second->receive(buffer, MAX_NET_BUFFER_LENGTH, length);
 
     switch (status) {
       case sf::Socket::Done:
         /*packet >> msg;*/
-        msg = buffer;
-        std::cout << it->first << ": " << msg << "\n";
+        message = buffer;
+        std::cout << it->first << ": " << message << "\n";
+        if (message.length() > 0) {
+          action(it, message);
+          message.clear();
+          buffer[MAX_NET_BUFFER_LENGTH] = {0};
+        }
         ++it;
         break;
-
       case sf::Socket::Disconnected:
         std::cout << it->first << " has been disconnected\n";
         it = clients.erase(it);
@@ -64,7 +62,7 @@ void GameServer::send(const std::string& i, const std::string& msg) {
   tmp->second->send(msg.c_str(), msg.length());
 }
 
-void GameServer::receive(std::string& msg) {
+void GameServer::receive() {
   sf::TcpSocket* nextClient = nullptr;
 
   if (nextClient == nullptr) {
@@ -77,18 +75,21 @@ void GameServer::receive(std::string& msg) {
     nextClient = nullptr;
   }
 
-  receivePackets(msg);
+  receivePackets();
 }
 
-void GameServer::action(std::string msg) {
+void GameServer::action(Clients::iterator& clientSocket, std::string msg) {
   command cmd = parseCommand(msg);
   // printCommand(cmd);
   if (!cmd.command.compare("auth")) {
-    authentification(cmd.args, cmd.arglen);
+    authentification(clientSocket, cmd.args, cmd.arglen);
   }
+
+  //clearCommand( cmd );
 }
 
 command GameServer::parseCommand(std::string entry) {
+	std::cout << "Parse Command\n";
   command out;
   out.command = "";
   out.id = "";
@@ -110,6 +111,7 @@ command GameServer::parseCommand(std::string entry) {
   boost::split(tmp, out.command, boost::is_any_of(":"));  // Split every :
   if (tmp.size() > 0) out.command = tmp[0];
   if (tmp.size() > 1) out.arglen = std::atoi(tmp[1].c_str());
+  tmp.clear();
 
   if (out.id.length() < 1 || out.command.length() < 1 || out.arglen < 0) {
     out.valid = false;
@@ -134,6 +136,15 @@ void GameServer::printCommand(command cmd) {
   }
 }
 
-void GameServer::authentification(std::vector<std::string> args, int arglen) {
+void GameServer::clearCommand(command& cmd){
+	cmd.args.clear();
+	cmd.arglen = -1;
+	cmd.command.clear();
+	cmd.id.clear();
+	cmd.valid = false;
+}
+
+void GameServer::authentification(Clients::iterator& clientSocket, std::vector<std::string> args, int arglen) {
   if (arglen <= 0 && args.size() <= 0) return;
+  (clientSocket->first) = args[0];
 }
