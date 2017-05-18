@@ -28,11 +28,11 @@ int main() {
       rects.push_back(rect);
     }
   }
-  
+
   bool iaLaunched = false;
-  
-  //IA test(std::make_shared<Game>(game), sf::Color::Red);
-  IA test(&game, sf::Color::Red);
+
+  // IA test(std::make_shared<Game>(game), sf::Color::Red);
+  IA test(std::make_shared<Game>(game), sf::Color::Blue);
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
@@ -136,12 +136,11 @@ int main() {
               break;
 
             case sf::Keyboard::S:
-              if(iaLaunched){
+              if (iaLaunched) {
                 std::cout << "IA stopped" << std::endl;
                 test.close();
                 iaLaunched = 0;
               } else {
-                if(std::system("clear")){}
                 std::cout << "IA launched" << std::endl;
                 iaLaunched = 1;
               }
@@ -160,9 +159,8 @@ int main() {
           break;
       }
     }
-    
-    
-    if(iaLaunched){
+
+    if (iaLaunched) {
       test.run();
     }
 
