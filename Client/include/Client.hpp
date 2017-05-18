@@ -19,7 +19,7 @@ class Client {
   sf::Socket::Status connect(const sf::IpAddress& IP, unsigned short port);
   sf::Socket::Status send(const std::string& msg);
   std::string receive();
-  std::string getName() { return mName; }
+  std::string getName() const { return mName; }
 };
 
 #endif /* CLIENT_HPP */

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Client.hpp"
+#include "Define.hpp"
 
 /*
                 CONVENTION MAP
@@ -12,8 +13,8 @@
 3: Riviere, Infranchissable
 */
 
-struct Building{
-  sf::Vector2f mPosisiton;
+struct Building {
+  sf::Vector2f mPositon;
   sf::Color mColor;
   BuildingType mType;
 };
@@ -22,6 +23,7 @@ class Game {
  public:
   Game(const sf::IpAddress& ip, unsigned short port, std::string name);
   std::vector<std::vector<int>> getMap();
+  std::vector<Building> getBuildings();
 
  private:
   Client mClient;
