@@ -45,10 +45,11 @@
     /*****************************/
     sf::Vector2f findFreeTree(Game& game, const sf::Vector2f pos, int index);
     sf::Vector2f findTown(Game& game, const sf::Vector2f pos, int index);
+    sf::Vector2f pathfinder(Game& game, const sf::Vector2f pos, int index);
     
-    /************************************************/
-    /*Trouver la prochane case lors d'un déplacement*/
-    /************************************************/
+    /*************************************************/
+    /*Trouver la prochaine case lors d'un déplacement*/
+    /*************************************************/
     sf::Vector2f findNextTile(Game& game, const sf::Vector2f pos, int index);
 
     /**************************************/
@@ -56,6 +57,9 @@
     /**************************************/
     void computePoints(Game& game, const sf::Vector2f pos,
                        std::vector<sf::Vector2f>& aroundPoints);
+    void computePoints(Game& game, const sf::Vector2f pos,
+                       std::vector<Tile>& aroundPoints, const Tile parent,
+                       const sf::Vector2f finale);
     /*********/
     /*Calculs*/
     /*********/
@@ -69,11 +73,13 @@
     bool isAroundFree(Game& game, const sf::Vector2f pos, unsigned index);
     bool posInMap(Game& game, const sf::Vector2f pos);
     bool pointExist(const sf::Vector2f pos, std::vector<sf::Vector2f> aroundMap);
+    bool pointExist(Tile firstTile, std::vector<Tile> aroundMap);
 
-    /*******************/
-    /*Pause à supprimer*/
-    /*******************/
+    /***********************/
+    /*Fonctions à supprimer*/
+    /***********************/
     void pause(unsigned time);
+    void printTile(Tile tile);
 
    private:
     sf::Color mColor;
@@ -85,6 +91,8 @@
     sf::Clock clock;
     sf::Time delay;
     std::vector<sf::Vector2f> mPosition;
+    
+    int test;
   };
 
   #endif
