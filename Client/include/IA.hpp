@@ -51,28 +51,28 @@
     /************************************************/
     sf::Vector2f findNextTile(const sf::Vector2f pos, int index);
 
-    /****************************/
-    /*Lancement et arrêt de l'IA*/
-    /****************************/
+    /**************************************/
+    /*Calculs des points autour de la case*/
+    /**************************************/
     void computePoints(const sf::Vector2f pos,
                        std::vector<sf::Vector2f>& aroundPoints);
-    /****************************/
-    /*Lancement et arrêt de l'IA*/
-    /****************************/
+    /*********/
+    /*Calculs*/
+    /*********/
     int manhattan(int x1, int y1, int x2, int y2);
     int manhattan(const sf::Vector2f pos1, const sf::Vector2f pos2);
 
     /****************************/
-    /*Lancement et arrêt de l'IA*/
+    /*Vérifications de positions*/
     /****************************/
     bool isFree(const sf::Vector2f pos);
     bool isTileFree(const sf::Vector2f pos);
     bool posInMap(const sf::Vector2f pos);
     bool pointExist(const sf::Vector2f pos, std::vector<sf::Vector2f> aroundMap);
 
-    /****************************/
-    /*Lancement et arrêt de l'IA*/
-    /****************************/
+    /*******************/
+    /*Pause à supprimer*/
+    /*******************/
     void pause(unsigned time);
 
    private:

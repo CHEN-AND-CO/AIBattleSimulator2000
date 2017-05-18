@@ -128,6 +128,9 @@ void IA::run() {
   }
 }
 
+/***********************************/
+/*Utilisation des actions de player*/
+/***********************************/
 bool IA::collect(int index) {
   return mGame->collectRessource(Direction::Up, mColor, index) ||
          mGame->collectRessource(Direction::Down, mColor, index) ||
@@ -142,6 +145,24 @@ bool IA::store(int index) {
          mGame->putRessourcesInTown(Direction::Right, mColor, index);
 }
 
+void IA::move(const sf::Vector2f pos, int index) {
+  sf::Vector2f player =
+      mGame->getPlayer(mColor).getEntities()[index].getPosition();
+
+  if (pos.x > player.x) {
+    mGame->moveEntity(Direction::Right, mColor, index);
+  } else if (pos.x < player.x) {
+    mGame->moveEntity(Direction::Left, mColor, index);
+  } else if (pos.y > player.y) {
+    mGame->moveEntity(Direction::Down, mColor, index);
+  } else if (pos.y < player.y) {
+    mGame->moveEntity(Direction::Up, mColor, index);
+  }
+}
+
+/***************************/
+/*Déplacements des entitées*/
+/***************************/
 int IA::toForest(int index) {
   if (mPosition[index].x == -1 && mPosition[index].y == -1) {
     mPosition[index] = findFreeTree(
@@ -175,6 +196,9 @@ bool IA::goTo(const sf::Vector2f pos, int index) {
   return false;
 }
 
+/*****************************/
+/*Trouver une case sur la map*/
+/*****************************/
 sf::Vector2f IA::findFreeTree(const sf::Vector2f pos, int index) {
   /*Déclaration des variables*/
   std::vector<sf::Vector2f> aroundMap;
@@ -293,6 +317,9 @@ sf::Vector2f IA::findTown(const sf::Vector2f pos, int index) {
   }
 }
 
+/************************************************/
+/*Trouver la prochane case lors d'un déplacement*/
+/************************************************/
 sf::Vector2f IA::findNextTile(const sf::Vector2f pos, int index) {
   std::vector<sf::Vector2f> aroundPoint;
   sf::Vector2f player =
@@ -328,19 +355,9 @@ sf::Vector2f IA::findNextTile(const sf::Vector2f pos, int index) {
   return sf::Vector2f(-1, -1);
 }
 
-bool IA::posInMap(const sf::Vector2f pos) {
-  if (pos.y <= 0) {
-    return false;
-  } else if (pos.x <= 0) {
-    return false;
-  } else if (pos.y >= mGame->getMap().size() - 1) {
-    return false;
-  } else if (pos.x >= mGame->getMap()[0].size() - 1) {
-    return false;
-  }
-  return true;
-}
-
+/**************************************/
+/*Calculs des points autour de la case*/
+/**************************************/
 void IA::computePoints(const sf::Vector2f pos,
                        std::vector<sf::Vector2f>& aroundPoints) {
   sf::Vector2f top = pos;
@@ -367,17 +384,20 @@ void IA::computePoints(const sf::Vector2f pos,
   }
 }
 
-bool IA::pointExist(const sf::Vector2f pos,
-                    std::vector<sf::Vector2f> aroundMap) {
-  for (const auto& position : aroundMap) {
-    if (position == pos) {
-      return true;
-    }
-  }
-
-  return false;
+/*********/
+/*Calculs*/
+/*********/
+int IA::manhattan(int x1, int y1, int x2, int y2) {
+  return abs(x2 - x1) + abs(y2 - y1);
 }
 
+int IA::manhattan(const sf::Vector2f pos1, const sf::Vector2f pos2) {
+  return manhattan(pos1.x, pos1.y, pos2.x, pos2.y);
+}
+
+/****************************/
+/*Vérifications de positions*/
+/****************************/
 bool IA::isFree(const sf::Vector2f pos) {
   std::vector<sf::Vector2f> point;
 
@@ -421,29 +441,33 @@ bool IA::isTileFree(const sf::Vector2f pos) {
   return true;
 }
 
-void IA::move(const sf::Vector2f pos, int index) {
-  sf::Vector2f player =
-      mGame->getPlayer(mColor).getEntities()[index].getPosition();
-
-  if (pos.x > player.x) {
-    mGame->moveEntity(Direction::Right, mColor, index);
-  } else if (pos.x < player.x) {
-    mGame->moveEntity(Direction::Left, mColor, index);
-  } else if (pos.y > player.y) {
-    mGame->moveEntity(Direction::Down, mColor, index);
-  } else if (pos.y < player.y) {
-    mGame->moveEntity(Direction::Up, mColor, index);
+bool IA::posInMap(const sf::Vector2f pos) {
+  if (pos.y <= 0) {
+    return false;
+  } else if (pos.x <= 0) {
+    return false;
+  } else if (pos.y >= mGame->getMap().size() - 1) {
+    return false;
+  } else if (pos.x >= mGame->getMap()[0].size() - 1) {
+    return false;
   }
+  return true;
 }
 
-int IA::manhattan(const sf::Vector2f pos1, const sf::Vector2f pos2) {
-  return manhattan(pos1.x, pos1.y, pos2.x, pos2.y);
+bool IA::pointExist(const sf::Vector2f pos,
+                    std::vector<sf::Vector2f> aroundMap) {
+  for (const auto& position : aroundMap) {
+    if (position == pos) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
-int IA::manhattan(int x1, int y1, int x2, int y2) {
-  return abs(x2 - x1) + abs(y2 - y1);
-}
-
+/*******************/
+/*Pause à supprimer*/
+/*******************/
 void IA::pause(unsigned time) {
   for (unsigned i{0}; i < time * 10000000; i++) {
     std::cout << "";
