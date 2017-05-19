@@ -72,7 +72,7 @@ class Game {
 
   void clearPlayer();
 
-  bool attack(const sf::Color& col1, int index1);
+  bool attack(const sf::Color& col1, int index1, const Direction& dir);
 
   bool isGameFinish() const;
   sf::Color getWinner() const;

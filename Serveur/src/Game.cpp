@@ -170,7 +170,7 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
   return false;
 }
 
-bool Game::attack(const sf::Color& col, int index) {
+bool Game::attack(const sf::Color& col, int index, const Direction& dir) {
   for (auto& player1 : mPlayer) {
     sf::Color pCol = player1.getColor();
     if (pCol != col) {
@@ -182,10 +182,31 @@ bool Game::attack(const sf::Color& col, int index) {
         continue;
       }
 
+      sf::Vector2f pos = player1.getEntities()[index].getPosition();
+      switch (dir) {
+        case Direction::Up:
+          pos.y--;
+          break;
+
+        case Direction::Down:
+          pos.y++;
+          break;
+
+        case Direction::Left:
+          pos.x--;
+          break;
+
+        case Direction::Right:
+          pos.x++;
+          break;
+
+        default:
+          break
+      }
+
       for (unsigned i{0}; i < player2.getEntities().size(); i++) {
-        if (rectCollide(
-                player1.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
-                player2.getEntities()[i].getPosition())) {
+        if (rectCollide(+sf::Vector2f(1, 0),
+                        player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;
