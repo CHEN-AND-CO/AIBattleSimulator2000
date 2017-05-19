@@ -3,11 +3,12 @@
 #include "Game.hpp"
 
 int main() {
-  Game game("127.0.0.1", 53013, "Alex");
+  Game game("172.17.3.250", 53000, "Alex");
 
-  //auto v = game.getMap();
+  // auto v = game.getMap();
 
-  auto b = game.getBuildings();
+  // auto b = game.getBuildings();
+  while(getchar()!='q'){}
 
   return 0;
 }

@@ -76,11 +76,21 @@ std::vector<Building> Game::getBuildings() {
     build.hp = std::stoi(data.substr(0, data.find(' ')));
     data = data.substr(data.find(' ') + 1);
 
-    // get tyoe
-    if (data == "TypeCenter") {
-      build.mType = BuildingType::TownCenter;
-    } else if (data == "Fort") {
-      build.mType = BuildingType::Fort;
+    // get type
+    auto pos = data.find(' ');
+    if (pos == std::string::npos) {
+      if (data == "TypeCenter") {
+        build.mType = BuildingType::TownCenter;
+      } else if (data == "Fort") {
+        build.mType = BuildingType::Fort;
+      }
+    } else {
+      if (data.substr(0, data.find(' ')) == "TypeCenter") {
+        build.mType = BuildingType::TownCenter;
+      } else if (data.substr(0, data.find(' ')) == "Fort") {
+        build.mType = BuildingType::Fort;
+      }
+      data = data.substr(data.find(' ') + 1);
     }
 
     output.push_back(build);
@@ -129,10 +139,20 @@ std::vector<Entity> Game::getEntities() {
     data = data.substr(data.find(' ') + 1);
 
     // get tyoe
-    if (data == "Warrior") {
-      ent.mType = EntityType::Warrior;
-    } else if (data == "Villager") {
-      ent.mType = EntityType::Villager;
+    auto pos = data.find(' ');
+    if (pos == std::string::npos) {
+      if (data == "Villager") {
+        ent.mType = EntityType::Villager;
+      } else if (data == "Warrior") {
+        ent.mType = EntityType::Warrior;
+      }
+    } else {
+      if (data.substr(0, data.find(' ')) == "Villager") {
+        ent.mType = EntityType::Villager;
+      } else if (data.substr(0, data.find(' ')) == "Warrior") {
+        ent.mType = EntityType::Warrior;
+      }
+      data = data.substr(data.find(' ') + 1);
     }
 
     output.push_back(ent);
@@ -162,4 +182,15 @@ std::vector<Entity> Game::getEntities(const sf::Color& color) {
     }
   }
   return output;
+}
+
+bool Game::attack(const sf::Color& col, int index) {
+  mClient.send(mClient.getName() + "@attack:2 " + std::to_string(col.r) + " " +
+               std::to_string(col.g) + " " + std::to_string(col.b) + " " +
+               std::to_string(index));
+  std::string data;
+  while ((data = mClient.receive()) == "Error") {
+  }
+  auto datas = getData(data);
+  return datas.second.second == "ok";
 }

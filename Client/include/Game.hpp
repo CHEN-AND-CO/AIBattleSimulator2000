@@ -31,12 +31,15 @@ class Game {
  public:
   Game(const sf::IpAddress& ip, unsigned short port, std::string name);
   std::vector<std::vector<int>> getMap();
-  std::vector<Building> getBuildings();
-  std::vector<Entity> getEntities();
   std::vector<Building> getBuildings(const sf::Color& color);
   std::vector<Entity> getEntities(const sf::Color& color);
 
+  bool attack(const sf::Color& col, int index);
+
  private:
+  std::vector<Building> getBuildings();
+  std::vector<Entity> getEntities();
+
   Client mClient;
 };
 
