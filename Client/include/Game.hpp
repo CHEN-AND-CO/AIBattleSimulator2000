@@ -33,6 +33,8 @@ class Game {
   std::vector<std::vector<int>> getMap();
   std::vector<Building> getBuildings();
   std::vector<Entity> getEntities();
+  std::vector<Building> getBuildings(const sf::Color& color);
+  std::vector<Entity> getEntities(const sf::Color& color);
 
  private:
   Client mClient;
@@ -41,10 +43,7 @@ class Game {
 #endif
 
 //   std::vector<Player> getPlayer() const { return mPlayer; }
-//   std::vector<Entity> getEntities() const;
 //   Player getPlayer(const sf::Color&) const;
-//   std::vector<Building> getBuildings(const sf::Color&) const;
-//   std::vector<Entity> getEntities(const sf::Color&) const;
 //   bool addEntity(const EntityType& entT, const sf::Color& col, int index)
 //   bool addBuilding(const BuildingType& buildT, const sf::Color& col, int
 //   index)
