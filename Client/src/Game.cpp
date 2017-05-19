@@ -8,7 +8,6 @@ Game::Game(const sf::IpAddress& ip, unsigned short port, std::string name)
 std::vector<std::vector<int>> Game::getMap() {
   std::string data;
   std::vector<std::vector<int>> output;
-  unsigned n = 0;
 
   mClient.send(mClient.getName() + "@getEntitysMap:0");
 
@@ -22,7 +21,7 @@ std::vector<std::vector<int>> Game::getMap() {
     return output;
   }
 
-  n = std::sqrt(datas.second.first);
+  unsigned n = std::sqrt(datas.second.first);
 
   data = datas.second.second;
 
@@ -55,7 +54,7 @@ std::vector<Building> Game::getBuildings() {
 
   data = datas.second.second;
 
-  for (unsigned i{0}; i < datas.second.first; i++) {
+  for (unsigned i{0}; i < datas.second.first / 7; i++) {
     Building build;
 
     // get position
@@ -117,7 +116,7 @@ std::vector<Entity> Game::getEntities() {
 
   data = datas.second.second;
 
-  for (unsigned i{0}; i < datas.second.first; i++) {
+  for (unsigned i{0}; i < datas.second.first / 7; i++) {
     Entity ent;
 
     // get position
@@ -184,13 +183,164 @@ std::vector<Entity> Game::getEntities(const sf::Color& color) {
   return output;
 }
 
-bool Game::attack(const sf::Color& col, int index) {
-  mClient.send(mClient.getName() + "@attack:2 " + std::to_string(col.r) + " " +
-               std::to_string(col.g) + " " + std::to_string(col.b) + " " +
-               std::to_string(index));
-  std::string data;
+bool Game::attack(const Direction& dir, const sf::Color& col, int index) {
+  std::string data = mClient.getName() + "@attack:5 " + std::to_string(col.r) +
+                     " " + std::to_string(col.g) + " " + std::to_string(col.b) +
+                     " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
+
+    case Direction::Down:
+      data += "down";
+      break;
+
+    case Direction::Left:
+      data += "left";
+      break;
+
+    case Direction::Right:
+      data += "right";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
   while ((data = mClient.receive()) == "Error") {
   }
+
   auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
+}
+
+bool Game::moveEntity(const Direction& dir, const sf::Color& col, int index) {
+  std::string data = mClient.getName() + "@move:5 " + std::to_string(col.r) +
+                     " " + std::to_string(col.g) + " " + std::to_string(col.b) +
+                     " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
+
+    case Direction::Down:
+      data += "down";
+      break;
+
+    case Direction::Left:
+      data += "left";
+      break;
+
+    case Direction::Right:
+      data += "right";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
+}
+
+bool Game::collectRessource(const Direction& dir, const sf::Color& col,
+                            int index) {
+  std::string data = mClient.getName() + "@collect:5 " + std::to_string(col.r) +
+                     " " + std::to_string(col.g) + " " + std::to_string(col.b) +
+                     " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
+
+    case Direction::Down:
+      data += "down";
+      break;
+
+    case Direction::Left:
+      data += "left";
+      break;
+
+    case Direction::Right:
+      data += "right";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
+}
+
+bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
+                               int index) {
+  std::string data = mClient.getName() + "@putintown:5 " +
+                     std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+                     std::to_string(col.b) + " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
+
+    case Direction::Down:
+      data += "down";
+      break;
+
+    case Direction::Left:
+      data += "left";
+      break;
+
+    case Direction::Right:
+      data += "right";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    return false;
+  }
+
   return datas.second.second == "ok";
 }

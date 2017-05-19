@@ -34,7 +34,11 @@ class Game {
   std::vector<Building> getBuildings(const sf::Color& color);
   std::vector<Entity> getEntities(const sf::Color& color);
 
-  bool attack(const sf::Color& col, int index);
+  bool attack(const Direction& dir, const sf::Color& col, int index);
+  bool moveEntity(const Direction& dir, const sf::Color& col, int index);
+  bool collectRessource(const Direction& dir, const sf::Color& col, int index);
+  bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
+                           int index);
 
  private:
   std::vector<Building> getBuildings();
@@ -50,12 +54,9 @@ class Game {
 //   bool addEntity(const EntityType& entT, const sf::Color& col, int index)
 //   bool addBuilding(const BuildingType& buildT, const sf::Color& col, int
 //   index)
-//   bool addPlayer(const sf::Color& col, const sf::Vector2f pos)
-//   bool moveEntity(const Direction& dir, const sf::Color& col, int i)
 //   bool collectRessource(const Direction& dir, const sf::Color& col, int
 //   index)
 //   bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
 //                            int index)
-//   bool attack(const sf::Color& col1, int index1);
-//   bool isGameFinish() const;
-//   sf::Color getWinner() const;
+// bool isGameFinish() const;
+// sf::Color getWinner() const;

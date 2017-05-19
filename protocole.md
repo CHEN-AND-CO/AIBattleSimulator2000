@@ -19,17 +19,21 @@
 
 		id@getBuildingsMap:0 //Demande la map des batiments
 
-		id@move:1 [0-3](left/right/up/down)
+		id@move:5 r g b int direction
 
 		id@update:3 x y hp
 
 		id@auth:2 name r g b
 
-		id@attack:2 r g b int
+		id@attack:5 r g b int direction
+
+		id@collect:5 r g b int direction
+
+		id@putintown:5 r g b int direction
 
 		### Reception ###
 
-		id@reply:2 command (ok/fail)
+		id@reply:1 command (ok/fail)
 
 		id@terrain:1 data
 
