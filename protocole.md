@@ -31,9 +31,6 @@
 
 		id@terrain:1 data
 
-		id@entitys:1 data
+		id@entitys:2 x y color hp type x y color hp type
 
-		id@buildings:1 data
-
-		id@update:3 x y hp
-		
+		id@buildings:2 x y color hp type x y color hp type
