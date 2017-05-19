@@ -344,3 +344,67 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
 
   return datas.second.second == "ok";
 }
+
+bool Game::addEntity(const EntityType& entT, const sf::Color& col, int index) {
+  std::string data = mClient.getName() + "@addentity:5 " +
+                     std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+                     std::to_string(col.b) + " " + std::to_string(index) + " ";
+  switch (entT) {
+    case EntityType::Villager:
+      data += "villager";
+      break;
+
+    case EntityType::Warrior:
+      data += "warrior";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
+}
+
+bool Game::addBuilding(const BuildingType& buildT, const sf::Color& col, int index) {
+  std::string data = mClient.getName() + "@addbuilding:5 " +
+                     std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+                     std::to_string(col.b) + " " + std::to_string(index) + " ";
+  switch (buildT) {
+    case BuildingType::TownCenter:
+      data += "towncenter";
+      break;
+
+    case BuildingType::Fort:
+      data += "fort";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
+}

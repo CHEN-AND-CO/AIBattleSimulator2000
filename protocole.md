@@ -31,6 +31,10 @@
 
 		id@putintown:5 r g b int direction
 
+		id@addentity:5 r g b int entType
+
+		id@addbuildind:5 r g b int buildType
+
 		### Reception ###
 
 		id@reply:1 command (ok/fail)
