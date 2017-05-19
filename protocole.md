@@ -23,7 +23,9 @@
 
 		id@update:3 x y hp
 
-		id@auth:2 name color
+		id@auth:2 name r g b
+
+		id@attack:2 r g b int
 
 		### Reception ###
 
@@ -31,6 +33,6 @@
 
 		id@terrain:1 data
 
-		id@entitys:2 x y color hp type x y color hp type
+		id@entitys:14 x y r g b hp type x y r g b hp type
 
-		id@buildings:2 x y color hp type x y color hp type
+		id@buildings:14 x y r g b hp type x y r g b hp type
