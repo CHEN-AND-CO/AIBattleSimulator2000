@@ -6,15 +6,14 @@ GameServer::GameServer(const unsigned short port) {
 }
 
 void GameServer::receivePackets() {
-	char buffer[MAX_NET_BUFFER_LENGTH];
-    size_t length;
-    sf::Socket::Status status;
+  char buffer[MAX_NET_BUFFER_LENGTH];
+  size_t length;
+  sf::Socket::Status status;
   for (Clients::iterator it = clients.begin(); it != clients.end();) {
     /*sf::Packet packet;
     sf::Socket::Status status = it->second->receive(packet);*/
-    
-    status =
-        it->second->receive(buffer, MAX_NET_BUFFER_LENGTH, length);
+
+    status = it->second->receive(buffer, MAX_NET_BUFFER_LENGTH, length);
 
     switch (status) {
       case sf::Socket::Done:
@@ -22,9 +21,11 @@ void GameServer::receivePackets() {
         message = buffer;
         std::cout << it->first << ": " << message << "\n";
         if (message.length() > 0) {
-          action(it, message);
+          action(it->first, message);
           message.clear();
-          buffer[MAX_NET_BUFFER_LENGTH] = {0};
+          for (int i = 0; i < MAX_NET_BUFFER_LENGTH; i++) {
+            buffer[i] = 0;
+          }
         }
         ++it;
         break;
@@ -50,7 +51,7 @@ void GameServer::broadCast(const std::string& msg) {
   }
 }
 
-void GameServer::send(const std::string& i, const std::string& msg) {
+void GameServer::send(const std::string i, const std::string& msg) {
   /*sf::Packet packet;
   packet << msg;*/
   Clients::iterator tmp = clients.find(i);
@@ -71,6 +72,7 @@ void GameServer::receive() {
   }
   if (listner.accept(*nextClient) == sf::Socket::Done) {
     clients.insert(std::make_pair(std::to_string(clients.size()), nextClient));
+    send(clients.find(std::to_string(clients.size()-1))->first, std::string(SERVER_ID)+std::string("@auth:1 ")+std::to_string(clients.size()-1) );
     std::cout << clients.size() - 1 << " is connected\n";
     nextClient = nullptr;
   }
@@ -78,18 +80,17 @@ void GameServer::receive() {
   receivePackets();
 }
 
-void GameServer::action(Clients::iterator& clientSocket, std::string msg) {
+void GameServer::action(const std::string id, std::string msg) {
   command cmd = parseCommand(msg);
   // printCommand(cmd);
   if (!cmd.command.compare("auth")) {
-    authentification(clientSocket, cmd.args, cmd.arglen);
+    authentification(id, cmd.args, cmd.arglen);
   }
 
-  //clearCommand( cmd );
+  // clearCommand( cmd );
 }
 
 command GameServer::parseCommand(std::string entry) {
-	std::cout << "Parse Command\n";
   command out;
   out.command = "";
   out.id = "";
@@ -136,15 +137,44 @@ void GameServer::printCommand(command cmd) {
   }
 }
 
-void GameServer::clearCommand(command& cmd){
-	cmd.args.clear();
-	cmd.arglen = -1;
-	cmd.command.clear();
-	cmd.id.clear();
-	cmd.valid = false;
+void GameServer::clearCommand(command& cmd) {
+  cmd.args.clear();
+  cmd.arglen = -1;
+  cmd.command.clear();
+  cmd.id.clear();
+  cmd.valid = false;
 }
 
-void GameServer::authentification(Clients::iterator& clientSocket, std::vector<std::string> args, int arglen) {
+void GameServer::authentification(const std::string id,
+                                  std::vector<std::string> args, int arglen) {
   if (arglen <= 0 && args.size() <= 0) return;
-  (clientSocket->first) = args[0];
+  clients.insert(std::make_pair(args[0], clients.find(id)->second));
+  clients.erase(id);
+  send(clients.find(args[0])->first,
+       std::string(SERVER_ID) + std::string("@reply:2 auth ok"));
+}
+
+std::string GameServer::newId() {
+  std::string newId;
+  do {
+    newId = randomAlphaNumeric(8);
+  } while (clients.find(newId) == clients.end());
+  std::cout << newId << std::endl;
+  return newId;
+}
+
+std::string GameServer::randomAlphaNumeric(size_t length) {
+  auto randchar = []() -> char {
+    const char charset[] =
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz";
+    const size_t max_index = (sizeof(charset) - 1);
+    return charset[rand() % max_index];
+  };
+  std::string str(length, 0);
+  std::generate_n(str.begin(), length, randchar);
+
+  std::cout << str << std::endl;
+  return str;
 }

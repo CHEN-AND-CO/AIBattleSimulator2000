@@ -13,6 +13,10 @@
 #define MAX_NET_BUFFER_LENGTH 65536
 #endif /* MAX_NET_BUFFER_LENGTH */
 
+#ifndef SERVER_ID
+#define SERVER_ID "SERVER"
+#endif /* SERVER_ID */
+
 typedef struct command {
   std::string id, command;
   std::vector<std::string> args;
@@ -27,15 +31,18 @@ class GameServer {
   GameServer(const unsigned short port);
 
   void receive();
-  void send(const std::string &i, const std::string &msg);
+  void send(const std::string i, const std::string &msg);
   void broadCast(const std::string &msg);
   void receivePackets();
 
-  void action(Clients::iterator& clientSocket, std::string msg);
+  void action(const std::string id, std::string msg);
   command parseCommand(std::string entry);
   void printCommand(command cmd);
   void clearCommand(command& cmd);
-  void authentification( Clients::iterator& clientSocket, std::vector<std::string> args, int arglen );
+  void authentification(const std::string id, std::vector<std::string> args, int arglen) ;
+
+  std::string newId();
+  std::string randomAlphaNumeric(size_t length);
 
  private:
   std::string message;
