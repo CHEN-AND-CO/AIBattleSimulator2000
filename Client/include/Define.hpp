@@ -14,7 +14,7 @@ enum class EntityType { Villager, Warrior, MaxEntityType };
 enum class Direction { Up, Down, Left, Right, MaxDirection };
 enum class Ressource { Wood, MaxRessources };
 
-std::pair<std::string, std::pair<int, std::string>> getData(
+std::pair<std::string, std::pair<unsigned, std::string>> getData(
     const std::string& input);
 
 #endif

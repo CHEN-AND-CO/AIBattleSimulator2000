@@ -16,7 +16,15 @@
 struct Building {
   sf::Vector2f mPositon;
   sf::Color mColor;
+  int hp;
   BuildingType mType;
+};
+
+struct Entity {
+  sf::Vector2f mPositon;
+  sf::Color mColor;
+  int hp;
+  EntityType mType;
 };
 
 class Game {
@@ -24,6 +32,7 @@ class Game {
   Game(const sf::IpAddress& ip, unsigned short port, std::string name);
   std::vector<std::vector<int>> getMap();
   std::vector<Building> getBuildings();
+  std::vector<Entity> getEntities();
 
  private:
   Client mClient;
@@ -32,7 +41,6 @@ class Game {
 #endif
 
 //   std::vector<Player> getPlayer() const { return mPlayer; }
-//   std::vector<Building> getBuildings() const;
 //   std::vector<Entity> getEntities() const;
 //   Player getPlayer(const sf::Color&) const;
 //   std::vector<Building> getBuildings(const sf::Color&) const;
