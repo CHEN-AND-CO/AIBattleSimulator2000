@@ -29,11 +29,13 @@
 
 		id@collect:5 r g b int direction
 
-		id@putintown:5 r g b int direction
+		id@putInTown:5 r g b int direction
 
-		id@addentity:5 r g b int entType
+		id@addEntity:5 r g b int entType
 
-		id@addbuildind:5 r g b int buildType
+		id@addBuildind:5 r g b int buildType
+
+		id@getPlayer:3 r g b
 
 		### Reception ###
 
@@ -44,3 +46,5 @@
 		id@entitys:14 x y r g b hp type x y r g b hp type
 
 		id@buildings:14 x y r g b hp type x y r g b hp type
+
+		id@player:4 ressourceType amount ressoureType amount

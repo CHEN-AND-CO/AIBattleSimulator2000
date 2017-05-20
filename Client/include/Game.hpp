@@ -27,12 +27,18 @@ struct Entity {
   EntityType mType;
 };
 
+struct Player {
+  std::map<Ressource, int> mRessources;
+  sf::Color mColor;
+};
+
 class Game {
  public:
   Game(const sf::IpAddress& ip, unsigned short port, std::string name);
   std::vector<std::vector<int>> getMap();
-  std::vector<Building> getBuildings(const sf::Color& color);
-  std::vector<Entity> getEntities(const sf::Color& color);
+  std::vector<Building> getBuildings(const sf::Color& col);
+  std::vector<Entity> getEntities(const sf::Color& col);
+  Player getPlayer(const sf::Color& col);
 
   bool attack(const Direction& dir, const sf::Color& col, int index);
   bool moveEntity(const Direction& dir, const sf::Color& col, int index);
@@ -54,7 +60,5 @@ class Game {
 //   std::vector<Player> getPlayer() const { return mPlayer; }
 //   Player getPlayer(const sf::Color&) const;
 //   bool addEntity(const EntityType& entT, const sf::Color& col, int index)
-//   bool addBuilding(const BuildingType& buildT, const sf::Color& col, int
-//   index)
-// bool isGameFinish() const;
-// sf::Color getWinner() const;
+//   bool isGameFinish() const;
+//   sf::Color getWinner() const;

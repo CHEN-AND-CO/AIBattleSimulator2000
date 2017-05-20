@@ -306,7 +306,7 @@ bool Game::collectRessource(const Direction& dir, const sf::Color& col,
 
 bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
                                int index) {
-  std::string data = mClient.getName() + "@putintown:5 " +
+  std::string data = mClient.getName() + "@putInTown:5 " +
                      std::to_string(col.r) + " " + std::to_string(col.g) + " " +
                      std::to_string(col.b) + " " + std::to_string(index) + " ";
   switch (dir) {
@@ -346,7 +346,7 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
 }
 
 bool Game::addEntity(const EntityType& entT, const sf::Color& col, int index) {
-  std::string data = mClient.getName() + "@addentity:5 " +
+  std::string data = mClient.getName() + "@addEntity:5 " +
                      std::to_string(col.r) + " " + std::to_string(col.g) + " " +
                      std::to_string(col.b) + " " + std::to_string(index) + " ";
   switch (entT) {
@@ -377,8 +377,9 @@ bool Game::addEntity(const EntityType& entT, const sf::Color& col, int index) {
   return datas.second.second == "ok";
 }
 
-bool Game::addBuilding(const BuildingType& buildT, const sf::Color& col, int index) {
-  std::string data = mClient.getName() + "@addbuilding:5 " +
+bool Game::addBuilding(const BuildingType& buildT, const sf::Color& col,
+                       int index) {
+  std::string data = mClient.getName() + "@addBuilding:5 " +
                      std::to_string(col.r) + " " + std::to_string(col.g) + " " +
                      std::to_string(col.b) + " " + std::to_string(index) + " ";
   switch (buildT) {
@@ -407,4 +408,37 @@ bool Game::addBuilding(const BuildingType& buildT, const sf::Color& col, int ind
   }
 
   return datas.second.second == "ok";
+}
+
+Player Game::getPlayer(const sf::Color& col) {
+  Player play;
+  play.mColor = col;
+
+  mClient.send(mClient.getName() + "@getPlayer:3 " + std::to_string(col.r) +
+               " " + std::to_string(col.g) + " " + std::to_string(col.b));
+
+  std::string data;
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "player") {
+    play.mColor = sf::Color::Black;
+    return play;
+  }
+
+  unsigned n = datas.second.first;
+  data = datas.second.second;
+
+  for (unsigned i{0}; i < n / 2; i++) {
+    Ressource key;
+    if (data.substr(0, data.find(' ')) == "Wood") {
+      key = Ressource::Wood;
+    }
+    data = data.substr(data.find(' ') + 1);
+    play.mRessources[key] = std::stoi(data.substr(data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+  }
+  return play;
 }
