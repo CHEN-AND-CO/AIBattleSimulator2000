@@ -72,7 +72,9 @@ void GameServer::receive() {
   }
   if (listner.accept(*nextClient) == sf::Socket::Done) {
     clients.insert(std::make_pair(std::to_string(clients.size()), nextClient));
-    send(clients.find(std::to_string(clients.size()-1))->first, std::string(SERVER_ID)+std::string("@auth:1 ")+std::to_string(clients.size()-1) );
+    send(clients.find(std::to_string(clients.size() - 1))->first,
+         std::string(SERVER_ID) + std::string("@auth:1 ") +
+             std::to_string(clients.size() - 1));
     std::cout << clients.size() - 1 << " is connected\n";
     nextClient = nullptr;
   }
@@ -85,6 +87,7 @@ void GameServer::action(const std::string id, std::string msg) {
   if (!cmd.command.compare("auth")) {
     authentification(id, cmd.args, cmd.arglen);
   }
+  printCommand(cmd);
 }
 
 command GameServer::parseCommand(std::string entry) {
@@ -95,18 +98,21 @@ command GameServer::parseCommand(std::string entry) {
   std::vector<std::string> tmp;
   std::string stmp;
 
-  boost::split(tmp, entry, boost::is_any_of(" "));  // Split every space
+  // boost::split(tmp, entry, boost::is_any_of(" "));  // Split every space
+  tmp = split(entry, ' ');
   stmp = tmp[0];
   tmp.erase(tmp.begin());
   out.args = tmp;
   tmp.clear();
 
-  boost::split(tmp, stmp, boost::is_any_of("@"));  // Split every @
+  // boost::split(tmp, stmp, boost::is_any_of("@"));  // Split every @
+  tmp = split(stmp, '@');
   if (tmp.size() > 0) out.id = tmp[0];
   if (tmp.size() > 1) out.command = tmp[1];
   tmp.clear();
 
-  boost::split(tmp, out.command, boost::is_any_of(":"));  // Split every :
+  // boost::split(tmp, out.command, boost::is_any_of(":"));  // Split every :
+  tmp = split(out.command, ':');
   if (tmp.size() > 0) out.command = tmp[0];
   if (tmp.size() > 1) out.arglen = std::atoi(tmp[1].c_str());
   tmp.clear();
@@ -149,4 +155,21 @@ void GameServer::authentification(const std::string id,
   clients.erase(id);
   send(clients.find(args[0])->first,
        std::string(SERVER_ID) + std::string("@reply:2 auth ok"));
+}
+
+std::vector<std::string> GameServer::split(const std::string& in,
+                                           const char& token) {
+  std::vector<std::string> out;
+  std::string buffer = "";
+  for (auto n : in) {
+    if (n != token)
+      buffer += n;
+    else if (n == token && buffer != "") {
+      out.push_back(buffer);
+      buffer = "";
+    }
+  }
+  if (buffer != "") out.push_back(buffer);
+
+  return out;
 }

@@ -24,22 +24,24 @@ typedef struct command {
   bool valid;
 } command;
 
-typedef std::unordered_map<std::string, sf::TcpSocket *> Clients;
+typedef std::unordered_map<std::string, sf::TcpSocket*> Clients;
 
 class GameServer {
  public:
   GameServer(const unsigned short port);
 
   void receive();
-  void send(const std::string i, const std::string &msg);
-  void broadCast(const std::string &msg);
+  void send(const std::string i, const std::string& msg);
+  void broadCast(const std::string& msg);
   void receivePackets();
 
   void action(const std::string id, std::string msg);
   command parseCommand(std::string entry);
   void printCommand(command cmd);
   void clearCommand(command& cmd);
-  void authentification(const std::string id, std::vector<std::string> args, int arglen) ;
+  void authentification(const std::string id, std::vector<std::string> args,
+                        int arglen);
+  std::vector<std::string> split(const std::string& in, const char& token);
 
  private:
   std::string message;
