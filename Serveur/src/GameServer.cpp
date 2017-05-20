@@ -82,12 +82,9 @@ void GameServer::receive() {
 
 void GameServer::action(const std::string id, std::string msg) {
   command cmd = parseCommand(msg);
-  // printCommand(cmd);
   if (!cmd.command.compare("auth")) {
     authentification(id, cmd.args, cmd.arglen);
   }
-
-  // clearCommand( cmd );
 }
 
 command GameServer::parseCommand(std::string entry) {
@@ -152,29 +149,4 @@ void GameServer::authentification(const std::string id,
   clients.erase(id);
   send(clients.find(args[0])->first,
        std::string(SERVER_ID) + std::string("@reply:2 auth ok"));
-}
-
-std::string GameServer::newId() {
-  std::string newId;
-  do {
-    newId = randomAlphaNumeric(8);
-  } while (clients.find(newId) == clients.end());
-  std::cout << newId << std::endl;
-  return newId;
-}
-
-std::string GameServer::randomAlphaNumeric(size_t length) {
-  auto randchar = []() -> char {
-    const char charset[] =
-        "0123456789"
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        "abcdefghijklmnopqrstuvwxyz";
-    const size_t max_index = (sizeof(charset) - 1);
-    return charset[rand() % max_index];
-  };
-  std::string str(length, 0);
-  std::generate_n(str.begin(), length, randchar);
-
-  std::cout << str << std::endl;
-  return str;
 }

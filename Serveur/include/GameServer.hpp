@@ -41,9 +41,6 @@ class GameServer {
   void clearCommand(command& cmd);
   void authentification(const std::string id, std::vector<std::string> args, int arglen) ;
 
-  std::string newId();
-  std::string randomAlphaNumeric(size_t length);
-
  private:
   std::string message;
   Clients clients;
