@@ -1,16 +1,18 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
 #include <iostream>
 #include "Game.hpp"
+#include "GameServer.hpp"
 
 int main() {
   sf::RenderWindow window;
+
   unsigned currentId = 0;
 
   Game game;
   game.loadFile("ressources/level.txt");
   game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
   game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
+  GameServer gameServer(53000);
 
   std::vector<sf::RectangleShape> rects;
 
@@ -134,6 +136,8 @@ int main() {
           break;
       }
     }
+
+    gameServer.receive();
 
     window.clear();
     for (auto& r : rects) {
