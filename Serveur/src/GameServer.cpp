@@ -176,5 +176,10 @@ std::vector<std::string> GameServer::split(const std::string& in,
 
 std::string GameServer::maptostring( std::vector<std::vector<int>> map ){
 std::string out = "";
+for(int i = 0; i < map.size(); i++){
+for(int j = 0; j < map[0].size(); j++){
+out+= std::string(std::atoi(map[i][j]));
+}
+}
 return out;
 }
