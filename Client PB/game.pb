@@ -1,4 +1,9 @@
-﻿XIncludeFile "entity.pbi"
+﻿;##############################################
+;# Game implementation for AIBattle           #
+;##############################################
+;This is unsed for test purposes
+
+XIncludeFile "entity.pbi"
 
 Soldat.NewPlayer = InitPlayer(10,10,25)
 Sorcier.NewPlayer = InitPlayer(10,25,50)
@@ -11,7 +16,7 @@ Debug "Le sorcier a "+Sorcier\GetHealth()+" points de vie"
 Sorcier\Reheal(10)
 Debug "Le sorcier a utilisé son mana pour avoir "+Sorcier\GetHealth()+" points de vie"
 ; IDE Options = PureBasic 5.51 (Linux - x64)
-; CursorPosition = 7
+; CursorPosition = 3
 ; EnableXP
 ; CompileSourceDirectory
 ; EnableCompileCount = 2
