@@ -1,6 +1,8 @@
-#Convention de la map
+Convention de la map
   1:herbe, franchissable
+  
   2:foret, infranchissable, procure du bois
+  
   3:riviere, infranchissable, procure de la nourriture (a venir)
 
 
