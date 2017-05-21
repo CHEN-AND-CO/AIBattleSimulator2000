@@ -173,3 +173,8 @@ std::vector<std::string> GameServer::split(const std::string& in,
 
   return out;
 }
+
+std::string GameServer::maptostring( std::vector<std::vector<int>> map ){
+std::string out = "";
+return out;
+}
