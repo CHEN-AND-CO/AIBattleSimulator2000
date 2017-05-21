@@ -30,18 +30,19 @@ EndEnumeration
 
 Global Dim GameMap(#MapWidth, #MapHeight)
 
-Global NewList Players.NewPlayer()
+Global Dim Players.NewPlayer(#NbPlayers)
 
-For i=0 To #NbPlayers ;Création d'une ligne de 20 joueurs
-  AddElement(Players())
-  Players() = InitPlayer(i,10,25)
+For i=0 To #NbPlayers ;CrAddElement(Players())
+  Players(i) = InitPlayer(i,10,25)
 Next
 
+Debug "test du joueur 13 : " + Players(13)\GetHealth()
+
 ; IDE Options = PureBasic 5.51 (Linux - x64)
-; CursorPosition = 34
+; CursorPosition = 38
 ; FirstLine = 4
 ; EnableXP
 ; CompileSourceDirectory
-; EnableCompileCount = 3
+; EnableCompileCount = 4
 ; EnableBuildCount = 0
 ; EnableExeConstant

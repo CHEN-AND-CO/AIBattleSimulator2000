@@ -11,7 +11,7 @@ EndStructure
 Structure Player Extends Entity
   attack.i
   shield.i
-  HoldedMaterial.i
+  HoldedMaterial.i[4]
   
   thAI.i
 EndStructure
@@ -33,7 +33,7 @@ EndInterface
 Interface NewPlayer Extends NewEntity ;Entité de type joueur
   AttachAI.i(*thAIManager)            ;Attache une IA a l'entité et la pilote
   DetachAI.i()                        ;Détache l'IA attachée à cette entité (Retourne 1 si l'IA a été détachée correctement)
-  Pick(x,y)                           ;Prend les ressources à la position (x,y)
+  Pick(x,y)                           ;Prend les ressources à la position (x,y) adjacente au joueur
   Attack.i(*Target.Entity)   ;Attaque l'entité Target
 EndInterface
 
@@ -112,7 +112,13 @@ Procedure DetachAI(*this.Player)
 EndProcedure
 
 Procedure Pick(*this.Player, x, y)
-  ;!TODO : Ici svp !!!!
+  If Abs(*this\x - x) < 2 And Abs(*this\y - y) ;Vérification case adjacente
+                                               ;!TODO :gérer la perte de ressource sur la case
+    *this\HoldedMaterial[1] +1
+    ProcedureReturn 1
+  Else
+    ProcedureReturn 0
+  EndIf
 EndProcedure
 
 Procedure Attack(*this.Player,*Target.Entity)
@@ -168,8 +174,8 @@ DataSection
   Data.i @Add()
 EndDataSection
 ; IDE Options = PureBasic 5.51 (Linux - x64)
-; CursorPosition = 161
-; FirstLine = 133
+; CursorPosition = 35
+; FirstLine = 28
 ; Folding = ---
 ; EnableXP
 ; CompileSourceDirectory
