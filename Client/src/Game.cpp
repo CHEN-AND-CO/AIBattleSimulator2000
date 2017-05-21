@@ -19,6 +19,7 @@ std::vector<std::vector<int>> Game::getMap() {
 
   if (datas.first != "terrain") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << data << std::endl;
     return output;
   }
 
@@ -50,6 +51,7 @@ std::vector<Building> Game::getBuildings() {
 
   if (datas.first != "buildings") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << data << std::endl;
     return output;
   }
 
@@ -112,6 +114,7 @@ std::vector<Entity> Game::getEntities() {
 
   if (datas.first != "entitys") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << data << std::endl;
     return output;
   }
 

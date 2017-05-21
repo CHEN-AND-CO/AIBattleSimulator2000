@@ -8,7 +8,9 @@ int main() {
   // auto v = game.getMap();
 
   // auto b = game.getBuildings();
-  while(getchar()!='q'){}
+  while (getchar() != 'q') {
+    game.getBuildings(sf::Color::Blue);
+  }
 
   return 0;
 }
