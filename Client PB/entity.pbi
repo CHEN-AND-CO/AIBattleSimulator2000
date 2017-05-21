@@ -33,7 +33,7 @@ EndInterface
 Interface NewPlayer Extends NewEntity ;Entité de type joueur
   AttachAI.i(*thAIManager)            ;Attache une IA a l'entité et la pilote
   DetachAI.i()                        ;Détache l'IA attachée à cette entité (Retourne 1 si l'IA a été détachée correctement)
-  
+  Pick(x,y)                           ;Prend les ressources à la position (x,y)
   Attack.i(*Target.Entity)   ;Attaque l'entité Target
 EndInterface
 
@@ -42,7 +42,7 @@ Interface NewBuilding Extends NewEntity ;Entité de type batiment
   GetStock(Material.s)                  ;Renvoie la quantité de <matériau> contenue dans le batiment
   SetStock(Material.s, Quantity.f)      ;Modifie la <Quantity> de <matériau> dans le batiment
   
-  Pick(Material.s, Quantity.f)          ;Prend une <Quantity> de <Material> dans le batiment
+  Take(Material.s, Quantity.f)          ;Prend une <Quantity> de <Material> dans le batiment
   Add(Material.s, Quantity.f)           ;Ajoute <Quantity> de <Material> dans le batiment
 EndInterface
 
@@ -111,6 +111,10 @@ Procedure DetachAI(*this.Player)
   EndIf
 EndProcedure
 
+Procedure Pick(*this.Player, x, y)
+  ;!TODO : Ici svp !!!!
+EndProcedure
+
 Procedure Attack(*this.Player,*Target.Entity)
   *Target\Health - *this\attack
 EndProcedure
@@ -133,7 +137,7 @@ Procedure SetStock(*this.Building, Material.s, Quantity.f)
   *this\Materials(Material) = Quantity
 EndProcedure
 
-Procedure Pick(*this.Building, Material.s, Quantity.f)
+Procedure Take(*this.Building, Material.s, Quantity.f)
   If *this\Materials(Material) - Quantity > 0
     *this\Materials(Material) = *this\Materials(Material) - Quantity
     ProcedureReturn 1
@@ -155,16 +159,17 @@ DataSection
   Data.i @Destroy()
   Data.i @AttachAI()
   Data.i @DetachAI()
+  Data.i @Pick()
   Data.i @Attack()
   Data.i @Lock()
   Data.i @GetStock()
   Data.i @SetStock()
-  Data.i @Pick()
+  Data.i @Take()
   Data.i @Add()
 EndDataSection
 ; IDE Options = PureBasic 5.51 (Linux - x64)
-; CursorPosition = 162
-; FirstLine = 128
+; CursorPosition = 161
+; FirstLine = 133
 ; Folding = ---
 ; EnableXP
 ; CompileSourceDirectory
