@@ -1,9 +1,11 @@
 #include "GameServer.hpp"
 
-GameServer::GameServer(const unsigned short port) {
+GameServer::GameServer(const unsigned short port, std::shared_ptr<Game> gptr): gamePtr{gptr} {
   listner.listen(port);
   listner.setBlocking(false);
 }
+
+GameServer::~GameServer(){}
 
 void GameServer::receivePackets() {
   char buffer[MAX_NET_BUFFER_LENGTH];
@@ -86,6 +88,9 @@ void GameServer::action(const std::string id, std::string msg) {
   command cmd = parseCommand(msg);
   if (!cmd.command.compare("auth")) {
     authentification(id, cmd.args, cmd.arglen);
+  }else if( !cmd.command.compare("getTerrainMap")){
+    auto map = gamePtr->getMap();
+    send(cmd.id, std::string(SERVER_ID)+std::string("@terrain:")+std::to_string(map.size())+std::string(" ")+maptostring(map));
   }
   printCommand(cmd);
 }
@@ -174,12 +179,14 @@ std::vector<std::string> GameServer::split(const std::string& in,
   return out;
 }
 
-std::string GameServer::maptostring( std::vector<std::vector<int>> map ){
-std::string out = "";
-for(int i = 0; i < map.size(); i++){
-for(int j = 0; j < map[0].size(); j++){
-out+= std::string(std::atoi(map[i][j]));
-}
-}
-return out;
+std::string GameServer::maptostring(std::vector<std::vector<int>> map) {
+  std::string out;
+  for (size_t i = 0; i < map.size(); i++) {
+    for (size_t j = 0; j < map[0].size(); j++) {
+      out += std::to_string(map[i][j]) + std::string(" ");
+    }
+  }
+  out.pop_back();
+
+  return out;
 }

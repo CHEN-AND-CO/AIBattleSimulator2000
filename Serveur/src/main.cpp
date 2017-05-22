@@ -5,14 +5,15 @@
 
 int main() {
   sf::RenderWindow window;
-  GameServer gameServer(53000);
 
-  Game g;
-  g.loadFile("ressources/level.txt");
+  std::shared_ptr<Game> game = std::make_shared<Game>();
+  game->loadFile("ressources/level.txt");
+
+  GameServer gameServer(53000,game);
 
   std::vector<sf::RectangleShape> rects;
 
-  auto map = g.getMap();
+  auto map = game->getMap();
   auto n = map.size();
   auto m = map[0].size();
   for (unsigned i{0}; i < n; i++) {
@@ -25,6 +26,8 @@ int main() {
       rects.push_back(rect);
     }
   }
+
+  std::cout << gameServer.maptostring(map) << std::endl;
 
   window.create(sf::VideoMode(n * 32, m * 32), "Serveur");
 

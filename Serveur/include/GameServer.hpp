@@ -5,9 +5,12 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <memory>
 //#include <boost/algorithm/string.hpp>
 
 #include "Client.hpp"
+
+#include "Game.hpp"
 
 #ifndef MAX_NET_BUFFER_LENGTH
 #define MAX_NET_BUFFER_LENGTH 65536
@@ -28,7 +31,8 @@ typedef std::unordered_map<std::string, sf::TcpSocket*> Clients;
 
 class GameServer {
  public:
-  GameServer(const unsigned short port);
+  GameServer(const unsigned short port, std::shared_ptr<Game> gptr);
+  ~GameServer();
 
   void receive();
   void send(const std::string i, const std::string& msg);
@@ -47,6 +51,7 @@ std::string maptostring( std::vector<std::vector<int>> map );
  private:
   std::string message;
   Clients clients;
+  std::shared_ptr<Game> gamePtr;
   sf::TcpListener listner;
 };
 
