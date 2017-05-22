@@ -52,10 +52,4 @@ class Game {
   Client mClient;
 };
 
-#endif
-
-//   std::vector<Player> getPlayer() const { return mPlayer; }
-//   Player getPlayer(const sf::Color&) const;
-//   bool addEntity(const EntityType& entT, const sf::Color& col, int index)
-//   bool isGameFinish() const;
-//   sf::Color getWinner() const;
+#endif"
