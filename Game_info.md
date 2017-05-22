@@ -21,5 +21,5 @@
 	Fort: 1000pv
 
 # Caracteristique des Entités: #
-	Villager: 100pv 5attack
-	Warrior: 100pv 60attack
+	Villager: 100pv 5 attack
+	Warrior: 100pv 60 attack
