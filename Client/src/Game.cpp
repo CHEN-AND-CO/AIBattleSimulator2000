@@ -41,7 +41,9 @@ std::vector<Building> Game::getBuildings() {
   std::string data;
   std::vector<Building> output;
 
-  mClient.send(mClient.getName() + "@getBuildingMap:0");
+  mClient.send(mClient.getName() + "@getBuildingMap:0 " +
+               std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+               std::to_string(col.b));
 
   while ((data = mClient.receive()) == "Error") {
   }
@@ -104,7 +106,8 @@ std::vector<Entity> Game::getEntities() {
   std::string data;
   std::vector<Entity> output;
 
-  mClient.send(mClient.getName() + "@getEntitysMap:0");
+  mClient.send(mClient.getName() + "@getEntitysMap:3 " + std::to_string(col.r) +
+               " " + std::to_string(col.g) + " " + std::to_string(col.b));
 
   while ((data = mClient.receive()) == "Error") {
   }
@@ -160,29 +163,6 @@ std::vector<Entity> Game::getEntities() {
     output.push_back(ent);
   }
 
-  return output;
-}
-
-std::vector<Building> Game::getBuildings(const sf::Color& color) {
-  auto build = getBuildings();
-  std::vector<Building> output;
-
-  for (const auto& b : build) {
-    if (b.mColor == color) {
-      output.push_back(b);
-    }
-  }
-  return output;
-}
-std::vector<Entity> Game::getEntities(const sf::Color& color) {
-  auto ent = getEntities();
-  std::vector<Entity> output;
-
-  for (const auto& e : ent) {
-    if (e.mColor == color) {
-      output.push_back(e);
-    }
-  }
   return output;
 }
 
