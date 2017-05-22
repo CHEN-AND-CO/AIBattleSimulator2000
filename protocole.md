@@ -41,7 +41,7 @@
 
 		id@reply:1 command (ok/fail)
 
-		id@terrain:1 data
+		id@terrain:4 terrainID terrainID terrainID terrainID 
 
 		id@entitys:14 x y r g b hp type x y r g b hp type
 
