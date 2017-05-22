@@ -49,9 +49,6 @@ class Game {
   bool addBuilding(const BuildingType& buildT, const sf::Color& col, int index);
 
  private:
-  std::vector<Building> getBuildings();
-  std::vector<Entity> getEntities();
-
   Client mClient;
 };
 
