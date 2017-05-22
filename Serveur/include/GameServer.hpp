@@ -3,9 +3,9 @@
 
 #include <SFML/Network.hpp>
 #include <iostream>
+#include <memory>
 #include <unordered_map>
 #include <vector>
-#include <memory>
 //#include <boost/algorithm/string.hpp>
 
 #include "Client.hpp"
@@ -46,7 +46,7 @@ class GameServer {
   void authentification(const std::string id, std::vector<std::string> args,
                         int arglen);
   std::vector<std::string> split(const std::string& in, const char& token);
-std::string maptostring( std::vector<std::vector<int>> map );
+  std::string maptostring(std::vector<std::vector<int>> map);
 
  private:
   std::string message;

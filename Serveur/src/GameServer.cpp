@@ -1,11 +1,12 @@
 #include "GameServer.hpp"
 
-GameServer::GameServer(const unsigned short port, std::shared_ptr<Game> gptr): gamePtr{gptr} {
+GameServer::GameServer(const unsigned short port, std::shared_ptr<Game> gptr)
+    : gamePtr{gptr} {
   listner.listen(port);
   listner.setBlocking(false);
 }
 
-GameServer::~GameServer(){}
+GameServer::~GameServer() {}
 
 void GameServer::receivePackets() {
   char buffer[MAX_NET_BUFFER_LENGTH];
@@ -86,11 +87,14 @@ void GameServer::receive() {
 
 void GameServer::action(const std::string id, std::string msg) {
   command cmd = parseCommand(msg);
+
   if (!cmd.command.compare("auth")) {
     authentification(id, cmd.args, cmd.arglen);
-  }else if( !cmd.command.compare("getTerrainMap")){
+  } else if (!cmd.command.compare("getTerrainMap")) {
     auto map = gamePtr->getMap();
-    send(cmd.id, std::string(SERVER_ID)+std::string("@terrain:")+std::to_string(map.size())+std::string(" ")+maptostring(map));
+    send(cmd.id, std::string(SERVER_ID) + std::string("@terrain:") +
+                     std::to_string(map.size() * map[0].size()) +
+                     std::string(" ") + maptostring(map));
   }
   printCommand(cmd);
 }
@@ -156,10 +160,14 @@ void GameServer::clearCommand(command& cmd) {
 void GameServer::authentification(const std::string id,
                                   std::vector<std::string> args, int arglen) {
   if (arglen <= 0 && args.size() <= 0) return;
-  clients.insert(std::make_pair(args[0], clients.find(id)->second));
-  clients.erase(id);
-  send(clients.find(args[0])->first,
-       std::string(SERVER_ID) + std::string("@reply:2 auth ok"));
+  if (clients.find(args[0]) != clients.end()) {
+  	send(id, std::string(SERVER_ID) + std::string("@auth:1 fail"));
+  } else {
+    clients.insert(std::make_pair(args[0], clients.find(id)->second));
+    clients.erase(id);
+    send(clients.find(args[0])->first,
+         std::string(SERVER_ID) + std::string("@auth:1 ok"));
+  }
 }
 
 std::vector<std::string> GameServer::split(const std::string& in,
