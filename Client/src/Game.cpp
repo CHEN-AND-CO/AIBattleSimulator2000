@@ -9,7 +9,7 @@ std::vector<std::vector<int>> Game::getMap() {
   std::string data;
   std::vector<std::vector<int>> output;
 
-  mClient.send(mClient.getName() + "@getEntitysMap:0");
+  mClient.send(mClient.getName() + "@getTerrainMap:0");
 
   while ((data = mClient.receive()) == "Error") {
   }
@@ -18,6 +18,7 @@ std::vector<std::vector<int>> Game::getMap() {
 
   if (datas.first != "terrain") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return output;
   }
 
@@ -40,7 +41,7 @@ std::vector<Building> Game::getBuildings() {
   std::string data;
   std::vector<Building> output;
 
-  mClient.send(mClient.getName() + "@getTerrainMap:0");
+  mClient.send(mClient.getName() + "@getBuildingMap:0");
 
   while ((data = mClient.receive()) == "Error") {
   }
@@ -49,6 +50,7 @@ std::vector<Building> Game::getBuildings() {
 
   if (datas.first != "buildings") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return output;
   }
 
@@ -102,7 +104,7 @@ std::vector<Entity> Game::getEntities() {
   std::string data;
   std::vector<Entity> output;
 
-  mClient.send(mClient.getName() + "@getEntityMap:0");
+  mClient.send(mClient.getName() + "@getEntitysMap:0");
 
   while ((data = mClient.receive()) == "Error") {
   }
@@ -111,6 +113,7 @@ std::vector<Entity> Game::getEntities() {
 
   if (datas.first != "entitys") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return output;
   }
 
@@ -217,6 +220,7 @@ bool Game::attack(const Direction& dir, const sf::Color& col, int index) {
 
   if (datas.first != "reply") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return false;
   }
 
@@ -257,6 +261,7 @@ bool Game::moveEntity(const Direction& dir, const sf::Color& col, int index) {
 
   if (datas.first != "reply") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return false;
   }
 
@@ -298,6 +303,7 @@ bool Game::collectRessource(const Direction& dir, const sf::Color& col,
 
   if (datas.first != "reply") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return false;
   }
 
@@ -339,6 +345,7 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
 
   if (datas.first != "reply") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return false;
   }
 
@@ -404,6 +411,7 @@ bool Game::addBuilding(const BuildingType& buildT, const sf::Color& col,
 
   if (datas.first != "reply") {
     std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return false;
   }
 

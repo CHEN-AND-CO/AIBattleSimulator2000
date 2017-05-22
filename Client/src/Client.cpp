@@ -13,6 +13,17 @@ sf::Socket::Status Client::connect(const sf::IpAddress& IP,
   data = getData(data).second.second;
 
   send(data + "@auth:1 " + mName);
+
+  while ((data = receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "auth") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+  }
+
   return stat;
 }
 

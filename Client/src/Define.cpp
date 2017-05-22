@@ -10,10 +10,10 @@ std::pair<std::string, std::pair<unsigned, std::string>> getData(
   output.first = data.substr(0, data.find(':'));  // get the command
   data = data.substr(data.find(':') + 1);
 
-  output.second.first = std::stoi(data.substr(0, 1));  // get the number of arg
-  data = data.substr(2);
+  output.second.first =
+      std::stoi(data.substr(0, data.find(' ')));  // get the number of arg
 
-  output.second.second = data; //get the arguments
+  output.second.second = data.substr(data.find(' ') + 1);  // get the arguments
 
   return output;
 }
