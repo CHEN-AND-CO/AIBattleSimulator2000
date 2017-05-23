@@ -39,27 +39,45 @@ int main() {
           break;
 
         case sf::Event::KeyPressed:
-          for (auto i : game.getMap(sf::Color::Blue)) {
-            for (auto j : i) {
-              std::cout << j;
-            }
-            std::cout << std::endl;
-          }
           switch (event.key.code) {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
+              for (auto i : game.getMap(sf::Color::Blue)) {
+                for (auto j : i) {
+                  std::cout << j;
+                }
+                std::cout << std::endl;
+              }
               break;
 
             case sf::Keyboard::Down:
               game.moveEntity(Direction::Down, sf::Color::Blue, currentId);
+              for (auto i : game.getMap(sf::Color::Blue)) {
+                for (auto j : i) {
+                  std::cout << j;
+                }
+                std::cout << std::endl;
+              }
               break;
 
             case sf::Keyboard::Left:
               game.moveEntity(Direction::Left, sf::Color::Blue, currentId);
+              for (auto i : game.getMap(sf::Color::Blue)) {
+                for (auto j : i) {
+                  std::cout << j;
+                }
+                std::cout << std::endl;
+              }
               break;
 
             case sf::Keyboard::Right:
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
+              for (auto i : game.getMap(sf::Color::Blue)) {
+                for (auto j : i) {
+                  std::cout << j;
+                }
+                std::cout << std::endl;
+              }
               break;
 
             case sf::Keyboard::Space:

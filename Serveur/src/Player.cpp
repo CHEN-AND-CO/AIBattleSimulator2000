@@ -86,28 +86,12 @@ void Player::addBuilding(const BuildingType& buildT, const sf::Vector2f& pos) {
 }
 
 void Player::updateCache() {
-  for (unsigned i{0}; i < mCache.size(); i++) {
-    for (unsigned j{0}; j < mCache.size(); j++) {
-      mCache[i][j] = 0;
-    }
-  }
   for (const auto& b : mBuildings) {
     sf::Vector2f pos = b.getPosition();
-    for (int x{-mBuildingView}; x <= mBuildingView; x++) {
-      for (int y{-mBuildingView}; y <= mBuildingView; y++) {
-        if (rectInCircle(b.getPosition(), mBuildingView, sf::Vector2f(x, y))) {
-          mCache[y + pos.y][x + pos.x] = 1;
-        }
-        if (rectInCircle(b.getPosition() + sf::Vector2f(b.getSize().x, 0),
-                         mBuildingView, sf::Vector2f(x, y))) {
-          mCache[y + pos.y][x + pos.x] = 1;
-        }
-        if (rectInCircle(b.getPosition() + sf::Vector2f(0, b.getSize().y),
-                         mBuildingView, sf::Vector2f(x, y))) {
-          mCache[y + pos.y][x + pos.x] = 1;
-        }
-        if (rectInCircle(b.getPosition() + b.getSize(), mBuildingView,
-                         sf::Vector2f(x, y))) {
+    for (int x{-mBuildingView}; x <= mBuildingView + b.getSize().x; x++) {
+      for (int y{-mBuildingView}; y <= mBuildingView + b.getSize().y; y++) {
+        if (!(x + pos.x >= 0 && y + pos.y >= 0 &&
+              x + pos.x < mCache[0].size() && y + pos.y < mCache.size())) {
           mCache[y + pos.y][x + pos.x] = 1;
         }
       }
@@ -118,9 +102,7 @@ void Player::updateCache() {
     sf::Vector2f pos = e.getPosition();
     for (int x{-mBuildingView}; x <= mBuildingView; x++) {
       for (int y{-mBuildingView}; y <= mBuildingView; y++) {
-        if (rectInCircle(e.getPosition(), mBuildingView, sf::Vector2f(x, y))) {
-          mCache[y + pos.y][x + pos.x] = 1;
-        }
+        mCache[y + pos.y][x + pos.x] = 1;
       }
     }
   }
