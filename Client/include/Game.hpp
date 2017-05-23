@@ -52,8 +52,5 @@ class Game {
   Client mClient;
 };
 
-<<<<<<< HEAD
 #endif
-=======
-#endif"
->>>>>>> 6f5faedc59495d84bf6a8a21d172f203ad882f39
+
