@@ -104,7 +104,7 @@ std::vector<Building> Game::getBuildings(const sf::Color& col) {
   return output;
 }
 
-std::vector<Entity> Game::getEntities(const sf::Color& color) {
+std::vector<Entity> Game::getEntities(const sf::Color& col) {
   std::string data;
   std::vector<Entity> output;
 
