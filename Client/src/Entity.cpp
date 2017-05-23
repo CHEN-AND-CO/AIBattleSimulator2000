@@ -98,7 +98,7 @@ bool Entity::collectRessource(const Game& game, const Player& p,
         currentTransportedRessources = 0;
         break;
       }
-      if (currentTransportedRessources >= MAX_RESSOURCES) {
+      if (currentTransportedRessources >= MAX_TRANSPORTED_RESSOURCES) {
         return false;
       }
       currentTransportedRessources++;

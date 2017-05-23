@@ -32,14 +32,17 @@ int main() {
   bool iaLaunched = true;
 
   IA test(game, sf::Color::Red);
+  IA test2(game, sf::Color::Blue);
 
-  window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
+  window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Client");
 
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
       switch (event.type) {
         case sf::Event::Closed:
+        	test.close();
+        	test2.close();
           window.close();
           break;
 
@@ -137,7 +140,6 @@ int main() {
             case sf::Keyboard::S:
               if (iaLaunched) {
                 std::cout << "IA stopped" << std::endl;
-                test.close();
                 iaLaunched = 0;
               } else {
                 std::cout << "IA launched" << std::endl;
@@ -146,6 +148,8 @@ int main() {
               break;
 
             case sf::Keyboard::Q:
+            	test.close();
+            	test2.close();
               window.close();
               break;
 
@@ -161,6 +165,7 @@ int main() {
 
     if (iaLaunched) {
       test.run(game);
+      test2.run(game);
     }
 
     window.clear();
@@ -179,7 +184,10 @@ int main() {
 
     auto entity = game.getEntities();
     for (auto& e : entity) {
-      sf::CircleShape c(TILESIZE / 2);
+    	sf::CircleShape c(TILESIZE / 2);
+    	if(e.getType() == EntityType::Warrior){
+      	c.setPointCount(3);
+      }
       c.setFillColor(e.getColor());
       c.setPosition(e.getPosition().x * TILESIZE, e.getPosition().y * TILESIZE);
       window.draw(c);
