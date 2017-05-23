@@ -23,7 +23,7 @@ sf::Socket::Status Client::connect(const sf::IpAddress& IP,
     std::cout << "Wrong command received" << std::endl;
     std::cout << "Received " << data << std::endl;
   }
-
+  std::cout<<
   if(datas.second.second != "ok"){
     return sf::Socket::Error;
   }
