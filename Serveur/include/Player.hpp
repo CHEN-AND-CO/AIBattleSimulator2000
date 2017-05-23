@@ -8,13 +8,15 @@
 
 class Player {
  public:
-  Player(const sf::Color& col, const sf::Vector2f& pos);
+  Player(const sf::Color& col, const sf::Vector2f& pos, unsigned mapSize);
 
   std::vector<Building> getBuildings() const { return mBuildings; }
   std::vector<Entity> getEntities() const { return mEntities; }
   sf::Color getColor() const { return mColor; }
   std::map<Ressource, int> getRessources() { return mRessources; }
   int getRessources(Ressource r) { return mRessources[r]; }
+
+  std::vector<std::vector<int>> getCache() const { return mCache; }
 
   void addEntity(const EntityType& entT, const sf::Vector2f& pos);
   void addBuilding(const BuildingType& buildT, const sf::Vector2f& pos);
@@ -26,7 +28,9 @@ class Player {
   }
 
   bool moveEntity(Direction dir, const Game& game, int i) {
-    return mEntities[i].move(dir, game);
+    auto result = mEntities[i].move(dir, game);
+    updateCache();
+    return result;
   }
 
   void addRessource(Ressource r, int val) { mRessources[r] += val; }
@@ -47,13 +51,16 @@ class Player {
   }
 
   void clearMaps();
+  void updateCache();
 
  private:
   std::vector<Building> mBuildings;
   std::vector<Entity> mEntities;
+  std::vector<std::vector<int>> mCache;
   sf::Color mColor;
   std::map<Ressource, int> mRessources;
   int mEntID, mBuildID;
+  int mBuildingView, mEntityView;
 };
 
 #endif

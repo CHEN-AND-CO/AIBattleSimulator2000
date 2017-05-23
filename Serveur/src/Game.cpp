@@ -20,6 +20,25 @@ bool Game::loadFile(const std::string& fileName) {
   return true;
 }
 
+std::vector<std::vector<int>> Game::getMap(const sf::Color& col) const {
+  auto output = mMap;
+  std::vector<std::vector<int>> cache;
+  for (const auto& play : mPlayer) {
+    if (play.getColor() == col) {
+      cache = play.getCache();
+      break;
+    }
+  }
+  for (unsigned x{0}; x < mMap.size(); x++) {
+    for (unsigned y{0}; y < mMap.size(); y++) {
+      if (cache[y][x] == 0) {
+        output[y][x] = 0;
+      }
+    }
+  }
+  return output;
+}
+
 bool Game::isGameFinish() const { return mPlayer.size() == 1; }
 
 sf::Color Game::getWinner() const {
@@ -57,7 +76,7 @@ Player Game::getPlayer(const sf::Color& col) const {
       return mPlayer[i];
     }
   }
-  return Player(sf::Color::Black, sf::Vector2f(0, 0));
+  return Player(sf::Color::Black, sf::Vector2f(0, 0), 0);
 }
 
 std::vector<Building> Game::getBuildings(const sf::Color& col) const {
@@ -201,30 +220,23 @@ bool Game::attack(const sf::Color& col, int index, const Direction& dir) {
           break;
 
         default:
-          break
+          break;
       }
 
       for (unsigned i{0}; i < player2.getEntities().size(); i++) {
-        if (rectCollide(+sf::Vector2f(1, 0),
-                        player2.getEntities()[i].getPosition())) {
+        if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(-1, 0),
-                               player2.getEntities()[i].getPosition())) {
+        } else if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, 1),
-                               player2.getEntities()[i].getPosition())) {
+        } else if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, -1),
-                               player2.getEntities()[i].getPosition())) {
+        } else if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;

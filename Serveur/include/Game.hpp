@@ -19,6 +19,7 @@ class Game {
   bool loadFile(const std::string& fileName);
 
   std::vector<std::vector<int>> getMap() const { return mMap; }
+  std::vector<std::vector<int>> getMap(const sf::Color& col) const;
   std::vector<Player> getPlayer() const { return mPlayer; }
   std::vector<Building> getBuildings() const;
   std::vector<Entity> getEntities() const;
@@ -54,7 +55,7 @@ class Game {
         return false;
       }
     }
-    mPlayer.push_back(Player(col, pos));
+    mPlayer.push_back(Player(col, pos, mMap.size()));
     return true;
   }
 

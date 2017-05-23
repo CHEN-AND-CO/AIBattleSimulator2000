@@ -39,6 +39,12 @@ int main() {
           break;
 
         case sf::Event::KeyPressed:
+          for (auto i : game.getMap(sf::Color::Blue)) {
+            for (auto j : i) {
+              std::cout << j;
+            }
+            std::cout << std::endl;
+          }
           switch (event.key.code) {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
@@ -106,7 +112,10 @@ int main() {
               break;
 
             case sf::Keyboard::A:
-              game.attack(sf::Color::Blue, currentId);
+              game.attack(sf::Color::Blue, currentId, Direction::Up);
+              game.attack(sf::Color::Blue, currentId, Direction::Down);
+              game.attack(sf::Color::Blue, currentId, Direction::Left);
+              game.attack(sf::Color::Blue, currentId, Direction::Right);
               break;
 
             case sf::Keyboard::Add:

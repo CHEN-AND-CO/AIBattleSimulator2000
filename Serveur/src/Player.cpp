@@ -1,8 +1,15 @@
 #include "Player.hpp"
 #include <iostream>
 
-Player::Player(const sf::Color& col, const sf::Vector2f& pos)
-    : mColor{col}, mEntID{0}, mBuildID{0} {
+Player::Player(const sf::Color& col, const sf::Vector2f& pos, unsigned mapSize)
+    : mColor{col}, mEntID{0}, mBuildID{0}, mBuildingView{4}, mEntityView{2} {
+  for (unsigned i{0}; i < mapSize; i++) {
+    mCache.push_back(std::vector<int>(mapSize));
+    for (unsigned j{0}; j < mapSize; j++) {
+      mCache[i][j] = 0;
+    }
+  }
+
   mRessources[Ressource::Wood] = 650;
   addBuilding(BuildingType::TownCenter, pos);
   addEntity(EntityType::Villager, pos + sf::Vector2f(2, 0));
@@ -52,6 +59,7 @@ void Player::addEntity(const EntityType& entT, const sf::Vector2f& pos) {
     default:
       break;
   }
+  updateCache();
 }
 
 void Player::addBuilding(const BuildingType& buildT, const sf::Vector2f& pos) {
@@ -73,5 +81,47 @@ void Player::addBuilding(const BuildingType& buildT, const sf::Vector2f& pos) {
       }
     default:
       break;
+  }
+  updateCache();
+}
+
+void Player::updateCache() {
+  for (unsigned i{0}; i < mCache.size(); i++) {
+    for (unsigned j{0}; j < mCache.size(); j++) {
+      mCache[i][j] = 0;
+    }
+  }
+  for (const auto& b : mBuildings) {
+    sf::Vector2f pos = b.getPosition();
+    for (int x{-mBuildingView}; x <= mBuildingView; x++) {
+      for (int y{-mBuildingView}; y <= mBuildingView; y++) {
+        if (rectInCircle(b.getPosition(), mBuildingView, sf::Vector2f(x, y))) {
+          mCache[y + pos.y][x + pos.x] = 1;
+        }
+        if (rectInCircle(b.getPosition() + sf::Vector2f(b.getSize().x, 0),
+                         mBuildingView, sf::Vector2f(x, y))) {
+          mCache[y + pos.y][x + pos.x] = 1;
+        }
+        if (rectInCircle(b.getPosition() + sf::Vector2f(0, b.getSize().y),
+                         mBuildingView, sf::Vector2f(x, y))) {
+          mCache[y + pos.y][x + pos.x] = 1;
+        }
+        if (rectInCircle(b.getPosition() + b.getSize(), mBuildingView,
+                         sf::Vector2f(x, y))) {
+          mCache[y + pos.y][x + pos.x] = 1;
+        }
+      }
+    }
+  }
+
+  for (const auto& e : mEntities) {
+    sf::Vector2f pos = e.getPosition();
+    for (int x{-mBuildingView}; x <= mBuildingView; x++) {
+      for (int y{-mBuildingView}; y <= mBuildingView; y++) {
+        if (rectInCircle(e.getPosition(), mBuildingView, sf::Vector2f(x, y))) {
+          mCache[y + pos.y][x + pos.x] = 1;
+        }
+      }
+    }
   }
 }
