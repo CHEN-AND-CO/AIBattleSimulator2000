@@ -8,6 +8,19 @@ Define the type of the buildings and entities used in the game
 #include <SFML/System.hpp>
 #include <cmath>
 
+#define GROUND 1
+#define TREE 2
+#define WATER 3
+
+#define TILESIZE 16
+#define FORT_PRICE 200
+#define TOWNCENTER_PRICE 600
+#define VILLAGER_PRICE 50
+#define WARRIOR_PRICE 60
+
+#define MAX_TRANSPORTED_RESSOURCES 20
+#define DELAY 50
+
 enum class BuildingType { TownCenter, Fort, MaxBuildingType };
 enum class EntityType { Villager, Warrior, MaxEntityType };
 enum class Direction { Up, Down, Left, Right, MaxDirection };
