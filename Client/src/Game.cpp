@@ -108,11 +108,7 @@ std::vector<Entity> Game::getEntities(const sf::Color& color) {
   std::string data;
   std::vector<Entity> output;
 
-<<<<<<< HEAD
-  mClient.send(mClient.getName() + "@getEntitysMap:0 " + std::to_string(col.r) +
-=======
   mClient.send(mClient.getName() + "@getEntitysMap:3 " + std::to_string(col.r) +
->>>>>>> 6f5faedc59495d84bf6a8a21d172f203ad882f39
                " " + std::to_string(col.g) + " " + std::to_string(col.b));
 
   while ((data = mClient.receive()) == "Error") {
