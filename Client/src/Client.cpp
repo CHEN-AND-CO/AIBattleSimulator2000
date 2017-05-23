@@ -24,6 +24,10 @@ sf::Socket::Status Client::connect(const sf::IpAddress& IP,
     std::cout << "Received " << data << std::endl;
   }
 
+  if(datas.second.second != "ok"){
+    return sf::Socket::Error;
+  }
+
   return stat;
 }
 

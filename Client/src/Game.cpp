@@ -2,7 +2,9 @@
 
 Game::Game(const sf::IpAddress& ip, unsigned short port, std::string name)
     : mClient(name) {
-  mClient.connect(ip, port);
+  if (mClient.connect(ip, port) != sf::Socket::Done) {
+    std::cout << "Error connecting server" << std::endl;
+  }
 }
 
 std::vector<std::vector<int>> Game::getMap() {
@@ -37,11 +39,13 @@ std::vector<std::vector<int>> Game::getMap() {
   return output;
 }
 
-std::vector<Building> Game::getBuildings() {
+std::vector<Building> Game::getBuildings(const sf::Color& col) {
   std::string data;
   std::vector<Building> output;
 
-  mClient.send(mClient.getName() + "@getBuildingMap:0");
+  mClient.send(mClient.getName() + "@getBuildingMap:0 " +
+               std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+               std::to_string(col.b));
 
   while ((data = mClient.receive()) == "Error") {
   }
@@ -100,11 +104,12 @@ std::vector<Building> Game::getBuildings() {
   return output;
 }
 
-std::vector<Entity> Game::getEntities() {
+std::vector<Entity> Game::getEntities(const sf::Color& color) {
   std::string data;
   std::vector<Entity> output;
 
-  mClient.send(mClient.getName() + "@getEntitysMap:0");
+  mClient.send(mClient.getName() + "@getEntitysMap:0 " + std::to_string(col.r) +
+               " " + std::to_string(col.g) + " " + std::to_string(col.b));
 
   while ((data = mClient.receive()) == "Error") {
   }
@@ -160,29 +165,6 @@ std::vector<Entity> Game::getEntities() {
     output.push_back(ent);
   }
 
-  return output;
-}
-
-std::vector<Building> Game::getBuildings(const sf::Color& color) {
-  auto build = getBuildings();
-  std::vector<Building> output;
-
-  for (const auto& b : build) {
-    if (b.mColor == color) {
-      output.push_back(b);
-    }
-  }
-  return output;
-}
-std::vector<Entity> Game::getEntities(const sf::Color& color) {
-  auto ent = getEntities();
-  std::vector<Entity> output;
-
-  for (const auto& e : ent) {
-    if (e.mColor == color) {
-      output.push_back(e);
-    }
-  }
   return output;
 }
 

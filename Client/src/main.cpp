@@ -3,7 +3,9 @@
 #include "Game.hpp"
 
 int main() {
-  Game game("172.17.3.250", 53000, "Alex");
+  std::string data;
+  std::cin >> data;
+  Game game("172.17.3.250", 53000, data);
 
   while (getchar() != 'q') {
     auto map = game.getMap();

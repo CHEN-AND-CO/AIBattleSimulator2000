@@ -49,16 +49,7 @@ class Game {
   bool addBuilding(const BuildingType& buildT, const sf::Color& col, int index);
 
  private:
-  std::vector<Building> getBuildings();
-  std::vector<Entity> getEntities();
-
   Client mClient;
 };
 
 #endif
-
-//   std::vector<Player> getPlayer() const { return mPlayer; }
-//   Player getPlayer(const sf::Color&) const;
-//   bool addEntity(const EntityType& entT, const sf::Color& col, int index)
-//   bool isGameFinish() const;
-//   sf::Color getWinner() const;
