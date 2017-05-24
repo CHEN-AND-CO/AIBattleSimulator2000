@@ -10,7 +10,7 @@ IA::IA(Game& game, sf::Color color) : mColor{color} {
   }
   
   villagerLimit = QUIT_FIRST_STATE + 1;
-  warriorLimit = 10;
+  warriorLimit = 1000;
   stopWarriors = false;
   start = computeWarriorPosition(game, game.getBuildings(mColor)[0].getPosition(), -1);
   
@@ -60,7 +60,7 @@ void IA::run(Game& game) {
     }
   }
   
-  if(fort > 0 && townCenter > 0 && wood >= TOWNCENTER_PRICE + FORT_PRICE + VILLAGER_PRICE*8 + WARRIOR_PRICE && !stopWarriors){
+  if(fort > 0 && townCenter > 0 && wood >= /*TOWNCENTER_PRICE + FORT_PRICE + VILLAGER_PRICE*8 + */WARRIOR_PRICE && !stopWarriors){
   	if(game.addEntity(EntityType::Warrior, mColor, 1)){
 		  mEntities.push_back({0, 0, Work::Waiter, sf::Vector2f(-1, -1), true});
 		}
@@ -273,7 +273,7 @@ void IA::run(Game& game) {
           	if(entity.getType() == EntityType::Villager){
       				
 				  	} else if(entity.getType() == EntityType::Warrior){
-				  		game.attack(mColor, i);
+				  		//game.attack(mColor, i);
 				  		changeState(Work::Explorer, i);
 				  	}
             break;

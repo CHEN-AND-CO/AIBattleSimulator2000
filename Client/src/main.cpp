@@ -32,7 +32,7 @@ int main() {
   bool iaLaunched = true;
 
   IA test(game, sf::Color::Red);
-  //IA test2(game, sf::Color::Blue);
+  IA test2(game, sf::Color::Blue);
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Client");
 
@@ -161,7 +161,7 @@ int main() {
 
     if (iaLaunched) {
       test.run(game);
-      //test2.run(game);
+      test2.run(game);
     }
 
     window.clear();
