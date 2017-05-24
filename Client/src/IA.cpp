@@ -22,10 +22,6 @@ IA::IA(Game& game, sf::Color color) : mColor{color} {
 /*Lancement et arrêt de l'IA*/
 /****************************/
 
-void IA::close() {
-  window.close();
-}
-
 void IA::run(Game& game) {
 	if(verify){
 		test = 1;

@@ -61,7 +61,6 @@
     /*Lancement et arrêt de l'IA*/
     /****************************/
     void run(Game& game);
-    void close();
     
     /***********************************/
     /*Utilisation des actions de player*/

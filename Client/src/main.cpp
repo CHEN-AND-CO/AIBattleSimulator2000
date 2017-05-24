@@ -42,7 +42,6 @@ int main() {
       switch (event.type) {
         case sf::Event::Closed:
         	test.close();
-        	test2.close();
           window.close();
           break;
 
@@ -149,7 +148,6 @@ int main() {
 
             case sf::Keyboard::Q:
             	test.close();
-            	test2.close();
               window.close();
               break;
 
