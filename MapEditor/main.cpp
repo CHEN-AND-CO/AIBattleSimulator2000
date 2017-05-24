@@ -4,7 +4,6 @@
 #include <vector>
 
 int main() {
-  unsigned tileSize = 16;
   unsigned size;
   unsigned currentColor = 1;
 
@@ -16,8 +15,9 @@ int main() {
 
   std::cout << "Quel est la taille de la map a creer : ";
   std::cin >> size;
-  sf::RenderWindow window(sf::VideoMode(size * tileSize, size * tileSize),
-                          "MapEditor");
+  sf::RenderWindow window(sf::VideoMode(600, 600), "MapEditor");
+
+  unsigned tileSize = 600 / size;
 
   std::vector<std::vector<int>> map;
 
@@ -75,20 +75,10 @@ int main() {
 
         case sf::Event::MouseButtonPressed: {
           auto tmp = sf::Mouse::getPosition(window);
-          auto pos = sf::Vector2f((tmp.x / tileSize) % size,
-                                  (tmp.y / tileSize) % size);
+          auto pos = sf::Vector2f((tmp.x / tileSize) % window.getSize().x,
+                                  (tmp.y / tileSize) % window.getSize().y);
           rects[pos.x][pos.y].setFillColor(colors[currentColor]);
           map[pos.x][pos.y] = currentColor;
-          std::cout << std::endl
-                    << pos.x << " : " << pos.y << std::endl
-                    << std::endl
-                    << std::endl;
-          for (auto& t : map) {
-            for (auto& r : t) {
-              std::cout << r;
-            }
-            std::cout << std::endl;
-          }
         } break;
 
         default: { } break; }
