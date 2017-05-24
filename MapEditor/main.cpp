@@ -30,14 +30,6 @@ int main() {
       tmp.setPosition(i * tileSize, j * tileSize);
       tmp.setFillColor(colors[currentColor]);
       rects[i][j] = tmp;
-      map[i][j] = currentColor++;
-      if (currentColor >= colors.size()) {
-        currentColor = 0;
-      }
-    }
-    currentColor++;
-    if (currentColor >= colors.size()) {
-      currentColor = 0;
     }
   }
 
