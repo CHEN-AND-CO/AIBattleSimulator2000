@@ -5,18 +5,26 @@
 
 int main() {
   sf::RenderWindow window;
+  unsigned n = 40;
+  unsigned m = 40;
+
   unsigned currentId = 0;
 
   Game game;
-  game.loadFile("ressources/level.txt");
+  window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
+
+  if (!game.loadFile("ressources/level.txt")) {
+    std::cout << "Error loading file" << std::endl;
+    return -1;
+  }
+  
   game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
   game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
 
+  auto map = game.getMap();
+
   std::vector<sf::RectangleShape> rects;
 
-  auto map = game.getMap();
-  auto n = map.size();
-  auto m = map[0].size();
   for (unsigned i{0}; i < n; i++) {
     for (unsigned j{0}; j < m; j++) {
       sf::RectangleShape rect(sf::Vector2f(TILESIZE, TILESIZE));
@@ -27,8 +35,6 @@ int main() {
       rects.push_back(rect);
     }
   }
-
-  window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
   while (window.isOpen()) {
     sf::Event event;
