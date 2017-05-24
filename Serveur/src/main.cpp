@@ -30,6 +30,7 @@ int main() {
       if (map[j][i] == 1) rect.setFillColor(sf::Color(70, 190, 70));
       if (map[j][i] == 2) rect.setFillColor(sf::Color(0, 50, 10));
       if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 100, 255));
+      if (map[j][i] == 4) rect.setFillColor(sf::Color(0, 100, 10));
       rect.setPosition(sf::Vector2f(i * TILESIZE, j * TILESIZE));
       rects.push_back(rect);
     }
@@ -86,30 +87,22 @@ int main() {
                         << game.getPlayer(sf::Color::Blue)
                                .getRessources(Ressource::Wood)
                         << std::endl;
+              std::cout << "player food : "
+                        << game.getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Food)
+                        << std::endl;
               break;
 
             case sf::Keyboard::B:
               game.addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
               break;
 
             case sf::Keyboard::V:
               game.addEntity(EntityType::Villager, sf::Color::Blue, 0);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
               break;
 
             case sf::Keyboard::W:
               game.addEntity(EntityType::Warrior, sf::Color::Blue, 1);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
               break;
 
             case sf::Keyboard::A:

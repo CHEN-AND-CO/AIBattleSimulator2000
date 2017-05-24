@@ -8,7 +8,8 @@
 
 class Player {
  public:
-  Player(const sf::Color& col, const sf::Vector2f& pos, unsigned mapSize);
+  Player(const Game& game, const sf::Color& col, const sf::Vector2f& pos,
+         unsigned mapSize);
 
   std::vector<Building> getBuildings() const { return mBuildings; }
   std::vector<Entity> getEntities() const { return mEntities; }
@@ -18,13 +19,15 @@ class Player {
 
   std::vector<std::vector<int>> getCache() const { return mCache; }
 
-  void addEntity(const EntityType& entT, const sf::Vector2f& pos);
-  void addBuilding(const BuildingType& buildT, const sf::Vector2f& pos);
-  void addBuilding(const BuildingType& buildT, int index) {
-    mEntities[index].addBuilding(*this, buildT);
+  bool addEntity(const Game& game, const EntityType& entT,
+                 const sf::Vector2f& pos);
+  bool addBuilding(const Game& game, const BuildingType& buildT,
+                   const sf::Vector2f& pos);
+  bool addBuilding(const Game& game, const BuildingType& buildT, int index) {
+    return mEntities[index].addBuilding(game, *this, buildT);
   }
-  void addEntity(const EntityType& entT, int index) {
-    mBuildings[index].addEntity(*this, entT);
+  bool addEntity(const Game& game, const EntityType& entT, int index) {
+    return mBuildings[index].addEntity(game, *this, entT);
   }
 
   bool moveEntity(Direction dir, const Game& game, int i) {

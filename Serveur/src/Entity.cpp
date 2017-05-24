@@ -23,12 +23,13 @@ Entity::Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos, int id)
   }
 }
 
-void Entity::addBuilding(Player& player, const BuildingType& buildT) {
+bool Entity::addBuilding(const Game& game, Player& player,
+                         const BuildingType& buildT) {
   if (mType != EntityType::Villager) {
     std::cout << "This entity cannot construct buildings\n";
-    return;
+    return false;
   }
-  player.addBuilding(buildT, mPos + sf::Vector2f(1, 0));
+  return player.addBuilding(game, buildT, mPos + sf::Vector2f(1, 0));
 }
 
 // Deplacemant d'une unite
@@ -95,6 +96,19 @@ bool Entity::collectRessource(const Game& game, const Player& p,
     case 2:
       if (currentRessource != Ressource::Wood) {
         currentRessource = Ressource::Wood;
+        currentTransportedRessources = 0;
+        break;
+      }
+      if (currentTransportedRessources >= 20) {
+        return false;
+      }
+      currentTransportedRessources++;
+      return true;
+      break;
+
+    case 4:
+      if (currentRessource != Ressource::Food) {
+        currentRessource = Ressource::Food;
         currentTransportedRessources = 0;
         break;
       }

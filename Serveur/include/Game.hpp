@@ -31,7 +31,7 @@ class Game {
   bool addEntity(const EntityType& entT, const sf::Color& col, int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addEntity(entT, index);
+        player.addEntity(*this, entT, index);
         return true;
       }
     }
@@ -42,7 +42,7 @@ class Game {
                    int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addBuilding(buildT, index);
+        player.addBuilding(*this, buildT, index);
         return true;
       }
     }
@@ -55,7 +55,7 @@ class Game {
         return false;
       }
     }
-    mPlayer.push_back(Player(col, pos, mMap.size()));
+    mPlayer.push_back(Player(*this, col, pos, mMap.size()));
     return true;
   }
 

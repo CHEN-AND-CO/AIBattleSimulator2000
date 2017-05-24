@@ -76,7 +76,7 @@ Player Game::getPlayer(const sf::Color& col) const {
       return mPlayer[i];
     }
   }
-  return Player(sf::Color::Black, sf::Vector2f(0, 0), 0);
+  return Player(*this, sf::Color::Black, sf::Vector2f(0, 0), 0);
 }
 
 std::vector<Building> Game::getBuildings(const sf::Color& col) const {
