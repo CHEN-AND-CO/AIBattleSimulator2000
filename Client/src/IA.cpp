@@ -10,7 +10,7 @@ IA::IA(Game& game, sf::Color color) : mColor{color} {
   }
   
   villagerLimit = QUIT_FIRST_STATE + 1;
-  warriorLimit = 20;
+  warriorLimit = 10;
   stopWarriors = false;
   start = computeWarriorPosition(game, game.getBuildings(mColor)[0].getPosition(), -1);
   
@@ -91,9 +91,7 @@ void IA::run(Game& game) {
   for (const auto& entity : game.getPlayer(mColor).getEntities()) {
   	if(game.getPlayer(mColor).getEntities()[i].getType() == EntityType::Warrior){
   		if(mEntities[i].state != Work::Warrior && mEntities[i].action != 2){
-  			search(game, game.getPlayer(mColor).getEntities()[i].getPosition(), i);
-				  		
-	  		if(mEntities[i].position != sf::Vector2f(-1, -1)){
+	  		if(search(game, game.getPlayer(mColor).getEntities()[i].getPosition(), i) != sf::Vector2f(-1, -1)){
 	  			changeState(Work::Warrior, i);
 	  		}
   		}
@@ -269,17 +267,16 @@ void IA::run(Game& game) {
           	if(entity.getType() == EntityType::Villager){
       				
 				  	} else if(entity.getType() == EntityType::Warrior){
-				  		search(game, game.getPlayer(mColor).getEntities()[i].getPosition(), i);
-				  		
-				  		if(mEntities[i].position == sf::Vector2f(-1, -1)){
+				  		if(search(game, game.getPlayer(mColor).getEntities()[i].getPosition(), i) == sf::Vector2f(-1, -1)){
 				  			changeAction(1, i);
 				  			break;
 				  		}
-				  			mEntities[i].count = goTo(game, mEntities[i].position, i);
-				  			
-				  			if(mEntities[i].count){
-									changeAction(1, i);
-								}
+				  		
+			  			mEntities[i].count = goTo(game, mEntities[i].position, i);
+			  			
+			  			if(mEntities[i].count){
+								changeAction(1, i);
+							}
 				  	}
             break;
             

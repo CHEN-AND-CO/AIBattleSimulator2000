@@ -200,9 +200,9 @@ sf::Vector2f IA::computePosition(Game& game, const sf::Vector2f pos, int index) 
   std::uniform_int_distribution<> disy(1, 39);
   std::uniform_int_distribution<> disx(1, 39);
   
-	next.x = disx(gen);
+  next.x = disx(gen);
 	next.y = disy(gen);
-
+	
   return next;
 }
 
@@ -283,7 +283,14 @@ sf::Vector2f IA::search(Game& game, const sf::Vector2f pos, int index) {
 
       /*Vérification de ce que contient cette case*/
       if (game.getMap()[aroundPoint[j].y][aroundPoint[j].x] == GROUND) {
-      	if(isEnnemy(game, aroundPoint[j])){
+      	if(isEnnemyBuilding(game, aroundPoint[j])) {
+      		/*S'il n'y a pas de joueurs autour de la case on l'ajoute*/
+          aroundMap.push_back(aroundPoint[j]);
+          finded = true;
+          /*C'est la fin du chemin*/
+          aroundMap.push_back(aroundMap[i]);
+          break;
+      	} else if(isEnnemy(game, aroundPoint[j])){
         	/*S'il n'y a pas de joueurs autour de la case on l'ajoute*/
           aroundMap.push_back(aroundPoint[j]);
           finded = true;
@@ -316,68 +323,31 @@ sf::Vector2f IA::search(Game& game, const sf::Vector2f pos, int index) {
   }
 }
 
-sf::Vector2f IA::findEnnemi(Game& game, const sf::Vector2f pos, int index) {
-  /*Déclaration des variables*/
-  std::vector<sf::Vector2f> aroundMap;
-  std::vector<sf::Vector2f> aroundPoint;
+sf::Vector2f IA::searchEnnemi(Game& game, const sf::Vector2f pos, int index) {
+	/*Déclaration des variables*/
   bool finded = false;
-  sf::Vector2f town;
-  sf::Vector2f townSize;
+  unsigned sizeMax{10};
+  
+  if(!posInMap(game, pos)){
+  	return sf::Vector2f(-1, -1);
+  }
 
-  for (unsigned i{0}; i < game.getBuildings(mColor).size(); i++) {
-    if (game.getBuildings(mColor)[i].getType() == BuildingType::TownCenter) {
-      town = game.getBuildings(mColor)[i].getPosition();
-      townSize = game.getBuildings(mColor)[i].getSize();
+  for (const auto& player : game.getPlayer()) {
+  	for(const auto& entity : player.getEntities()){
+		  if(entity.getColor() != mColor || entity.getPosition() != pos){
+	  		finded = rectInCircle(pos, sizeMax, entity.getPosition());
+	  		
+	  		if(finded){
+	  			mEntities[index].position = entity.getPosition();
+	  			return entity.getPosition();
+	  		}
+		  }
     }
   }
-
-  /*Ajout de la première position dans le tableau de la map, celle du joueur*/
-  aroundMap.push_back(pos);
-
-  /*Boucle tant que i est inférieure au nombre de cases dans le tableau de la
-   * map*/
-  for (unsigned i{0}; i < aroundMap.size() && !finded; i++) {
-    /*Récupération des cases autour de la position i dans le tableau
-     * aroundPoint*/
-    computePoints(game, aroundMap[i], aroundPoint);
-
-    /*Boucle tant que j est inférieure au nombre de cases dans le tableau
-     * aroundPoint*/
-    for (unsigned j{0}; j < aroundPoint.size(); j++) {
-      /*Si le point existe dans le tableau de la map, on ne l'ajoute pas*/
-      if (pointExist(aroundPoint[j], aroundMap)) {
-        continue;
-      }
-
-      /*Vérification de ce que contient cette case*/
-      if (game.getMap()[aroundPoint[j].y][aroundPoint[j].x] == GROUND) {
-        if (isTileFree(game, aroundPoint[j])) {
-          /*Si c'est du sol on l'ajoute au tableau de case de la map*/
-          aroundMap.push_back(aroundPoint[j]);
-        }
-        /*S'il est en collision avec le town center, on est arrivé*/
-        if (rectCollide(aroundPoint[j], sf::Vector2f(1, 1), town, townSize)) {
-          if (isAroundFree(game, aroundPoint[j], index)) {
-            /*S'il n'y a pas de joueurs autour de la case on l'ajoute*/
-            aroundMap.push_back(aroundPoint[j]);
-            finded = true;
-            /*C'est la fin du chemin*/
-            aroundMap.push_back(aroundMap[i]);
-            break;
-          }
-        }
-      }
-    }
-    /*Vidage du tableau de points autour de la case*/
-    aroundPoint.clear();
-  }
-
-  /*Retour de la dernière position du tableau, celle du center*/
-  if (finded) {
-    return aroundMap[aroundMap.size() - 1];
-  } else {
-    return sf::Vector2f(-1, -1);
-  }
+  
+  /*Retour de la dernière position du tableau, celle de l'arbre*/
+  mEntities[index].position = sf::Vector2f(-1, -1);
+  return sf::Vector2f(-1, -1);
 }
 
 sf::Vector2f IA::findEnnemiBuilding(Game& game, const sf::Vector2f pos, int index) {

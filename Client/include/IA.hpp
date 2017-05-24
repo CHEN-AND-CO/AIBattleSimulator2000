@@ -35,8 +35,6 @@
   
   enum class Work { Woodcutter, Architect, Explorer, Rabbit, Harvester, Waiter, Warrior, MaxWork };
   
-  template<typename T> std::vector<T> remove(std::vector<T> vect, int index);
-  
   struct Human_Entity {
     unsigned action;
     unsigned count;
@@ -53,7 +51,7 @@
   	unsigned index;
   };
   
-	#define QUIT_FIRST_STATE 7
+	#define QUIT_FIRST_STATE 3
 
   class IA {
    public:
@@ -93,7 +91,7 @@
    	sf::Vector2f computeWarriorPosition(Game& game, const sf::Vector2f pos, int index);
    	sf::Vector2f computeWarriorPositionEnnemi(Game& game, const sf::Vector2f pos, int index);
    	sf::Vector2f search(Game& game, const sf::Vector2f pos, int index);
-    sf::Vector2f findEnnemi(Game& game, const sf::Vector2f pos, int index);
+   	sf::Vector2f searchEnnemi(Game& game, const sf::Vector2f pos, int index);
     sf::Vector2f findEnnemiBuilding(Game& game, const sf::Vector2f pos, int index);
     sf::Vector2f pathfinder(Game& game, const sf::Vector2f pos, int index);
 
@@ -125,6 +123,7 @@
     bool isFree(Game& game, const sf::Vector2f pos, int index);
     bool isGround(Game& game, const sf::Vector2f pos);
     bool isEnnemy(Game& game, const sf::Vector2f pos);
+    bool isEnnemyBuilding(Game& game, const sf::Vector2f pos);
     
     /*******************/
     /*Fonctions tierces*/

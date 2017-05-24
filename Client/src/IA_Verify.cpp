@@ -179,3 +179,21 @@ bool IA::isEnnemy(Game& game, const sf::Vector2f pos) {
 
   return false;
 }
+
+bool IA::isEnnemyBuilding(Game& game, const sf::Vector2f pos) {
+  std::vector<sf::Vector2f> point;
+
+  if(!posInMap(game, pos)){
+  	return false;
+  }
+
+  point.push_back(pos);
+
+  for (const auto& building : game.getBuildings()) {
+  	if (pointExist(building.getPosition(), point) && building.getColor() != mColor) {
+	  	return true;
+	  }
+  }
+
+  return false;
+}

@@ -35,6 +35,9 @@ void IA::move(Game& game, const sf::Vector2f pos, int index) {
 }
 
 bool IA::construct(Game& game, BuildingType type, int index) {
+	if(fort == 1){
+		return true;
+	}
  	if(game.getPlayer(mColor).getRessources(Ressource::Wood) >= FORT_PRICE){
 		game.addBuilding(type, mColor, index);
 		if(game.getPlayer(mColor).getRessources(Ressource::Wood) < FORT_PRICE){
