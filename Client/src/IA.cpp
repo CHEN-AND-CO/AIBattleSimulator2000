@@ -3,7 +3,7 @@
 IA::IA(Game& game, sf::Color color) : mColor{color} {
 	delay = sf::milliseconds(DELAY);
   
-  window.create(sf::VideoMode(250, 150), "Données");
+  window.create(sf::VideoMode(250, 150), "Données " + std::to_string(mColor.r)+" "+std::to_string(mColor.g)+" "+std::to_string(mColor.b));
 
   for (unsigned i{0}; i < game.getPlayer(mColor).getEntities().size(); i++) {
     mEntities.push_back({0, 0, Work::Woodcutter, sf::Vector2f(-1, -1), true});
@@ -44,13 +44,6 @@ void IA::run(Game& game) {
 	
 	unsigned i{0};
 	unsigned nbWarrior{0};
-  
-  for(const auto& entity : mEntities){
-  	if(!entity.isAlive){
-  		mEntities = remove(mEntities, i);
-  	}
-  	i++;
-  }
   
   for(const auto& entity : game.getPlayer(mColor).getEntities()){
   	if(entity.getType() == EntityType::Warrior){
