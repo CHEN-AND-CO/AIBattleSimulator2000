@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -pedantic -std=c++17
+CFLAGS = -g -Wall -pedantic -std=c++17 -O3
 LDFLAGS = -lsfml-network -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 #UNIT = -ftest-coverage -fprofile-arcs
 
