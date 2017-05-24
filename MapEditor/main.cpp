@@ -1,6 +1,10 @@
 #include <SFML/Graphics.hpp>
+#include <algorithm>
 #include <array>
+#include <ctime>
+#include <fstream>
 #include <iostream>
+#include <string>
 #include <vector>
 
 int main() {
@@ -27,7 +31,7 @@ int main() {
     rects.push_back(std::vector<sf::RectangleShape>(size));
     for (unsigned j{0}; j < size; j++) {
       sf::RectangleShape tmp(sf::Vector2f(tileSize, tileSize));
-      tmp.setPosition(i * tileSize, j * tileSize);
+      tmp.setPosition(j * tileSize, i * tileSize);
       tmp.setFillColor(colors[currentColor]);
       rects[i][j] = tmp;
     }
@@ -67,6 +71,27 @@ int main() {
                   map[i][j] = currentColor;
                 }
               }
+              break;
+
+            case sf::Keyboard::S: {
+              std::time_t now = std::time(0);
+
+              std::string dt = std::ctime(&now);
+              std::replace(dt.begin(), dt.end(), ' ', '_');
+
+              dt = dt.substr(0, dt.size() - 1);
+
+              std::ofstream file(dt + ".txt", std::ios::out);
+              file << size << std::endl;
+
+              for (auto& y : map) {
+                for (auto& x : y) {
+                  file << x << " ";
+                }
+                file << std::endl;
+              }
+              break;
+            }
 
             default:
               break;
@@ -77,8 +102,19 @@ int main() {
           auto tmp = sf::Mouse::getPosition(window);
           auto pos = sf::Vector2f((tmp.x / tileSize) % window.getSize().x,
                                   (tmp.y / tileSize) % window.getSize().y);
-          rects[pos.x][pos.y].setFillColor(colors[currentColor]);
-          map[pos.x][pos.y] = currentColor;
+          rects[pos.y][pos.x].setFillColor(colors[currentColor]);
+          map[pos.y][pos.x] = currentColor;
+        } break;
+
+        case sf::Event::MouseMouved: {
+          if (sf::Mouse::isButtonPressed(sf::Mouse::Right) ||
+              sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            auto tmp = sf::Mouse::getPosition(window);
+            auto pos = sf::Vector2f((tmp.x / tileSize) % window.getSize().x,
+                                    (tmp.y / tileSize) % window.getSize().y);
+            rects[pos.y][pos.x].setFillColor(colors[currentColor]);
+            map[pos.y][pos.x] = currentColor;
+          }
         } break;
 
         default: { } break; }
@@ -92,6 +128,23 @@ int main() {
     }
 
     window.display();
+  }
+
+  std::time_t now = std::time(0);
+
+  std::string dt = std::ctime(&now);
+  std::replace(dt.begin(), dt.end(), ' ', '_');
+
+  dt = dt.substr(0, dt.size() - 1);
+
+  std::ofstream file(dt + ".txt", std::ios::out);
+  file << size << std::endl;
+
+  for (auto& y : map) {
+    for (auto& x : y) {
+      file << x << " ";
+    }
+    file << std::endl;
   }
 
   return 0;
