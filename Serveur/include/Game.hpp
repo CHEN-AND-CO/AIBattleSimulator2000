@@ -72,6 +72,11 @@ class Game {
                            int index);
 
   void clearPlayer();
+  void updateCachePlayer() {
+    for (auto& play : mPlayer) {
+      play.updateCache();
+    }
+  }
 
   bool attack(const sf::Color& col1, int index1, const Direction& dir);
 

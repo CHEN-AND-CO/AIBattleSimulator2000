@@ -59,7 +59,6 @@ void Player::addEntity(const EntityType& entT, const sf::Vector2f& pos) {
     default:
       break;
   }
-  updateCache();
 }
 
 void Player::addBuilding(const BuildingType& buildT, const sf::Vector2f& pos) {
@@ -82,18 +81,19 @@ void Player::addBuilding(const BuildingType& buildT, const sf::Vector2f& pos) {
     default:
       break;
   }
-  updateCache();
 }
 
 void Player::updateCache() {
   for (const auto& b : mBuildings) {
     sf::Vector2f pos = b.getPosition();
-    for (int x{-mBuildingView}; x <= mBuildingView + b.getSize().x; x++) {
-      for (int y{-mBuildingView}; y <= mBuildingView + b.getSize().y; y++) {
-        if (!(x + pos.x >= 0 && y + pos.y >= 0 &&
-              x + pos.x < mCache[0].size() && y + pos.y < mCache.size())) {
-          mCache[y + pos.y][x + pos.x] = 1;
+    for (int x{-mBuildingView}; x <= mBuildingView; x++) {
+      for (int y{-mBuildingView}; y <= mBuildingView; y++) {
+        sf::Vector2f checkPos = pos + sf::Vector2f(x, y);
+        if (checkPos.x < 0 || checkPos.y < 0 ||
+            checkPos.x >= mCache[0].size() || checkPos.y >= mCache.size()) {
+          continue;
         }
+        mCache[checkPos.y][checkPos.x] = 1;
       }
     }
   }
@@ -102,7 +102,12 @@ void Player::updateCache() {
     sf::Vector2f pos = e.getPosition();
     for (int x{-mBuildingView}; x <= mBuildingView; x++) {
       for (int y{-mBuildingView}; y <= mBuildingView; y++) {
-        mCache[y + pos.y][x + pos.x] = 1;
+        sf::Vector2f checkPos = pos + sf::Vector2f(x, y);
+        if (checkPos.x < 0 || checkPos.y < 0 ||
+            checkPos.x >= mCache[0].size() || checkPos.y >= mCache.size()) {
+          continue;
+        }
+        mCache[checkPos.y][checkPos.x] = 1;
       }
     }
   }

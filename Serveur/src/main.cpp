@@ -5,23 +5,22 @@
 
 int main() {
   sf::RenderWindow window;
-  unsigned n = 40;
-  unsigned m = 40;
 
   unsigned currentId = 0;
 
   Game game;
-  window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
 
   if (!game.loadFile("ressources/level.txt")) {
     std::cout << "Error loading file" << std::endl;
     return -1;
   }
-  
+
   game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
   game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
 
   auto map = game.getMap();
+  unsigned n = map.size();
+  unsigned m = map[0].size();
 
   std::vector<sf::RectangleShape> rects;
 
@@ -36,6 +35,8 @@ int main() {
     }
   }
 
+  window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
+
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -48,42 +49,18 @@ int main() {
           switch (event.key.code) {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
-              for (auto i : game.getMap(sf::Color::Blue)) {
-                for (auto j : i) {
-                  std::cout << j;
-                }
-                std::cout << std::endl;
-              }
               break;
 
             case sf::Keyboard::Down:
               game.moveEntity(Direction::Down, sf::Color::Blue, currentId);
-              for (auto i : game.getMap(sf::Color::Blue)) {
-                for (auto j : i) {
-                  std::cout << j;
-                }
-                std::cout << std::endl;
-              }
               break;
 
             case sf::Keyboard::Left:
               game.moveEntity(Direction::Left, sf::Color::Blue, currentId);
-              for (auto i : game.getMap(sf::Color::Blue)) {
-                for (auto j : i) {
-                  std::cout << j;
-                }
-                std::cout << std::endl;
-              }
               break;
 
             case sf::Keyboard::Right:
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
-              for (auto i : game.getMap(sf::Color::Blue)) {
-                for (auto j : i) {
-                  std::cout << j;
-                }
-                std::cout << std::endl;
-              }
               break;
 
             case sf::Keyboard::Space:
@@ -192,6 +169,7 @@ int main() {
 
     window.display();
 
+    game.updateCachePlayer();
     game.clearPlayer();
   }
   return 0;

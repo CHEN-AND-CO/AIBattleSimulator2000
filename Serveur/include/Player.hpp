@@ -28,9 +28,7 @@ class Player {
   }
 
   bool moveEntity(Direction dir, const Game& game, int i) {
-    auto result = mEntities[i].move(dir, game);
-    updateCache();
-    return result;
+    return mEntities[i].move(dir, game);
   }
 
   void addRessource(Ressource r, int val) { mRessources[r] += val; }
