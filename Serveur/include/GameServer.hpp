@@ -43,7 +43,9 @@ class GameServer {
   void clearCommand(command& cmd);
   void authentification(const std::string id, std::vector<std::string> args,
                         int arglen);
+  
   std::vector<std::string> split(const std::string& in, const char& token);
+
   std::string map_to_string(std::vector<std::vector<int>> map);
   std::string buildings_to_string(std::vector<Building> buildings,
                                               int& argn);

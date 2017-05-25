@@ -1,36 +1,48 @@
 #include "Client.hpp"
-
-Client::Client(const std::string cname) { name = cname; }
+#include "Define.hpp"
 
 sf::Socket::Status Client::connect(const sf::IpAddress& IP,
                                    unsigned short port) {
-  // connect to server
-  sf::Socket::Status stat = socket.connect(IP, port);
-  socket.setBlocking(false);
+  sf::Socket::Status stat = mSocket.connect(IP, port);
+  mSocket.setBlocking(false);
+
+  std::string data;
+  while ((data = receive()) == "Error") {
+  }
+
+  data = getData(data).second.second;
+
+  send(data + "@auth:1 " + mName);
+
+  while ((data = receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "auth") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+  }
+
+  if(datas.second.second != "ok"){
+    return sf::Socket::Error;
+  }
+
   return stat;
 }
 
 sf::Socket::Status Client::send(const std::string& msg) {
-  /*sf::Packet packet;
-  packet << msg;
-  return socket.send(packet);*/
-
-  return socket.send(msg.c_str(), msg.length());
+  return mSocket.send(msg.c_str(), msg.length());
 }
 
-sf::Socket::Status Client::receive(std::string& msg) {
-  /*sf::Packet packet;
-  sf::Socket::Status status = socket.receive(packet);*/
+std::string Client::receive() {
   char buffer[MAX_NET_BUFFER_LENGTH];
   size_t length;
+  std::string msg = "Error";
   sf::Socket::Status status =
-      socket.receive(buffer, MAX_NET_BUFFER_LENGTH, length);
+      mSocket.receive(buffer, MAX_NET_BUFFER_LENGTH, length);
   if (status == sf::Socket::Done) {
-    /*packet >> msg;*/
-        msg=buffer;
-    std::cout << msg << "\n";
+    msg = buffer;
   }
-  return status;
+  return msg;
 }
-
-std::string Client::getName() { return name; }

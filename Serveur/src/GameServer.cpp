@@ -223,7 +223,7 @@ std::string GameServer::building_to_string(Building building) {
   out += std::to_string(building.getColor().g) + std::string(" ");  // g
   out += std::to_string(building.getColor().b) + std::string(" ");  // b
 
-  out += std::to_string(42) + std::string(" ");  // hp
+  out += std::to_string(building.getHealth()) + std::string(" ");  // hp
 
   out += buildingType_to_string(building.getType()) + std::string(" ");  // type
 
@@ -231,8 +231,8 @@ std::string GameServer::building_to_string(Building building) {
 }
 
 std::string GameServer::buildingType_to_string(BuildingType type) {
-  if (type == BuildingType::Town) {
-    return "Town";
+  if (type == BuildingType::TownCenter) {
+    return "TownCenter";
   } else if (type == BuildingType::Fort) {
     return "Fort";
   } else if (type == BuildingType::MaxBuildingType) {
