@@ -30,8 +30,6 @@ int main() {
     }
   }*/
 
-  std::cout << gameServer.maptostring(map) << std::endl;
-
   //window.create(sf::VideoMode(n * 32, m * 32), "Serveur");
 
   while (true) {

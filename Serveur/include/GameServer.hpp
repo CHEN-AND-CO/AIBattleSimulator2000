@@ -20,14 +20,12 @@
 #define SERVER_ID "SERVER"
 #endif /* SERVER_ID */
 
-typedef struct command {
+struct command {
   std::string id, command;
   std::vector<std::string> args;
   int arglen;
   bool valid;
-} command;
-
-typedef std::unordered_map<std::string, sf::TcpSocket*> Clients;
+};
 
 class GameServer {
  public:
@@ -46,11 +44,15 @@ class GameServer {
   void authentification(const std::string id, std::vector<std::string> args,
                         int arglen);
   std::vector<std::string> split(const std::string& in, const char& token);
-  std::string maptostring(std::vector<std::vector<int>> map);
+  std::string map_to_string(std::vector<std::vector<int>> map);
+  std::string buildings_to_string(std::vector<Building> buildings,
+                                              int& argn);
+  std::string building_to_string(Building building);
+  std::string buildingType_to_string(BuildingType type);
 
  private:
   std::string message;
-  Clients clients;
+  std::map<std::string, std::shared_ptr<sf::TcpSocket>> clients;
   std::shared_ptr<Game> gamePtr;
   sf::TcpListener listner;
 };
