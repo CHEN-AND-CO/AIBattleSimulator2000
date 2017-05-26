@@ -60,3 +60,10 @@ bool Building::addEntity(const Game& game, Player& player,
       break;
   }
 }
+
+bool operator==(const Building& left, const Building& right) {
+  return left.getID() == right.getID() && left.getColor() == right.getColor();
+}
+bool operator!=(const Building& left, const Building& right) {
+  return !(left == right);
+}

@@ -12,11 +12,16 @@ Player::Player(const Game& game, const sf::Color& col, const sf::Vector2f& pos,
     }
   }
 
-  mRessources[Ressource::Wood] = 600;
-  mRessources[Ressource::Gold] = 100;
-  mRessources[Ressource::Food] = 50;
+  mRessources[Ressource::Wood] =
+      ressourceB[BuildingType::TownCenter][Ressource::Wood];
+  mRessources[Ressource::Gold] =
+      ressourceB[BuildingType::TownCenter][Ressource::Gold];
+  mRessources[Ressource::Food] =
+      ressourceE[EntityType::Villager][Ressource::Food] * 2;
+
   addBuilding(game, BuildingType::TownCenter, pos, ressourceB);
   addEntity(game, EntityType::Villager, pos + sf::Vector2f(2, 0), ressourceE);
+  addEntity(game, EntityType::Villager, pos + sf::Vector2f(2, 1), ressourceE);
 }
 
 void Player::clearMaps() {

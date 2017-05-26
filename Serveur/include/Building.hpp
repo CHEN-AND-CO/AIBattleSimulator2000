@@ -35,4 +35,7 @@ class Building {
   int mID;
 };
 
+bool operator==(const Building& left, const Building& right);
+bool operator!=(const Building& left, const Building& right);
+
 #endif

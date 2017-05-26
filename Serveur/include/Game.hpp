@@ -6,26 +6,22 @@
 #include <string>
 #include "Player.hpp"
 
-/*
-                CONVENTION MAP
-
-1: Herbe, Franchissable
-2: Foret, Infranchissable, Ressource
-3: Riviere, Infranchissable
-*/
-
 class Game {
  public:
   Game();
   bool loadFile(const std::string& fileName);
 
-  std::vector<std::vector<int>> getMap() const { return mMap; }
-  std::vector<std::vector<int>> getMap(const sf::Color& col) const;
   std::vector<Player> getPlayer() const { return mPlayer; }
+  Player getPlayer(const sf::Color&) const;
+
+  std::vector<std::vector<int>> getMap() const { return mMap; }
   std::vector<Building> getBuildings() const;
   std::vector<Entity> getEntities() const;
 
-  Player getPlayer(const sf::Color&) const;
+  std::vector<std::vector<int>> getVisibleMap(const sf::Color& col) const;
+  std::vector<Building> getVisibleBuildings(const sf::Color& col) const;
+  std::vector<Entity> getVisibleEntities(const sf::Color& col) const;
+
   std::vector<Building> getBuildings(const sf::Color&) const;
   std::vector<Entity> getEntities(const sf::Color&) const;
 
@@ -61,6 +57,7 @@ class Game {
     return true;
   }
 
+  bool attack(const sf::Color& col1, int index1, const Direction& dir);
   bool moveEntity(const Direction& dir, const sf::Color& col, int i);
   bool collectRessource(const Direction& dir, const sf::Color& col, int index) {
     for (auto& p : mPlayer) {
@@ -80,9 +77,7 @@ class Game {
     }
   }
 
-  bool attack(const sf::Color& col1, int index1, const Direction& dir);
-
-  bool isGameFinish() const;
+  bool isGameFinish() const { return mPlayer.size() == 1; }
   sf::Color getWinner() const;
 
  private:

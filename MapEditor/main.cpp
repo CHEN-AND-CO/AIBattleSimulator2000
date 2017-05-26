@@ -244,12 +244,14 @@ int main(int argc, char const** argv) {
     window.display();
   }
 
-  std::time_t now = std::time(0);
+  if (fileName == "error") {
+    std::time_t now = std::time(0);
 
-  std::string dt = std::ctime(&now);
-  std::replace(dt.begin(), dt.end(), ' ', '_');
+    std::string dt = std::ctime(&now);
+    std::replace(dt.begin(), dt.end(), ' ', '_');
 
-  fileName = dt.substr(0, dt.size() - 1) + ".txt";
+    fileName = dt.substr(0, dt.size() - 1) + ".txt";
+  }
 
   std::ofstream file(fileName, std::ios::trunc);
   file << size << std::endl;

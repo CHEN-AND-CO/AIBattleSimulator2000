@@ -43,7 +43,7 @@ bool Game::loadFile(const std::string& fileName) {
   return true;
 }
 
-std::vector<std::vector<int>> Game::getMap(const sf::Color& col) const {
+std::vector<std::vector<int>> Game::getVisibleMap(const sf::Color& col) const {
   auto output = mMap;
   std::vector<std::vector<int>> cache;
   for (const auto& play : mPlayer) {
@@ -62,7 +62,45 @@ std::vector<std::vector<int>> Game::getMap(const sf::Color& col) const {
   return output;
 }
 
-bool Game::isGameFinish() const { return mPlayer.size() == 1; }
+std::vector<Building> Game::getVisibleBuildings(const sf::Color& col) const {
+  std::vector<std::vector<int>> cache;
+  for (const auto& play : mPlayer) {
+    if (play.getColor() == col) {
+      cache = play.getCache();
+      break;
+    }
+  }
+
+  std::vector<Building> output;
+
+  for (const auto& build : getBuildings()) {
+    if (cache[build.getPosition().y][build.getPosition().x]) {
+      output.push_back(build);
+    }
+  }
+
+  return output;
+}
+
+std::vector<Entity> Game::getVisibleEntities(const sf::Color& col) const {
+  std::vector<std::vector<int>> cache;
+  for (const auto& play : mPlayer) {
+    if (play.getColor() == col) {
+      cache = play.getCache();
+      break;
+    }
+  }
+
+  std::vector<Entity> output;
+
+  for (const auto& ent : getEntities()) {
+    if (cache[ent.getPosition().y][ent.getPosition().x]) {
+      output.push_back(ent);
+    }
+  }
+
+  return output;
+}
 
 sf::Color Game::getWinner() const {
   if (isGameFinish()) {

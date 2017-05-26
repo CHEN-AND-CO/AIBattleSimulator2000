@@ -51,18 +51,42 @@ int main() {
           switch (event.key.code) {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
+              for (const auto& build :
+                   game.getVisibleBuildings(sf::Color::Blue)) {
+                std::cout << (int)build.getColor().r << " "
+                          << (int)build.getColor().g << " "
+                          << (int)build.getColor().b << std::endl;
+              }
               break;
 
             case sf::Keyboard::Down:
               game.moveEntity(Direction::Down, sf::Color::Blue, currentId);
+              for (const auto& build :
+                   game.getVisibleBuildings(sf::Color::Blue)) {
+                std::cout << (int)build.getColor().r << " "
+                          << (int)build.getColor().g << " "
+                          << (int)build.getColor().b << std::endl;
+              }
               break;
 
             case sf::Keyboard::Left:
               game.moveEntity(Direction::Left, sf::Color::Blue, currentId);
+              for (const auto& build :
+                   game.getVisibleBuildings(sf::Color::Blue)) {
+                std::cout << (int)build.getColor().r << " "
+                          << (int)build.getColor().g << " "
+                          << (int)build.getColor().b << std::endl;
+              }
               break;
 
             case sf::Keyboard::Right:
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
+              for (const auto& build :
+                   game.getVisibleBuildings(sf::Color::Blue)) {
+                std::cout << (int)build.getColor().r << " "
+                          << (int)build.getColor().g << " "
+                          << (int)build.getColor().b << std::endl;
+              }
               break;
 
             case sf::Keyboard::Space:
@@ -84,19 +108,6 @@ int main() {
                                        currentId);
               game.putRessourcesInTown(Direction::Right, sf::Color::Blue,
                                        currentId);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
-              std::cout << "player food : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Food)
-                        << std::endl;
-              std::cout << "player gold : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Gold)
-                        << std::endl;
-
               break;
 
             case sf::Keyboard::B:
@@ -135,6 +146,12 @@ int main() {
               break;
 
             default:
+              for (auto& r : game.getPlayer(sf::Color::Blue).getCache()) {
+                for (auto& i : r) {
+                  std::cout << i;
+                }
+                std::cout << std::endl;
+              }
               break;
           }
           break;
