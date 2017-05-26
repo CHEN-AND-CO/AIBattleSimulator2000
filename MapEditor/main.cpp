@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <algorithm>
-#include <array>
 #include <ctime>
 #include <fstream>
 #include <iostream>
@@ -14,33 +13,37 @@ int main() {
   unsigned size;
   unsigned currentColor = 1;
   unsigned tempColor = 1, k, l;
-  
+
   sf::Font font;
-	font.loadFromFile("arial.ttf");
+  font.loadFromFile("arial.ttf");
 
-  std::array<sf::Color, 5> colors = {sf::Color::Black,
-                                     sf::Color(70, 190, 70),  // Grass
-                                     sf::Color(0, 50, 10),    // Forest
-                                     sf::Color(0, 100, 255),  // Water
-                                     sf::Color(0, 100, 10)};  // Bush
+  std::vector<sf::Color> colors = {sf::Color::Black,
+                                   sf::Color(70, 190, 70),  // Grass
+                                   sf::Color(0, 50, 10),    // Forest
+                                   sf::Color(0, 100, 255),  // Water
+                                   sf::Color(0, 100, 10)};  // Bush
 
-  std::array<std::string, 5> colorsName = {"error",
-                                     "Grass",  // Grass
-                                     "Forest",    // Forest
-                                     "Water",  // Water
-                                     "Bush"};  // Bush
+  std::vector<std::string> colorsName = {"error",
+                                         "Grass",   // Grass
+                                         "Forest",  // Forest
+                                         "Water",   // Water
+                                         "Bush"};   // Bush
 
   std::cout << "Quel est la taille de la map a creer : ";
   std::cin >> size;
-  sf::RenderWindow infos(sf::VideoMode(400, 400), "MapEditor - Infos");
+  sf::RenderWindow infos(
+      sf::VideoMode(400,
+                    (INFOS_TILESIZE + INFOS_TILESPACE) * colors.size() + 50),
+      "MapEditor - Infos");
   sf::RenderWindow window(sf::VideoMode(600, 600), "MapEditor");
-  
+
   infos.setPosition(sf::Vector2i(0, 0));
   window.setPosition(sf::Vector2i(infos.getSize().x, 0));
 
   unsigned tileSize = 600 / size;
-  
-  infos.setSize(sf::Vector2u(300, (INFOS_TILESIZE + INFOS_TILESPACE*2)*(colors.size()-1)));
+
+  infos.setSize(sf::Vector2u(
+      300, (INFOS_TILESIZE + INFOS_TILESPACE * 2) * (colors.size() - 1)));
 
   std::vector<std::vector<int>> map;
 
@@ -57,10 +60,10 @@ int main() {
   }
 
   currentColor++;
-  
+
   for (unsigned i{0}; i < size; i++) {
     for (unsigned j{0}; j < size; j++) {
-      map[i][j] = currentColor-1;
+      map[i][j] = currentColor - 1;
     }
   }
 
@@ -68,10 +71,11 @@ int main() {
     sf::Event event;
     sf::Event event2;
     while (window.pollEvent(event) || infos.pollEvent(event2)) {
-    	if(event2.type == sf::Event::Closed){}
+      if (event2.type == sf::Event::Closed) {
+      }
       switch (event.type) {
         case sf::Event::Closed: {
-        	infos.close();
+          infos.close();
           window.close();
         } break;
 
@@ -92,7 +96,7 @@ int main() {
               break;
 
             case sf::Keyboard::C:
-            	tempColor = currentColor;
+              tempColor = currentColor;
               currentColor = 1;
               for (unsigned i{0}; i < size; i++) {
                 for (unsigned j{0}; j < size; j++) {
@@ -100,7 +104,7 @@ int main() {
                   map[i][j] = currentColor;
                 }
               }
-            	currentColor = tempColor;
+              currentColor = tempColor;
               break;
 
             case sf::Keyboard::S: {
@@ -157,36 +161,38 @@ int main() {
         window.draw(r);
       }
     }
-    
-   	sf::Text text;
-    for (k = INFOS_TILESPACE, l = 1; l < colors.size(); k += INFOS_TILESIZE + INFOS_TILESPACE, l++){
-    	sf::RectangleShape rect(sf::Vector2f(INFOS_TILESIZE, INFOS_TILESIZE));
+
+    sf::Text text;
+    for (k = INFOS_TILESPACE, l = 1; l < colors.size();
+         k += INFOS_TILESIZE + INFOS_TILESPACE, l++) {
+      sf::RectangleShape rect(sf::Vector2f(INFOS_TILESIZE, INFOS_TILESIZE));
       rect.setPosition(5, k);
       rect.setFillColor(colors[l]);
 
-			text.setFont(font);
-			text.setString(colorsName[l]);
-			text.setCharacterSize(24);
-			text.setColor(sf::Color::White);
-      text.setPosition(rect.getPosition().x*2 + INFOS_TILESIZE, k + INFOS_TILESIZE/2 - text.getCharacterSize()/2);
-      
-      if(currentColor == l){
-      	rect.setOutlineThickness(INFOS_TILESPACE/2);
-				rect.setOutlineColor(sf::Color(255, 255, 0));
+      text.setFont(font);
+      text.setString(colorsName[l]);
+      text.setCharacterSize(24);
+      text.setColor(sf::Color::White);
+      text.setPosition(rect.getPosition().x * 2 + INFOS_TILESIZE,
+                       k + INFOS_TILESIZE / 2 - text.getCharacterSize() / 2);
+
+      if (currentColor == l) {
+        rect.setOutlineThickness(INFOS_TILESPACE / 2);
+        rect.setOutlineColor(sf::Color(255, 255, 0));
       }
-      
+
       infos.draw(rect);
       infos.draw(text);
     }
-    
+
     text.setFont(font);
-		text.setString("'C' : Clear\n'+/-' : Change color\n'S' : Save changes");
-		text.setCharacterSize(24);
-		text.setColor(sf::Color::White);
-    text.setPosition(5, k + INFOS_TILESIZE/2 - text.getCharacterSize()/2);
+    text.setString("'C' : Clear\n'+/-' : Change color\n'S' : Save changes");
+    text.setCharacterSize(24);
+    text.setColor(sf::Color::White);
+    text.setPosition(5, k + INFOS_TILESIZE / 2 - text.getCharacterSize() / 2);
     infos.draw(text);
 
-		infos.display();
+    infos.display();
     window.display();
   }
 
