@@ -174,7 +174,7 @@ int main() {
     }
     
     text.setFont(font);
-		text.setString("'C' : Clear\n'+/-' : Change color");
+		text.setString("'C' : Clear\n'+/-' : Change color\n'S' : Save changes");
 		text.setCharacterSize(24);
 		text.setColor(sf::Color::White);
     text.setPosition(5, k + INFOS_TILESIZE/2 - text.getCharacterSize()/2);
