@@ -4,18 +4,19 @@
 	2:foret, infranchissable, procure du bois
 	3:riviere, infranchissable
 	4:buisson, infranchissable, procure de la nourriture
+	5:mine d'or, infranchissable, procure de l'or
 
 
 # Tous les couts ci dessous sont soumis a modification pour equilibrer le jeu
 
 
 # Cout des Batiments:(construits par des Villagers) #
-	TownCenter: 600 bois
-	Fort: 200 bois
+	TownCenter: 600 bois 100 gold
+	Fort: 200 bois 50 gold
   
 # Cout des Entités: #
 	Villager: 50 bois dans le TownCenter
-	Warrior: 60 bois dans le Fort
+	Warrior: 60 bois 10 gold dans le Fort
   
 # Caracteristique des Buildings: #
 	TownCenter: 1000pv
