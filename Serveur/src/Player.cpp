@@ -21,7 +21,7 @@ Player::Player(const Game& game, const sf::Color& col, const sf::Vector2f& pos,
 
   addBuilding(game, BuildingType::TownCenter, pos, ressourceB);
   addEntity(game, EntityType::Villager, pos + sf::Vector2f(2, 0), ressourceE);
-  addEntity(game, EntityType::Villager, pos + sf::Vector2f(2, 1), ressourceE);
+  addEntity(game, EntityType::Villager, pos + sf::Vector2f(-1, 0), ressourceE);
 }
 
 void Player::clearMaps() {

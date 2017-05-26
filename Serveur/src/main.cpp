@@ -122,12 +122,6 @@ int main() {
               break;
 
             default:
-              for (auto& r : game.getPlayer(sf::Color::Blue).getCache()) {
-                for (auto& i : r) {
-                  std::cout << i;
-                }
-                std::cout << std::endl;
-              }
               break;
           }
           break;
@@ -164,5 +158,6 @@ int main() {
     game.updateCachePlayer();
     game.clearPlayer();
   }
+
   return 0;
 }
