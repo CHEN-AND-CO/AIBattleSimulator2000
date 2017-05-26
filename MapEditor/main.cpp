@@ -144,6 +144,10 @@ int main() {
           if (sf::Mouse::isButtonPressed(sf::Mouse::Right) ||
               sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             auto tmp = sf::Mouse::getPosition(window);
+            if (tmp.x < 0 || tmp.y < 0 || tmp.x >= (float)window.getSize().x ||
+                tmp.y >= (float)window.getSize().y) {
+              break;
+            }
             auto pos = sf::Vector2f((tmp.x / tileSize) % window.getSize().x,
                                     (tmp.y / tileSize) % window.getSize().y);
             rects[pos.y][pos.x].setFillColor(colors[currentColor]);
