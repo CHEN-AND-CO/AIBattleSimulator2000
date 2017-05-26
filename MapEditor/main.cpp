@@ -57,6 +57,12 @@ int main() {
   }
 
   currentColor++;
+  
+  for (unsigned i{0}; i < size; i++) {
+    for (unsigned j{0}; j < size; j++) {
+      map[i][j] = currentColor-1;
+    }
+  }
 
   while (window.isOpen()) {
     sf::Event event;
