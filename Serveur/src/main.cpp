@@ -51,42 +51,18 @@ int main() {
           switch (event.key.code) {
             case sf::Keyboard::Up:
               game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
-              for (const auto& build :
-                   game.getVisibleBuildings(sf::Color::Blue)) {
-                std::cout << (int)build.getColor().r << " "
-                          << (int)build.getColor().g << " "
-                          << (int)build.getColor().b << std::endl;
-              }
               break;
 
             case sf::Keyboard::Down:
               game.moveEntity(Direction::Down, sf::Color::Blue, currentId);
-              for (const auto& build :
-                   game.getVisibleBuildings(sf::Color::Blue)) {
-                std::cout << (int)build.getColor().r << " "
-                          << (int)build.getColor().g << " "
-                          << (int)build.getColor().b << std::endl;
-              }
               break;
 
             case sf::Keyboard::Left:
               game.moveEntity(Direction::Left, sf::Color::Blue, currentId);
-              for (const auto& build :
-                   game.getVisibleBuildings(sf::Color::Blue)) {
-                std::cout << (int)build.getColor().r << " "
-                          << (int)build.getColor().g << " "
-                          << (int)build.getColor().b << std::endl;
-              }
               break;
 
             case sf::Keyboard::Right:
               game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
-              for (const auto& build :
-                   game.getVisibleBuildings(sf::Color::Blue)) {
-                std::cout << (int)build.getColor().r << " "
-                          << (int)build.getColor().g << " "
-                          << (int)build.getColor().b << std::endl;
-              }
               break;
 
             case sf::Keyboard::Space:
