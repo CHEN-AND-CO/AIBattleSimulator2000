@@ -3,7 +3,7 @@
 #include "Game.hpp"
 
 Player::Player(const Game& game, const sf::Color& col, const sf::Vector2f& pos,
-               unsigned mapSize)
+               buildMap ressourceB, entMap ressourceE, unsigned mapSize)
     : mColor{col}, mEntID{0}, mBuildID{0}, mBuildingView{4}, mEntityView{2} {
   for (unsigned i{0}; i < mapSize; i++) {
     mCache.push_back(std::vector<int>(mapSize));
@@ -12,9 +12,11 @@ Player::Player(const Game& game, const sf::Color& col, const sf::Vector2f& pos,
     }
   }
 
-  mRessources[Ressource::Wood] = 650;
-  addBuilding(game, BuildingType::TownCenter, pos);
-  addEntity(game, EntityType::Villager, pos + sf::Vector2f(2, 0));
+  mRessources[Ressource::Wood] = 600;
+  mRessources[Ressource::Gold] = 100;
+  mRessources[Ressource::Food] = 50;
+  addBuilding(game, BuildingType::TownCenter, pos, ressourceB);
+  addEntity(game, EntityType::Villager, pos + sf::Vector2f(2, 0), ressourceE);
 }
 
 void Player::clearMaps() {
@@ -41,7 +43,7 @@ void Player::clearMaps() {
 }
 
 bool Player::addEntity(const Game& game, const EntityType& entT,
-                       const sf::Vector2f& pos) {
+                       const sf::Vector2f& pos, entMap ressourceMap) {
   if (game.getMap()[pos.y][pos.x] != 1) {
     std::cout << "Postion obstructed" << std::endl;
     return false;
@@ -59,34 +61,23 @@ bool Player::addEntity(const Game& game, const EntityType& entT,
       return false;
     }
   }
-  switch (entT) {
-    case EntityType::Villager:
-      if (mRessources[Ressource::Wood] < 50) {
-        std::cout << "Not enough ressources to create Villager\n";
-        return false;
-      } else {
-        mEntities.push_back(Entity(entT, mColor, pos, mEntID++));
-        mRessources[Ressource::Wood] -= 50;
-      }
-      break;
-    case EntityType::Warrior:
-      if (mRessources[Ressource::Wood] < 60) {
-        std::cout << "Not enough ressources to create Warrior\n";
-        return false;
-      } else {
-        mEntities.push_back(Entity(entT, mColor, pos, mEntID++));
-        mRessources[Ressource::Wood] -= 60;
-      }
-      break;
-    default:
+
+  for (auto& r : ressourceMap[entT]) {
+    if (mRessources[r.first] < r.second) {
+      std::cout << "Not enough Ressources" << std::endl;
       return false;
-      break;
+    }
+  }
+
+  mEntities.push_back(Entity(entT, mColor, pos, mEntID++));
+  for (auto& r : ressourceMap[entT]) {
+    mRessources[r.first] -= r.second;
   }
   return true;
 }
 
 bool Player::addBuilding(const Game& game, const BuildingType& buildT,
-                         const sf::Vector2f& pos) {
+                         const sf::Vector2f& pos, buildMap ressourceMap) {
   if (game.getMap()[pos.y][pos.x] != 1) {
     std::cout << "Postion obstructed" << std::endl;
     return false;
@@ -104,27 +95,16 @@ bool Player::addBuilding(const Game& game, const BuildingType& buildT,
       return false;
     }
   }
-  switch (buildT) {
-    case BuildingType::TownCenter:
-      if (mRessources[Ressource::Wood] < 600) {
-        std::cout << "Not enough ressources to construct Town\n";
-        return false;
-      } else {
-        mBuildings.push_back(Building(buildT, mColor, pos, mBuildID++));
-        mRessources[Ressource::Wood] -= 600;
-      }
-      break;
-    case BuildingType::Fort:
-      if (mRessources[Ressource::Wood] < 200) {
-        std::cout << "Not enough ressources to construct Fort\n";
-        return false;
-      } else {
-        mBuildings.push_back(Building(buildT, mColor, pos, mBuildID++));
-        mRessources[Ressource::Wood] -= 200;
-      }
-    default:
+
+  for (auto& r : ressourceMap[buildT]) {
+    if (mRessources[r.first] < r.second) {
+      std::cout << "Not enough Ressources" << std::endl;
       return false;
-      break;
+    }
+  }
+  mBuildings.push_back(Building(buildT, mColor, pos, mEntID++));
+  for (auto& r : ressourceMap[buildT]) {
+    mRessources[r.first] -= r.second;
   }
   return true;
 }

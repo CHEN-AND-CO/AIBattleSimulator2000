@@ -16,6 +16,7 @@
 
 class Game {
  public:
+  Game();
   bool loadFile(const std::string& fileName);
 
   std::vector<std::vector<int>> getMap() const { return mMap; }
@@ -31,7 +32,7 @@ class Game {
   bool addEntity(const EntityType& entT, const sf::Color& col, int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addEntity(*this, entT, index);
+        player.addEntity(*this, entT, index, mEntityCost);
         return true;
       }
     }
@@ -42,7 +43,7 @@ class Game {
                    int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addBuilding(*this, buildT, index);
+        player.addBuilding(*this, buildT, index, mBuildingCost);
         return true;
       }
     }
@@ -55,7 +56,8 @@ class Game {
         return false;
       }
     }
-    mPlayer.push_back(Player(*this, col, pos, mMap.size()));
+    mPlayer.push_back(
+        Player(*this, col, pos, mBuildingCost, mEntityCost, mMap.size()));
     return true;
   }
 
@@ -84,6 +86,8 @@ class Game {
   sf::Color getWinner() const;
 
  private:
+  buildMap mBuildingCost;
+  entMap mEntityCost;
   std::vector<std::vector<int>> mMap;
   std::vector<Player> mPlayer;
 };

@@ -2,6 +2,29 @@
 #include <algorithm>
 #include <iostream>
 
+Game::Game() {
+  std::map<Ressource, int> r;
+  r[Ressource::Wood] = 600;
+  r[Ressource::Gold] = 100;
+  r[Ressource::Food] = 0;
+  mBuildingCost[BuildingType::TownCenter] = r;
+
+  r[Ressource::Wood] = 200;
+  r[Ressource::Gold] = 50;
+  r[Ressource::Food] = 0;
+  mBuildingCost[BuildingType::Fort] = r;
+
+  r[Ressource::Wood] = 0;
+  r[Ressource::Gold] = 0;
+  r[Ressource::Food] = 50;
+  mEntityCost[EntityType::Villager] = r;
+
+  r[Ressource::Wood] = 0;
+  r[Ressource::Gold] = 10;
+  r[Ressource::Food] = 60;
+  mEntityCost[EntityType::Warrior] = r;
+}
+
 bool Game::loadFile(const std::string& fileName) {
   std::ifstream file(fileName, std::ios::binary);
   if (!file.is_open()) {
@@ -76,7 +99,8 @@ Player Game::getPlayer(const sf::Color& col) const {
       return mPlayer[i];
     }
   }
-  return Player(*this, sf::Color::Black, sf::Vector2f(0, 0), 0);
+  return Player(*this, sf::Color::Black, sf::Vector2f(0, 0), mBuildingCost,
+                mEntityCost, 0);
 }
 
 std::vector<Building> Game::getBuildings(const sf::Color& col) const {
