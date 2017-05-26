@@ -15,8 +15,8 @@
 	Fort: 200 bois 50 gold
   
 # Cout des Entités: #
-	Villager: 50 bois dans le TownCenter
-	Warrior: 60 bois 10 gold dans le Fort
+	Villager: 50 nourriture dans le TownCenter
+	Warrior: 60 nourriture 10 gold dans le Fort
   
 # Caracteristique des Buildings: #
 	TownCenter: 1000pv
