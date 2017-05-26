@@ -10,13 +10,13 @@ int main() {
 
   Game game;
 
-  if (!game.loadFile("ressources/test.txt")) {
+  if (!game.loadFile("ressources/GreatLake.txt")) {
     std::cout << "Error loading file" << std::endl;
     return -1;
   }
 
-  game.addPlayer(sf::Color::Blue, sf::Vector2f(3, 2));
-  game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
+  game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 8));
+  game.addPlayer(sf::Color::Red, sf::Vector2f(35, 35));
 
   auto map = game.getMap();
   unsigned n = map.size();
