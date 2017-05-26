@@ -10,12 +10,12 @@ int main() {
 
   Game game;
 
-  if (!game.loadFile("ressources/level.txt")) {
+  if (!game.loadFile("ressources/test.txt")) {
     std::cout << "Error loading file" << std::endl;
     return -1;
   }
 
-  game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
+  game.addPlayer(sf::Color::Blue, sf::Vector2f(3, 2));
   game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
 
   auto map = game.getMap();
@@ -31,6 +31,7 @@ int main() {
       if (map[j][i] == 2) rect.setFillColor(sf::Color(0, 50, 10));
       if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 100, 255));
       if (map[j][i] == 4) rect.setFillColor(sf::Color(0, 100, 10));
+      if (map[j][i] == 5) rect.setFillColor(sf::Color(193, 172, 81));
       rect.setPosition(sf::Vector2f(i * TILESIZE, j * TILESIZE));
       rects.push_back(rect);
     }
@@ -91,6 +92,11 @@ int main() {
                         << game.getPlayer(sf::Color::Blue)
                                .getRessources(Ressource::Food)
                         << std::endl;
+              std::cout << "player gold : "
+                        << game.getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Gold)
+                        << std::endl;
+
               break;
 
             case sf::Keyboard::B:

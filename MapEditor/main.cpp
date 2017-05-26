@@ -9,28 +9,81 @@
 #define INFOS_TILESIZE 60
 #define INFOS_TILESPACE 10
 
-int main() {
+int main(int argc, char const** argv) {
   unsigned size;
   unsigned currentColor = 1;
   unsigned tempColor = 1, k, l;
+  int tmp = 0;
+
+  std::string fileName = "error";
 
   sf::Font font;
-  font.loadFromFile("arial.ttf");
+  if (!font.loadFromFile("arial.ttf")) {
+    std::cout << "Error loading ttf" << std::endl;
+    return -1;
+  }
 
-  std::vector<sf::Color> colors = {sf::Color::Black,
-                                   sf::Color(70, 190, 70),  // Grass
-                                   sf::Color(0, 50, 10),    // Forest
-                                   sf::Color(0, 100, 255),  // Water
-                                   sf::Color(0, 100, 10)};  // Bush
+  std::vector<sf::Color> colors = {
+      sf::Color::Black,       sf::Color(70, 190, 70),  // Grass
+      sf::Color(0, 50, 10),                            // Forest
+      sf::Color(0, 100, 255),                          // Water
+      sf::Color(0, 100, 10),                           // Bush
+      sf::Color(193, 172, 81)                          // Gold
+  };
 
-  std::vector<std::string> colorsName = {"error",
-                                         "Grass",   // Grass
-                                         "Forest",  // Forest
-                                         "Water",   // Water
-                                         "Bush"};   // Bush
+  std::vector<std::string> colorsName = {"error", "Grass", "Forest",
+                                         "Water", "Bush",  "Gold"};
 
-  std::cout << "Quel est la taille de la map a creer : ";
-  std::cin >> size;
+  std::vector<std::vector<int>> map;
+
+  if (argc == 2) {
+    fileName = argv[1];
+    tmp = 1;
+  }
+
+  if (tmp == 0) {
+    std::cout << "Charger un fichier(1) ou creer une map vierge(2) : ";
+    std::cin >> tmp;
+  }
+
+  switch (tmp) {
+    case 1: {
+      if (argc == 1) {
+        std::cout << "Quel est le nom du fichier ? ";
+        std::cin >> fileName;
+      }
+      std::ifstream file(fileName, std::ios::binary);
+      if (!file.is_open()) {
+        std::cerr << "Error open file " << fileName << std::endl;
+        return -1;
+      }
+      file >> size;
+      for (unsigned i{0}; i < size; i++) {
+        map.push_back(std::vector<int>(size));
+        for (unsigned j{0}; j < size; j++) {
+          file >> tmp;
+          map[i][j] = tmp;
+        }
+      }
+    } break;
+
+    case 2:
+      std::cout << "Quel est la taille de la map a creer : ";
+      std::cin >> size;
+      for (unsigned i{0}; i < size; i++) {
+        map.push_back(std::vector<int>(size));
+        for (unsigned j{0}; j < size; j++) {
+          map[i][j] = currentColor;
+        }
+      }
+      break;
+
+    default:
+      std::cout << "Erreur input" << std::endl;
+      return -1;
+      break;
+  }
+
   sf::RenderWindow infos(
       sf::VideoMode(400,
                     (INFOS_TILESIZE + INFOS_TILESPACE) * colors.size() + 50),
@@ -45,27 +98,18 @@ int main() {
   infos.setSize(sf::Vector2u(
       300, (INFOS_TILESIZE + INFOS_TILESPACE * 2) * (colors.size() - 1)));
 
-  std::vector<std::vector<int>> map;
-
   std::vector<std::vector<sf::RectangleShape>> rects;
   for (unsigned i{0}; i < size; i++) {
-    map.push_back(std::vector<int>(size));
     rects.push_back(std::vector<sf::RectangleShape>(size));
     for (unsigned j{0}; j < size; j++) {
       sf::RectangleShape tmp(sf::Vector2f(tileSize, tileSize));
       tmp.setPosition(j * tileSize, i * tileSize);
-      tmp.setFillColor(colors[currentColor]);
+      tmp.setFillColor(colors[map[i][j]]);
       rects[i][j] = tmp;
     }
   }
 
   currentColor++;
-
-  for (unsigned i{0}; i < size; i++) {
-    for (unsigned j{0}; j < size; j++) {
-      map[i][j] = currentColor - 1;
-    }
-  }
 
   while (window.isOpen()) {
     sf::Event event;
@@ -205,9 +249,9 @@ int main() {
   std::string dt = std::ctime(&now);
   std::replace(dt.begin(), dt.end(), ' ', '_');
 
-  dt = dt.substr(0, dt.size() - 1);
+  fileName = dt.substr(0, dt.size() - 1) + ".txt";
 
-  std::ofstream file(dt + ".txt", std::ios::out);
+  std::ofstream file(fileName, std::ios::trunc);
   file << size << std::endl;
 
   for (auto& y : map) {
