@@ -2,11 +2,14 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include "Game.hpp"
+#include "Server.hpp"
 
 int main() {
   sf::RenderWindow window;
 
   unsigned currentId = 0;
+  Server server(53000);
+
 
   Game game;
 
@@ -38,6 +41,7 @@ int main() {
   }
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
+  std::string input;
 
   while (window.isOpen()) {
     sf::Event event;
@@ -45,6 +49,11 @@ int main() {
       switch (event.type) {
         case sf::Event::Closed:
           window.close();
+          break;
+        case sf::Event::KeyPressed:
+          std::getline(std::cin, input);
+          server.send("0", input);
+          input.clear();
           break;
 
         case sf::Event::KeyPressed:
@@ -85,7 +94,7 @@ int main() {
               game.putRessourcesInTown(Direction::Right, sf::Color::Blue,
                                        currentId);
               break;
-
+              
             case sf::Keyboard::B:
               game.addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
               break;
@@ -130,6 +139,7 @@ int main() {
           break;
       }
     }
+    server.receive();
 
     window.clear();
     for (auto& r : rects) {
