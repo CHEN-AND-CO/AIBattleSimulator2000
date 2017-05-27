@@ -11,7 +11,6 @@ depending of the types of both of them
 
 Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
     : mType{bT}, mColor{color}, mPos{pos}, mHealth{1000}, mID{id} {
-<<<<<<< HEAD
   switch (mType) {
     case BuildingType::TownCenter:
       mSize = sf::Vector2f(2, 2);
@@ -38,29 +37,6 @@ bool Building::addEntity(const Game& game, Player& player,
         case EntityType::Villager:
           return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0),
                                   ressourceMap);
-=======
-  switch (mType) {
-    case BuildingType::TownCenter:
-      mSize = sf::Vector2f(2, 2);
-      break;
-
-    case BuildingType::Fort:
-      mSize = sf::Vector2f(1, 1);
-      break;
-
-    case BuildingType::MaxBuildingType:
-    default:
-      break;
-  }
-}
-
-void Building::addEntity(Player& player, const EntityType& entT) {
-  switch (mType) {
-    case BuildingType::TownCenter:
-      switch (entT) {
-        case EntityType::Villager:
-          player.addEntity(entT, mPos + sf::Vector2f(mSize.x, 0));
->>>>>>> origin/advancedServerImplement
           break;
 
         default:
@@ -73,12 +49,8 @@ void Building::addEntity(Player& player, const EntityType& entT) {
     case BuildingType::Fort:
       switch (entT) {
         case EntityType::Warrior:
-<<<<<<< HEAD
           return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0),
                                   ressourceMap);
-=======
-          player.addEntity(entT, mPos + sf::Vector2f(mSize.x, 0));
->>>>>>> origin/advancedServerImplement
           break;
 
         default:

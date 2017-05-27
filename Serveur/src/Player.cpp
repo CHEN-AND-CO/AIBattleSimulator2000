@@ -1,6 +1,5 @@
 #include "Player.hpp"
 #include <iostream>
-<<<<<<< HEAD
 #include "Game.hpp"
 
 Player::Player(const Game& game, const sf::Color& col, const sf::Vector2f& pos,
@@ -23,14 +22,6 @@ Player::Player(const Game& game, const sf::Color& col, const sf::Vector2f& pos,
   addBuilding(game, BuildingType::TownCenter, pos, ressourceB);
   addEntity(game, EntityType::Villager, pos + sf::Vector2f(2, 0), ressourceE);
   addEntity(game, EntityType::Villager, pos + sf::Vector2f(-1, 1), ressourceE);
-=======
-
-Player::Player(const sf::Color& col, const sf::Vector2f& pos)
-    : mColor{col}, mEntID{0}, mBuildID{0} {
-  mRessources[Ressource::Wood] = 650;
-  addBuilding(BuildingType::TownCenter, pos);
-  addEntity(EntityType::Villager, pos + sf::Vector2f(2, 0));
->>>>>>> origin/advancedServerImplement
 }
 
 void Player::clearMaps() {
@@ -56,7 +47,6 @@ void Player::clearMaps() {
   }
 }
 
-<<<<<<< HEAD
 bool Player::addEntity(const Game& game, const EntityType& entT,
                        const sf::Vector2f& pos, entMap ressourceMap) {
   if (game.getMap()[pos.y][pos.x] != 1) {
@@ -151,49 +141,5 @@ void Player::updateCache() {
         mCache[checkPos.y][checkPos.x] = 1;
       }
     }
-=======
-void Player::addEntity(const EntityType& entT, const sf::Vector2f& pos) {
-  switch (entT) {
-    case EntityType::Villager:
-      if (mRessources[Ressource::Wood] < 50) {
-        std::cout << "Not enough ressources to create Villager\n";
-      } else {
-        mEntities.push_back(Entity(entT, mColor, pos, mEntID++));
-        mRessources[Ressource::Wood] -= 50;
-      }
-      break;
-    case EntityType::Warrior:
-      if (mRessources[Ressource::Wood] < 60) {
-        std::cout << "Not enough ressources to create Warrior\n";
-      } else {
-        mEntities.push_back(Entity(entT, mColor, pos, mEntID++));
-        mRessources[Ressource::Wood] -= 60;
-      }
-      break;
-    default:
-      break;
-  }
-}
-
-void Player::addBuilding(const BuildingType& buildT, const sf::Vector2f& pos) {
-  switch (buildT) {
-    case BuildingType::TownCenter:
-      if (mRessources[Ressource::Wood] < 600) {
-        std::cout << "Not enough ressources to construct Town\n";
-      } else {
-        mBuildings.push_back(Building(buildT, mColor, pos, mBuildID++));
-        mRessources[Ressource::Wood] -= 600;
-      }
-      break;
-    case BuildingType::Fort:
-      if (mRessources[Ressource::Wood] < 200) {
-        std::cout << "Not enough ressources to construct Fort\n";
-      } else {
-        mBuildings.push_back(Building(buildT, mColor, pos, mBuildID++));
-        mRessources[Ressource::Wood] -= 200;
-      }
-    default:
-      break;
->>>>>>> origin/advancedServerImplement
   }
 }

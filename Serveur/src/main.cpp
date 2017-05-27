@@ -7,27 +7,6 @@ int main() {
   sf::RenderWindow window;
 
   unsigned currentId = 0;
-<<<<<<< HEAD
-  Server server(53000);
-
-
-  Game game;
-
-  if (!game.loadFile("ressources/GreatLake.txt")) {
-    std::cout << "Error loading file" << std::endl;
-    return -1;
-  }
-
-  game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 8));
-  game.addPlayer(sf::Color::Red, sf::Vector2f(35, 35));
-
-  auto map = game.getMap();
-  unsigned n = map.size();
-  unsigned m = map[0].size();
-
-  std::vector<sf::RectangleShape> rects;
-
-=======
 
   std::shared_ptr<Game> game = std::make_shared<Game>();
   game->loadFile("ressources/level.txt");
@@ -40,28 +19,21 @@ int main() {
   auto map = game->getMap();
   auto n = map.size();
   auto m = map[0].size();
->>>>>>> origin/advancedServerImplement
   for (unsigned i{0}; i < n; i++) {
     for (unsigned j{0}; j < m; j++) {
       sf::RectangleShape rect(sf::Vector2f(TILESIZE, TILESIZE));
       if (map[j][i] == 1) rect.setFillColor(sf::Color(70, 190, 70));
       if (map[j][i] == 2) rect.setFillColor(sf::Color(0, 50, 10));
       if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 100, 255));
-<<<<<<< HEAD
       if (map[j][i] == 4) rect.setFillColor(sf::Color(0, 100, 10));
       if (map[j][i] == 5) rect.setFillColor(sf::Color(193, 172, 81));
-=======
->>>>>>> origin/advancedServerImplement
       rect.setPosition(sf::Vector2f(i * TILESIZE, j * TILESIZE));
       rects.push_back(rect);
     }
   }
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
-<<<<<<< HEAD
   std::string input;
-=======
->>>>>>> origin/advancedServerImplement
 
   while (window.isOpen()) {
     sf::Event event;
@@ -294,23 +266,15 @@ int main() {
           break;
       }
     }
-<<<<<<< HEAD
-    server.receive();
-=======
 
     gameServer.receive();
->>>>>>> origin/advancedServerImplement
 
     window.clear();
     for (auto& r : rects) {
       window.draw(r);
     }
 
-<<<<<<< HEAD
-    auto buildings = game.getBuildings();
-=======
     auto buildings = game->getBuildings();
->>>>>>> origin/advancedServerImplement
     for (auto& b : buildings) {
       sf::RectangleShape r(
           sf::Vector2f(b.getSize().x * TILESIZE, b.getSize().y * TILESIZE));
@@ -319,11 +283,7 @@ int main() {
       window.draw(r);
     }
 
-<<<<<<< HEAD
-    auto enttity = game.getEntities();
-=======
     auto enttity = game->getEntities();
->>>>>>> origin/advancedServerImplement
     for (auto& e : enttity) {
       sf::CircleShape c(TILESIZE / 2);
       c.setFillColor(e.getColor());
@@ -332,13 +292,8 @@ int main() {
     }
 
     window.display();
-
-<<<<<<< HEAD
-    game.updateCachePlayer();
-    game.clearPlayer();
-=======
+    game->updateCachePlayer();
     game->clearPlayer();
->>>>>>> origin/advancedServerImplement
   }
 
   return 0;
