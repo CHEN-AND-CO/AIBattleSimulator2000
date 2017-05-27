@@ -13,6 +13,7 @@ bool rectCollide(const sf::Vector2f& pos1, const sf::Vector2f& size1,
 bool rectCollide(const sf::Vector2f& pos1, const sf::Vector2f& pos2) {
   return rectCollide(pos1, sf::Vector2f(1, 1), pos2, sf::Vector2f(1, 1));
 }
+<<<<<<< HEAD
 
 bool rectInCircle(const sf::Vector2f pos1, int radius, sf::Vector2f pos2) {
   if (std::pow(pos2.x - pos1.x,2) + std::pow(pos2.y - pos1.y,2) <= std::pow(radius,2)) {
@@ -20,3 +21,5 @@ bool rectInCircle(const sf::Vector2f pos1, int radius, sf::Vector2f pos2) {
   }
   return false;
 }
+=======
+>>>>>>> origin/advancedServerImplement

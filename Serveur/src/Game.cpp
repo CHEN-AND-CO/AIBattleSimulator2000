@@ -53,6 +53,7 @@ bool Game::loadFile(const std::string& fileName) {
   return true;
 }
 
+<<<<<<< HEAD
 std::vector<std::vector<int>> Game::getVisibleMap(const sf::Color& col) const {
   auto output = mMap;
   std::vector<std::vector<int>> cache;
@@ -111,6 +112,9 @@ std::vector<Entity> Game::getVisibleEntities(const sf::Color& col) const {
 
   return output;
 }
+=======
+bool Game::isGameFinish() const { return mPlayer.size() == 1; }
+>>>>>>> origin/advancedServerImplement
 
 sf::Color Game::getWinner() const {
   if (isGameFinish()) {
@@ -147,8 +151,12 @@ Player Game::getPlayer(const sf::Color& col) const {
       return mPlayer[i];
     }
   }
+<<<<<<< HEAD
   return Player(*this, sf::Color::Black, sf::Vector2f(0, 0), mBuildingCost,
                 mEntityCost, 0);
+=======
+  return Player(sf::Color::Black, sf::Vector2f(0, 0));
+>>>>>>> origin/advancedServerImplement
 }
 
 std::vector<Building> Game::getBuildings(const sf::Color& col) const {
@@ -261,7 +269,11 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
   return false;
 }
 
+<<<<<<< HEAD
 bool Game::attack(const sf::Color& col, int index, const Direction& dir) {
+=======
+bool Game::attack(const sf::Color& col, int index) {
+>>>>>>> origin/advancedServerImplement
   for (auto& player1 : mPlayer) {
     sf::Color pCol = player1.getColor();
     if (pCol != col) {
@@ -273,6 +285,7 @@ bool Game::attack(const sf::Color& col, int index, const Direction& dir) {
         continue;
       }
 
+<<<<<<< HEAD
       sf::Vector2f pos = player1.getEntities()[index].getPosition();
       switch (dir) {
         case Direction::Up:
@@ -309,6 +322,30 @@ bool Game::attack(const sf::Color& col, int index, const Direction& dir) {
                                       i);
           return true;
         } else if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
+=======
+      for (unsigned i{0}; i < player2.getEntities().size(); i++) {
+        if (rectCollide(
+                player1.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
+                player2.getEntities()[i].getPosition())) {
+          player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
+                                      i);
+          return true;
+        } else if (rectCollide(player1.getEntities()[index].getPosition() +
+                                   sf::Vector2f(-1, 0),
+                               player2.getEntities()[i].getPosition())) {
+          player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
+                                      i);
+          return true;
+        } else if (rectCollide(player1.getEntities()[index].getPosition() +
+                                   sf::Vector2f(0, 1),
+                               player2.getEntities()[i].getPosition())) {
+          player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
+                                      i);
+          return true;
+        } else if (rectCollide(player1.getEntities()[index].getPosition() +
+                                   sf::Vector2f(0, -1),
+                               player2.getEntities()[i].getPosition())) {
+>>>>>>> origin/advancedServerImplement
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;

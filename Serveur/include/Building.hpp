@@ -14,7 +14,11 @@ class Building {
  public:
   Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id);
 
+<<<<<<< HEAD
   bool addEntity(const Game& game, Player& player, const EntityType& entT, entMap ressourceMap);
+=======
+  void addEntity(Player& player, const EntityType& entT);
+>>>>>>> origin/advancedServerImplement
 
   BuildingType getType() const { return mType; }
   sf::Color getColor() const { return mColor; }

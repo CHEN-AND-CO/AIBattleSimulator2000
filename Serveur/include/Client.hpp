@@ -4,6 +4,10 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 
+#ifndef MAX_NET_BUFFER_LENGTH
+#define MAX_NET_BUFFER_LENGTH 65536
+#endif /* MAX_NET_BUFFER_LENGTH */
+
 class Client {
  private:
   std::string name;

@@ -15,22 +15,36 @@
 
 		id@getTerrainMap:0 //Demande la map du terrain
 
-		id@getEntitysMap:0 //Demande la map des entités
+		id@getEntitysMap:3 r g b //Demande la map des entités
 
-		id@getBuildingsMap:0 //Demande la map des batiments
+		id@getBuildingsMap:3 r g b //Demande la map des batiments
 
-		id@move:1 [0-3](left/right/up/down)
+		id@move:5 r g b int direction
 
 		id@update:3 x y hp
 
+		id@auth:2 name r g b
+
+		id@attack:5 r g b int direction
+
+		id@collect:5 r g b int direction
+
+		id@putInTown:5 r g b int direction
+
+		id@addEntity:5 r g b int entType
+
+		id@addBuildind:5 r g b int buildType
+
+		id@getPlayer:3 r g b
+
 		### Reception ###
 
-		id@reply:2 command (ok/fail)
+		id@reply:1 command (ok/fail)
 
-		id@terrain:1 data
+		id@terrain:4 terrainID terrainID terrainID terrainID 
 
-		id@entitys:1 data
+		id@entitys:14 x y r g b hp type x y r g b hp type
 
-		id@buildings:1 data
+		id@buildings:14 x y r g b hp type x y r g b hp type
 
-		id@lifeUpdate:1 hp
+		id@player:4 ressourceType amount ressoureType amount
