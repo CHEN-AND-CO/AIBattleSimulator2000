@@ -14,8 +14,8 @@ AIBattleSimulatorServeur.out : $(OBJ)
 	g++ obj/* $(LDFLAGS) -o $@ 
 
 obj/%.o: src/%.cpp
-	g++ -c $< -Iinclude -o $@ $(CFLAGS) -fPIC
-
+	g++ -c $< -Iinclude -o $@ $(CFLAGS) 
+	
 clean:
 	rm obj/*.o *.out *.gch -f
 

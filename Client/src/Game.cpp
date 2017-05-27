@@ -1,8 +1,8 @@
 #include "Game.hpp"
 
-Game::Game(const sf::IpAddress& ip, unsigned short port, std::string name)
+Game::Game(const sf::IpAddress& ip, unsigned short port, std::string name, const sf::Color& col)
     : mClient(name) {
-  if (mClient.connect(ip, port) != sf::Socket::Done) {
+  if (mClient.connect(ip, port, col) != sf::Socket::Done) {
     std::cout << "Error connecting server" << std::endl;
   }
 }

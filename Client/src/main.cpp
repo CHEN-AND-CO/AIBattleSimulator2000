@@ -5,7 +5,7 @@
 int main() {
   std::string data;
   std::cin >> data;
-  Game game("172.17.3.250", 53000, data);
+  Game game("172.17.3.250", 53000, data, sf::Color::Blue);
 
   while (getchar() != 'q') {
     auto map = game.getMap();

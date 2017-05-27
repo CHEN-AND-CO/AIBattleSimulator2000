@@ -1,8 +1,8 @@
 #include "Client.hpp"
 #include "Define.hpp"
 
-sf::Socket::Status Client::connect(const sf::IpAddress& IP,
-                                   unsigned short port) {
+sf::Socket::Status Client::connect(const sf::IpAddress& IP, unsigned short port,
+                                   const sf::Color& col) {
   sf::Socket::Status stat = mSocket.connect(IP, port);
   mSocket.setBlocking(false);
 
@@ -12,7 +12,8 @@ sf::Socket::Status Client::connect(const sf::IpAddress& IP,
 
   data = getData(data).second.second;
 
-  send(data + "@auth:1 " + mName);
+  send(data + "@auth:1 " + mName + " " + std::to_string(col.r) + " " +
+       std::to_string(col.g) + " " + std::to_string(col.b));
 
   while ((data = receive()) == "Error") {
   }
@@ -24,7 +25,7 @@ sf::Socket::Status Client::connect(const sf::IpAddress& IP,
     std::cout << "Received " << data << std::endl;
   }
 
-  if(datas.second.second != "ok"){
+  if (datas.second.second != "ok") {
     return sf::Socket::Error;
   }
 
