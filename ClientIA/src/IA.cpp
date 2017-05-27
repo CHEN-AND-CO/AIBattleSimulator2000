@@ -14,6 +14,9 @@ IA::IA(Game& game, sf::Color color) : mColor{color} {
   stopWarriors = false;
   start = computeWarriorPosition(game, game.getBuildings(mColor)[0].getPosition(), -1);
   
+  fortPosition = sf::Vector2f(-1, -1);
+  townCenterPosition = sf::Vector2f(-1, -1);
+  
   test = 0;
   verify = false;
 }
@@ -40,6 +43,7 @@ void IA::run(Game& game) {
 	
 	unsigned i{0};
 	unsigned nbWarrior{0};
+	unsigned villager{0};
   
   for(const auto& entity : game.getPlayer(mColor).getEntities()){
   	if(entity.getType() == EntityType::Warrior){
@@ -55,17 +59,31 @@ void IA::run(Game& game) {
   for (const auto& building : game.getBuildings(mColor)) {
     if (building.getType() == BuildingType::TownCenter) {
       townCenter++;
+      townCenterPosition = building.getPosition();
     } else if (building.getType() == BuildingType::Fort) {
      	fort++;
+     	fortPosition = building.getPosition();
     }
   }
   
-  if(fort > 0 && townCenter > 0 && wood >= /*TOWNCENTER_PRICE + FORT_PRICE + VILLAGER_PRICE*8 + */WARRIOR_PRICE && !stopWarriors){
+  for (const auto& entity : game.getPlayer(mColor).getEntities()) {
+  	if(entity.getType() == EntityType::Villager){
+  		break;
+  	}
+  	
+  	villager++;
+  }
+  
+  if(fort > 0 && townCenter > 0 && wood >= TOWNCENTER_PRICE + FORT_PRICE + VILLAGER_PRICE*villagerLimit + WARRIOR_PRICE && !stopWarriors){
   	if(game.addEntity(EntityType::Warrior, mColor, 1)){
 		  mEntities.push_back({0, 0, Work::Waiter, sf::Vector2f(-1, -1), true});
 		}
-  } else if(townCenter < 0){
-    
+  } else if(townCenter < 1 && townCenterPosition != sf::Vector2f(-1, -1)){
+    changeState(Work::Architect, villager);
+    changeAction(4, villager);
+	} else if(fort < 1 && fortPosition != sf::Vector2f(-1, -1)){
+    changeState(Work::Architect, villager);
+    changeAction(3, villager);
 	} else if(game.getPlayer(mColor).getEntities().size() < villagerLimit
 		 && wood >= VILLAGER_PRICE){
     if(game.addEntity(EntityType::Villager, mColor, 0)){
@@ -208,6 +226,36 @@ void IA::run(Game& game) {
 						  }
 				    }
             break;
+            
+          case 3:
+          	if(entity.getType() == EntityType::Villager){
+		          mEntities[i].count = goTo(game, fortPosition, i);
+		      
+						  if(mEntities[i].count){
+						  	changeAction(2, i);
+						  }
+				    }
+            break;
+            
+          case 4:
+          	if(entity.getType() == EntityType::Villager){
+		          mEntities[i].count = goTo(game, townCenterPosition, i);
+		      
+						  if(mEntities[i].count){
+						  	changeAction(5, i);
+						  }
+				    }
+            break;
+            
+          case 5:
+          	if(entity.getType() == EntityType::Villager){
+		          mEntities[i].count = construct(game, BuildingType::TownCenter, i);
+		      
+						  if(mEntities[i].count){
+						  	changeState(Work::Woodcutter, i);
+						  }
+				    }
+            break;
 
           default:
             break;
@@ -273,7 +321,7 @@ void IA::run(Game& game) {
           	if(entity.getType() == EntityType::Villager){
       				
 				  	} else if(entity.getType() == EntityType::Warrior){
-				  		//game.attack(mColor, i);
+				  		game.attack(mColor, i);
 				  		changeState(Work::Explorer, i);
 				  	}
             break;

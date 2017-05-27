@@ -1,4 +1,4 @@
-CFLAGS = -g -Wall -pedantic
+CFLAGS = -g -Wall -pedantic -O3
 ifeq ($(CXX),14)
 	CFLAGS += -std=c++14
 else

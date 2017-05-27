@@ -9,10 +9,6 @@ sf::Vector2f IA::pathfinder(Game& game, const sf::Vector2f pos, int index){
 	Tile temp;
 	sf::Vector2f player = game.getPlayer(mColor).getEntities()[index].getPosition();
 	
-	if(verify && mEntities[index].state == Work::Explorer){
-		std::cout << "Avant pathfinder " << index << " : " << player.x << "/" << player.y << " va a " << pos.x << "/" << pos.y << std::endl;
-	}
-	
 	if(player == pos){
 		return player;
 	}
@@ -49,47 +45,11 @@ sf::Vector2f IA::pathfinder(Game& game, const sf::Vector2f pos, int index){
     }
     aroundPoint.clear();
   }
-  #if 0
-  printArray(aroundMap);
-  #endif
-  
-  if(test){
-		//std::cout << "Size : " << aroundMap.size() << std::endl;
-	}
-  
-  #if 0
-  if(verify){
-  	std::cout << "Tout ;" << std::endl;
-  	for(unsigned z{0}; z < aroundMap.size(); z++){
-  		printTile(aroundMap[z]);
-  	}
-  }
-  #endif
  	
  	liste.push_back(aroundMap[aroundMap.size() - 1]);
  	while(liste[liste.size()-1].position != player){
  		liste.push_back(*liste[liste.size() - 1].parent);
  	}
- 	
- 	#if 0
- 	if(verify){
-  	std::cout << "Liste ;" << std::endl;
-  	for(unsigned z{0}; z < liste.size(); z++){
-  		printTile(liste[z]);
-  	}
-  }
-  #endif
-  
-  #if 0
-  //if(verify){
-  		printArray(liste);
-  //}
-  #endif
-  
-  if(verify && mEntities[index].state == Work::Explorer){
-		std::cout << "Finded : " << finded << " _ size : " << liste.size() << std::endl;
-		std::cout << "Après pathfinder : " << liste[liste.size()-2].position.x << "/" << liste[liste.size()-2].position.y << " va a " << pos.x << "/" << pos.y << std::endl;
-	}
 	
 	/*Retour de la dernière position du tableau, celle du center*/
   if (finded && liste.size()) {

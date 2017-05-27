@@ -1,250 +1,434 @@
 #include "Game.hpp"
-#include <algorithm>
-#include <iostream>
 
-bool Game::loadFile(const std::string& fileName) {
-  std::ifstream file(fileName, std::ios::binary);
-  if (!file.is_open()) {
-    std::cerr << "Error open file " << fileName << std::endl;
+Game::Game(const sf::IpAddress& ip, unsigned short port, std::string name)
+    : mClient(name) {
+  if (mClient.connect(ip, port) != sf::Socket::Done) {
+    std::cout << "Error connecting server" << std::endl;
+  }
+}
+
+std::vector<std::vector<int>> Game::getMap() {
+  std::string data;
+  std::vector<std::vector<int>> output;
+
+  mClient.send(mClient.getName() + "@getTerrainMap:0");
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "terrain") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+    return output;
+  }
+
+  unsigned n = std::sqrt(datas.second.first);
+
+  data = datas.second.second;
+
+  for (unsigned i{0}; i < n; i++) {
+    output.push_back(std::vector<int>(n));
+    for (unsigned j{0}; j < n; j++) {
+      output[i][j] = std::stoi(data.substr(0, 1));
+      data = data.substr(data.find(' ', 1) + 1);
+    }
+  }
+
+  return output;
+}
+
+std::vector<Building> Game::getBuildings(const sf::Color& col) {
+  std::string data;
+  std::vector<Building> output;
+
+  mClient.send(mClient.getName() + "@getBuildingMap:0 " +
+               std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+               std::to_string(col.b));
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "buildings") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+    return output;
+  }
+
+  data = datas.second.second;
+
+  for (unsigned i{0}; i < datas.second.first / 7; i++) {
+    Building build;
+
+    // get position
+    build.mPositon.x = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+    build.mPositon.y = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+
+    // get color
+    build.mColor.r = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+    build.mColor.g = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+    build.mColor.b = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+
+    // get hp
+    build.hp = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+
+    // get type
+    auto pos = data.find(' ');
+    if (pos == std::string::npos) {
+      if (data == "TypeCenter") {
+        build.mType = BuildingType::TownCenter;
+      } else if (data == "Fort") {
+        build.mType = BuildingType::Fort;
+      }
+    } else {
+      if (data.substr(0, data.find(' ')) == "TypeCenter") {
+        build.mType = BuildingType::TownCenter;
+      } else if (data.substr(0, data.find(' ')) == "Fort") {
+        build.mType = BuildingType::Fort;
+      }
+      data = data.substr(data.find(' ') + 1);
+    }
+
+    output.push_back(build);
+  }
+
+  return output;
+}
+
+std::vector<Entity> Game::getEntities(const sf::Color& col) {
+  std::string data;
+  std::vector<Entity> output;
+
+  mClient.send(mClient.getName() + "@getEntitysMap:3 " + std::to_string(col.r) +
+               " " + std::to_string(col.g) + " " + std::to_string(col.b));
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "entitys") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+    return output;
+  }
+
+  data = datas.second.second;
+
+  for (unsigned i{0}; i < datas.second.first / 7; i++) {
+    Entity ent;
+
+    // get position
+    ent.mPositon.x = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+    ent.mPositon.y = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+
+    // get color
+    ent.mColor.r = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+    ent.mColor.g = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+    ent.mColor.b = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+
+    // get hp
+    ent.hp = std::stoi(data.substr(0, data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+
+    // get tyoe
+    auto pos = data.find(' ');
+    if (pos == std::string::npos) {
+      if (data == "Villager") {
+        ent.mType = EntityType::Villager;
+      } else if (data == "Warrior") {
+        ent.mType = EntityType::Warrior;
+      }
+    } else {
+      if (data.substr(0, data.find(' ')) == "Villager") {
+        ent.mType = EntityType::Villager;
+      } else if (data.substr(0, data.find(' ')) == "Warrior") {
+        ent.mType = EntityType::Warrior;
+      }
+      data = data.substr(data.find(' ') + 1);
+    }
+
+    output.push_back(ent);
+  }
+
+  return output;
+}
+
+bool Game::attack(const Direction& dir, const sf::Color& col, int index) {
+  std::string data = mClient.getName() + "@attack:5 " + std::to_string(col.r) +
+                     " " + std::to_string(col.g) + " " + std::to_string(col.b) +
+                     " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
+
+    case Direction::Down:
+      data += "down";
+      break;
+
+    case Direction::Left:
+      data += "left";
+      break;
+
+    case Direction::Right:
+      data += "right";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
     return false;
   }
-  int n, tmp;
-  file >> n;
-  for (int i{0}; i < n; i++) {
-    mMap.push_back(std::vector<int>(n));
-    for (int j{0}; j < n; j++) {
-      file >> tmp;
-      mMap[i][j] = tmp;
-    }
-  }
-  return true;
+
+  return datas.second.second == "ok";
 }
 
-bool Game::isGameFinish() const { return mPlayer.size() == 1; }
+bool Game::moveEntity(const Direction& dir, const sf::Color& col, int index) {
+  std::string data = mClient.getName() + "@move:5 " + std::to_string(col.r) +
+                     " " + std::to_string(col.g) + " " + std::to_string(col.b) +
+                     " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
 
-sf::Color Game::getWinner() const {
-  if (isGameFinish()) {
-    return mPlayer[0].getColor();
+    case Direction::Down:
+      data += "down";
+      break;
+
+    case Direction::Left:
+      data += "left";
+      break;
+
+    case Direction::Right:
+      data += "right";
+      break;
+
+    default:
+      break;
   }
-  return sf::Color::Black;
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
 }
 
-std::vector<Building> Game::getBuildings() const {
-  std::vector<Building> v, build;
-  for (const auto& player : mPlayer) {
-    build = player.getBuildings();
-    for (const auto& b : build) {
-      v.push_back(b);
-    }
-  }
-  return v;
-}
+bool Game::collectRessource(const Direction& dir, const sf::Color& col,
+                            int index) {
+  std::string data = mClient.getName() + "@collect:5 " + std::to_string(col.r) +
+                     " " + std::to_string(col.g) + " " + std::to_string(col.b) +
+                     " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
 
-std::vector<Entity> Game::getEntities() const {
-  std::vector<Entity> v, ent;
-  for (const auto& player : mPlayer) {
-    ent = player.getEntities();
-    for (const auto& b : ent) {
-      v.push_back(b);
-    }
-  }
-  return v;
-}
+    case Direction::Down:
+      data += "down";
+      break;
 
-Player Game::getPlayer(const sf::Color& col) const {
-  for (unsigned i{0}; i < mPlayer.size(); i++) {
-    if (mPlayer[i].getColor() == col) {
-      return mPlayer[i];
-    }
-  }
-  return Player(sf::Color::Black, sf::Vector2f(0, 0));
-}
+    case Direction::Left:
+      data += "left";
+      break;
 
-std::vector<Building> Game::getBuildings(const sf::Color& col) const {
-  for (unsigned i{0}; i < mPlayer.size(); i++) {
-    if (mPlayer[i].getColor() == col) {
-      return mPlayer[i].getBuildings();
-    }
-  }
-  return std::vector<Building>();
-}
+    case Direction::Right:
+      data += "right";
+      break;
 
-std::vector<Entity> Game::getEntities(const sf::Color& col) const {
-  for (unsigned i{0}; i < mPlayer.size(); i++) {
-    if (mPlayer[i].getColor() == col) {
-      return mPlayer[i].getEntities();
-    }
+    default:
+      break;
   }
-  return std::vector<Entity>();
-}
 
-void Game::clearPlayer() {
-  std::vector<int> indexs;
-  for (unsigned i{0}; i < mPlayer.size(); i++) {
-    mPlayer[i].clearMaps();
-    if (mPlayer[i].getBuildings().size() == 0 &&
-        mPlayer[i].getEntities().size() == 0) {
-      indexs.push_back(i);
-    }
-  }
-  for (auto i : indexs) {
-    mPlayer.erase(mPlayer.begin() + i);
-  }
-}
+  mClient.send(data);
 
-bool Game::moveEntity(const Direction& dir, const sf::Color& col, int i) {
-  for (auto& player : mPlayer) {
-    if (player.getColor() == col) {
-      // Verification des limites de la map
-      auto entToMove = player.getEntities()[i];
-      sf::Vector2f pos = entToMove.getPosition();
-      if (dir == Direction::Up && pos.y <= 0) {
-        return false;
-      } else if (dir == Direction::Left && pos.x <= 0) {
-        return false;
-      } else if (dir == Direction::Down && pos.y >= mMap.size() - 1) {
-        return false;
-      } else if (dir == Direction::Right && pos.x >= mMap[0].size() - 1) {
-        return false;
-      }
-      // Verification de collision avec entites
-      for (const auto& ent : getEntities()) {
-        if (ent != entToMove) {
-          Entity e = entToMove;
-          e.move(dir, *this);
-          if (rectCollide(ent.getPosition(), e.getPosition())) {
-            return false;
-          }
-        }
-      }
-      // Verification de collision avec building
-      for (const auto& build : getBuildings()) {
-        Entity e = entToMove;
-        e.move(dir, *this);
-        if (rectCollide(build.getPosition(), build.getSize(), e.getPosition(),
-                        sf::Vector2f(1, 1))) {
-          return false;
-        }
-      }
-      return player.moveEntity(dir, *this, i);
-    }
+  while ((data = mClient.receive()) == "Error") {
   }
-  return false;
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
 }
 
 bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
                                int index) {
-  for (auto& p : mPlayer) {
-    if (p.getColor() == col) {
-      sf::Vector2f pos = p.getEntities()[index].getPosition();
-      switch (dir) {
-        case Direction::Up:
-          pos.y--;
-          break;
+  std::string data = mClient.getName() + "@putInTown:5 " +
+                     std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+                     std::to_string(col.b) + " " + std::to_string(index) + " ";
+  switch (dir) {
+    case Direction::Up:
+      data += "up";
+      break;
 
-        case Direction::Down:
-          pos.y++;
-          break;
+    case Direction::Down:
+      data += "down";
+      break;
 
-        case Direction::Left:
-          pos.x--;
-          break;
+    case Direction::Left:
+      data += "left";
+      break;
 
-        case Direction::Right:
-          pos.x++;
-          break;
+    case Direction::Right:
+      data += "right";
+      break;
 
-        default:
-          break;
-      }
-      for (auto& b : p.getBuildings()) {
-        if (b.getType() == BuildingType::TownCenter) {
-          if (rectCollide(pos, sf::Vector2f(1, 1), b.getPosition(),
-                          b.getSize())) {
-            return p.putRessourcesInTown(index);
-          }
-        }
-      }
-    }
+    default:
+      break;
   }
-  return false;
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
 }
 
-bool Game::attack(const sf::Color& col, int index) {
-  for (auto& player1 : mPlayer) {
-    sf::Color pCol = player1.getColor();
-    if (pCol != col) {
-      continue;
-    }
+bool Game::addEntity(const EntityType& entT, const sf::Color& col, int index) {
+  std::string data = mClient.getName() + "@addEntity:5 " +
+                     std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+                     std::to_string(col.b) + " " + std::to_string(index) + " ";
+  switch (entT) {
+    case EntityType::Villager:
+      data += "villager";
+      break;
 
-    for (auto& player2 : mPlayer) {
-      if (pCol == player2.getColor()) {
-        continue;
-      }
+    case EntityType::Warrior:
+      data += "warrior";
+      break;
 
-      for (unsigned i{0}; i < player2.getEntities().size(); i++) {
-        if (rectCollide(
-                player1.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
-                player2.getEntities()[i].getPosition())) {
-          player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
-                                      i);
-          return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(-1, 0),
-                               player2.getEntities()[i].getPosition())) {
-          player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
-                                      i);
-          return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, 1),
-                               player2.getEntities()[i].getPosition())) {
-          player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
-                                      i);
-          return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, -1),
-                               player2.getEntities()[i].getPosition())) {
-          player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
-                                      i);
-          return true;
-        }
-      }
-
-      for (unsigned i{0}; i < player2.getBuildings().size(); i++) {
-        if (rectCollide(
-                player1.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
-                sf::Vector2f(1, 1), player2.getBuildings()[i].getPosition(),
-                player2.getBuildings()[i].getSize())) {
-          player2.receiveDamageBuilding(
-              player1.getEntities()[index].getDamage(), i);
-          return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(-1, 0),
-                               sf::Vector2f(1, 1),
-                               player2.getBuildings()[i].getPosition(),
-                               player2.getBuildings()[i].getSize())) {
-          player2.receiveDamageBuilding(
-              player1.getEntities()[index].getDamage(), i);
-          return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, 1),
-                               sf::Vector2f(1, 1),
-                               player2.getBuildings()[i].getPosition(),
-                               player2.getBuildings()[i].getSize())) {
-          player2.receiveDamageBuilding(
-              player1.getEntities()[index].getDamage(), i);
-          return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, -1),
-                               sf::Vector2f(1, 1),
-                               player2.getBuildings()[i].getPosition(),
-                               player2.getBuildings()[i].getSize())) {
-          player2.receiveDamageBuilding(
-              player1.getEntities()[index].getDamage(), i);
-          return true;
-        }
-      }
-    }
+    default:
+      break;
   }
-  return false;
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
+}
+
+bool Game::addBuilding(const BuildingType& buildT, const sf::Color& col,
+                       int index) {
+  std::string data = mClient.getName() + "@addBuilding:5 " +
+                     std::to_string(col.r) + " " + std::to_string(col.g) + " " +
+                     std::to_string(col.b) + " " + std::to_string(index) + " ";
+  switch (buildT) {
+    case BuildingType::TownCenter:
+      data += "towncenter";
+      break;
+
+    case BuildingType::Fort:
+      data += "fort";
+      break;
+
+    default:
+      break;
+  }
+
+  mClient.send(data);
+
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "reply") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+    return false;
+  }
+
+  return datas.second.second == "ok";
+}
+
+Player Game::getPlayer(const sf::Color& col) {
+  Player play;
+  play.mColor = col;
+
+  mClient.send(mClient.getName() + "@getPlayer:3 " + std::to_string(col.r) +
+               " " + std::to_string(col.g) + " " + std::to_string(col.b));
+
+  std::string data;
+  while ((data = mClient.receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "player") {
+    play.mColor = sf::Color::Black;
+    return play;
+  }
+
+  unsigned n = datas.second.first;
+  data = datas.second.second;
+
+  for (unsigned i{0}; i < n / 2; i++) {
+    Ressource key;
+    if (data.substr(0, data.find(' ')) == "Wood") {
+      key = Ressource::Wood;
+    }
+    data = data.substr(data.find(' ') + 1);
+    play.mRessources[key] = std::stoi(data.substr(data.find(' ')));
+    data = data.substr(data.find(' ') + 1);
+  }
+  return play;
 }

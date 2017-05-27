@@ -151,7 +151,9 @@
     unsigned villagerLimit;
     unsigned warriorLimit;
     unsigned fort;
+    sf::Vector2f fortPosition;
     unsigned townCenter;
+    sf::Vector2f townCenterPosition;
     unsigned wood;
 
     sf::Clock clock;

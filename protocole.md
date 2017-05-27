@@ -15,9 +15,9 @@
 
 		id@getTerrainMap:0 //Demande la map du terrain
 
-		id@getEntitysMap:0 //Demande la map des entités
+		id@getEntitysMap:3 r g b //Demande la map des entités
 
-		id@getBuildingsMap:0 //Demande la map des batiments
+		id@getBuildingsMap:3 r g b //Demande la map des batiments
 
 		id@move:5 r g b int direction
 
@@ -41,7 +41,7 @@
 
 		id@reply:1 command (ok/fail)
 
-		id@terrain:1 data
+		id@terrain:4 terrainID terrainID terrainID terrainID 
 
 		id@entitys:14 x y r g b hp type x y r g b hp type
 

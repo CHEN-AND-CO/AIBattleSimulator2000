@@ -2,9 +2,8 @@
 #define GAME_HPP
 
 #include <SFML/Graphics.hpp>
-#include <fstream>
-#include <string>
-#include "Player.hpp"
+#include "Client.hpp"
+#include "Define.hpp"
 
 /*
                 CONVENTION MAP
@@ -14,72 +13,44 @@
 3: Riviere, Infranchissable
 */
 
+struct Building {
+  sf::Vector2f mPositon;
+  sf::Color mColor;
+  int hp;
+  BuildingType mType;
+};
+
+struct Entity {
+  sf::Vector2f mPositon;
+  sf::Color mColor;
+  int hp;
+  EntityType mType;
+};
+
+struct Player {
+  std::map<Ressource, int> mRessources;
+  sf::Color mColor;
+};
+
 class Game {
  public:
-  bool loadFile(const std::string& fileName);
+  Game(const sf::IpAddress& ip, unsigned short port, std::string name);
+  std::vector<std::vector<int>> getMap();
+  std::vector<Building> getBuildings(const sf::Color& col);
+  std::vector<Entity> getEntities(const sf::Color& col);
+  Player getPlayer(const sf::Color& col);
 
-  std::vector<std::vector<int>> getMap() const { return mMap; }
-  std::vector<Player> getPlayer() const { return mPlayer; }
-  std::vector<Building> getBuildings() const;
-  std::vector<Entity> getEntities() const;
-
-  Player getPlayer(const sf::Color&) const;
-  std::vector<Building> getBuildings(const sf::Color&) const;
-  std::vector<Entity> getEntities(const sf::Color&) const;
-
-  bool addEntity(const EntityType& entT, const sf::Color& col, int index) {
-    for (auto& player : mPlayer) {
-      if (player.getColor() == col) {
-        player.addEntity(entT, index);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool addBuilding(const BuildingType& buildT, const sf::Color& col,
-                   int index) {
-    for (auto& player : mPlayer) {
-      if (player.getColor() == col) {
-        player.addBuilding(buildT, index);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool addPlayer(const sf::Color& col, const sf::Vector2f pos) {
-    for (auto& player : mPlayer) {
-      if (player.getColor() == col) {
-        return false;
-      }
-    }
-    mPlayer.push_back(Player(col, pos));
-    return true;
-  }
-
-  bool moveEntity(const Direction& dir, const sf::Color& col, int i);
-  bool collectRessource(const Direction& dir, const sf::Color& col, int index) {
-    for (auto& p : mPlayer) {
-      if (p.getColor() == col) {
-        return p.collectRessource(*this, dir, index);
-      }
-    }
-    return false;
-  }
+  bool attack(const Direction& dir, const sf::Color& col, int index);
+  bool moveEntity(const Direction& dir, const sf::Color& col, int index);
+  bool collectRessource(const Direction& dir, const sf::Color& col, int index);
   bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
                            int index);
-
-  void clearPlayer();
-
-  bool attack(const sf::Color& col1, int index1);
-
-  bool isGameFinish() const;
-  sf::Color getWinner() const;
+  bool addEntity(const EntityType& entT, const sf::Color& col, int index);
+  bool addBuilding(const BuildingType& buildT, const sf::Color& col, int index);
 
  private:
-  std::vector<std::vector<int>> mMap;
-  std::vector<Player> mPlayer;
+  Client mClient;
 };
 
 #endif
+
