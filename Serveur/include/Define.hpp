@@ -9,8 +9,8 @@ Define the type of the buildings and entities used in the game
 #include <cmath>
 #include <map>
 
-enum class BuildingType { TownCenter, Fort, MaxBuildingType };
-enum class EntityType { Villager, Warrior, MaxEntityType };
+enum class BuildingType { TownCenter, Fort, Stable,MaxBuildingType };
+enum class EntityType { Villager, Warrior, Horse, MaxEntityType };
 enum class Direction { Up, Down, Left, Right, MaxDirection };
 enum class Ressource { Wood, Food, Gold, MaxRessources };
 

@@ -20,7 +20,10 @@ Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
       mSize = sf::Vector2f(1, 1);
       break;
 
-    case BuildingType::MaxBuildingType:
+    case BuildingType::Stable:
+      mSize = sf::Vector2f(2, 1);
+      break;
+
     default:
       break;
   }
@@ -32,7 +35,8 @@ bool Building::addEntity(const Game& game, Player& player,
     case BuildingType::TownCenter:
       switch (entT) {
         case EntityType::Villager:
-          return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0), ressourceMap);
+          return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0),
+                                  ressourceMap);
           break;
 
         default:
@@ -45,7 +49,8 @@ bool Building::addEntity(const Game& game, Player& player,
     case BuildingType::Fort:
       switch (entT) {
         case EntityType::Warrior:
-          return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0), ressourceMap);
+          return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0),
+                                  ressourceMap);
           break;
 
         default:

@@ -14,6 +14,11 @@ Game::Game() {
   r[Ressource::Food] = 0;
   mBuildingCost[BuildingType::Fort] = r;
 
+  r[Ressource::Wood] = 300;
+  r[Ressource::Gold] = 100;
+  r[Ressource::Food] = 0;
+  mBuildingCost[BuildingType::Stable] = r;
+
   r[Ressource::Wood] = 0;
   r[Ressource::Gold] = 0;
   r[Ressource::Food] = 50;
@@ -23,6 +28,11 @@ Game::Game() {
   r[Ressource::Gold] = 10;
   r[Ressource::Food] = 60;
   mEntityCost[EntityType::Warrior] = r;
+
+  r[Ressource::Wood] = 10;
+  r[Ressource::Gold] = 20;
+  r[Ressource::Food] = 100;
+  mEntityCost[EntityType::Horse] = r;
 }
 
 bool Game::loadFile(const std::string& fileName) {

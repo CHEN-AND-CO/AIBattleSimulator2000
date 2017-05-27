@@ -10,14 +10,19 @@ depending of the types of both of them
 */
 
 Entity::Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos, int id)
-    : mType{entT}, mColor{col}, mPos{pos}, mHealth{100}, mID{id} {
+    : mType{entT}, mColor{col}, mPos{pos}, mID{id} {
   switch (mType) {
     case EntityType::Villager:
+      mHealth = 100;
       mDamage = 5;
       break;
     case EntityType::Warrior:
+      mHealth = 100;
       mDamage = 60;
       break;
+    case EntityType::Horse:
+      mHealth = 200;
+      mDamage = 120;
     default:
       break;
   }
@@ -29,7 +34,8 @@ bool Entity::addBuilding(const Game& game, Player& player,
     std::cout << "This entity cannot construct buildings\n";
     return false;
   }
-  return player.addBuilding(game, buildT, mPos + sf::Vector2f(1, 0), ressourceMap);
+  return player.addBuilding(game, buildT, mPos + sf::Vector2f(1, 0),
+                            ressourceMap);
 }
 
 // Deplacemant d'une unite
