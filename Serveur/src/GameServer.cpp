@@ -220,7 +220,7 @@ std::string GameServer::buildings_to_string(std::vector<Building> buildings,
   return out;
 }
 
-std::string entities_to_string(std::vector<Entity> entities, int& argn) {
+std::string GameServer::entities_to_string(std::vector<Entity> entities, int& argn) {
   std::string out;
   argn = 0;
 
@@ -261,7 +261,7 @@ std::string GameServer::buildingType_to_string(BuildingType type) {
   }
 }
 
-std::string entity_to_string(Entity entity) {
+std::string GameServer::entity_to_string(Entity entity) {
   std::string out;
   out += std::to_string(entity.getPosition().x) + std::string(" ");  // x
   out += std::to_string(entity.getPosition().y) + std::string(" ");  // y
@@ -276,7 +276,7 @@ std::string entity_to_string(Entity entity) {
 
   return out;
 }
-std::string entityType_to_string(EntityType type) {
+std::string GameServer::entityType_to_string(EntityType type) {
   if (type == EntityType::Villager) {
     return "Villager";
   } else if (type == EntityType::Warrior) {
