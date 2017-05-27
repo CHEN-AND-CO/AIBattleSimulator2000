@@ -26,14 +26,18 @@ void GameServer::receivePackets() {
             buffer[i] = 0;
           }
         }
+        if (it == clients.end()) return;
         ++it;
         break;
       case sf::Socket::Disconnected:
         std::cout << it->first << " has been disconnected\n";
-        it = clients.erase(it);
+        clients.erase(it);
+        if (it == clients.end()) return;
         break;
 
       default:
+        if (it == clients.end()) return;
+
         ++it;
         break;
     }
@@ -91,8 +95,9 @@ void GameServer::action(const std::string id, std::string msg) {
            std::string(SERVER_ID) + std::string("@reply:2 getTerrainMap fail"));
       return;
     }
-    auto map = gamePtr->getVisibleMap(
-        sf::Color(std::atoi(cmd.args[0].c_str()), std::atoi(cmd.args[1].c_str()), std::atoi(cmd.args[2].c_str()), 255));
+    auto map = gamePtr->getVisibleMap(sf::Color(
+        std::atoi(cmd.args[0].c_str()), std::atoi(cmd.args[1].c_str()),
+        std::atoi(cmd.args[2].c_str()), 255));
     send(cmd.id, std::string(SERVER_ID) + std::string("@terrain:") +
                      std::to_string(map.size() * map[0].size()) +
                      std::string(" ") + map_to_string(map));
@@ -173,7 +178,7 @@ void GameServer::clearCommand(command& cmd) {
 void GameServer::authentification(const std::string id,
                                   std::vector<std::string> args, int arglen) {
   if (arglen <= 0 && args.size() <= 0) return;
-  if (clients.find(args[0]) != clients.end()) {
+  if (clients.find(args[0]) != clients.end() && clients.find(id)==clients.end()) {
     send(id, std::string(SERVER_ID) + std::string("@auth:1 fail"));
   } else {
     clients.insert(std::make_pair(args[0], clients.find(id)->second));
