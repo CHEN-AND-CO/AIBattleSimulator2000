@@ -96,6 +96,12 @@ void GameServer::action(const std::string id, std::string msg) {
     std::string args = buildings_to_string(buildings, arglen);
     send(cmd.id, std::string(SERVER_ID) + std::string("@buildings:") +
                      std::to_string(arglen) + std::string(" ") + args);
+  } else if (!cmd.command.compare("getEntitysMap")) {
+    auto entities = gamePtr->getEntities();
+    int arglen;
+    std::string args = entities_to_string(entities, arglen);
+    send(cmd.id, std::string(SERVER_ID) + std::string("@entitys:") +
+                     std::to_string(arglen) + std::string(" ") + args);
   }
   printCommand(cmd);
 }
@@ -214,6 +220,19 @@ std::string GameServer::buildings_to_string(std::vector<Building> buildings,
   return out;
 }
 
+std::string entities_to_string(std::vector<Entity> entities, int& argn) {
+  std::string out;
+  argn = 0;
+
+  for (auto i : entities) {
+    out += entity_to_string(i);
+    argn += 7;
+  }
+  out.pop_back();
+
+  return out;
+}
+
 std::string GameServer::building_to_string(Building building) {
   std::string out;
   out += std::to_string(building.getPosition().x) + std::string(" ");  // x
@@ -237,6 +256,33 @@ std::string GameServer::buildingType_to_string(BuildingType type) {
     return "Fort";
   } else if (type == BuildingType::MaxBuildingType) {
     return "MaxBuildingType";
+  } else {
+    return "";
+  }
+}
+
+std::string entity_to_string(Entity entity) {
+  std::string out;
+  out += std::to_string(entity.getPosition().x) + std::string(" ");  // x
+  out += std::to_string(entity.getPosition().y) + std::string(" ");  // y
+
+  out += std::to_string(entity.getColor().r) + std::string(" ");  // r
+  out += std::to_string(entity.getColor().g) + std::string(" ");  // g
+  out += std::to_string(entity.getColor().b) + std::string(" ");  // b
+
+  out += std::to_string(entity.getHealth()) + std::string(" ");  // hp
+
+  out += entityType_to_string(entity.getType()) + std::string(" ");  // type
+
+  return out;
+}
+std::string entityType_to_string(EntityType type) {
+  if (type == EntityType::Villager) {
+    return "Villager";
+  } else if (type == EntityType::Warrior) {
+    return "Warrior";
+  } else if (type == EntityType::MaxEntityType) {
+    return "MaxEntityType";
   } else {
     return "";
   }
