@@ -1,12 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
-#include "Game.hpp"
+#include <memory>
+#include "GameServer.hpp"
 
 int main() {
   sf::RenderWindow window;
 
-  unsigned currentId = 0;
   std::shared_ptr<Game> game = std::make_shared<Game>();
 
   if (!game->loadFile("ressources/GreatLake.txt")) {
@@ -14,10 +14,10 @@ int main() {
     return -1;
   }
 
-  auto map = game.getMap();
+  auto map = game->getMap();
   unsigned n = map.size();
   unsigned m = map[0].size();
-  
+
   game->addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
   game->addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
   GameServer gameServer(53000, game);
@@ -52,12 +52,14 @@ int main() {
       }
     }
 
+    gameServer.receive();
+
     window.clear();
     for (auto& r : rects) {
       window.draw(r);
     }
 
-    auto buildings = game.getBuildings();
+    auto buildings = game->getBuildings();
     for (auto& b : buildings) {
       sf::RectangleShape r(
           sf::Vector2f(b.getSize().x * TILESIZE, b.getSize().y * TILESIZE));
@@ -66,7 +68,7 @@ int main() {
       window.draw(r);
     }
 
-    auto enttity = game.getEntities();
+    auto enttity = game->getEntities();
     for (auto& e : enttity) {
       sf::CircleShape c(TILESIZE / 2);
       c.setFillColor(e.getColor());
@@ -76,8 +78,8 @@ int main() {
 
     window.display();
 
-    game.updateCachePlayer();
-    game.clearPlayer();
+    game->updateCachePlayer();
+    game->clearPlayer();
   }
 
   return 0;
