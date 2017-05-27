@@ -67,7 +67,7 @@ class Game {
     return false;
   }
   bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
-                           int index);
+                               int index);
 
   void clearPlayer();
   void updateCachePlayer() {
@@ -75,12 +75,6 @@ class Game {
       play.updateCache();
     }
   }
-  bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
-                           int index);
-
-  void clearPlayer();
-
-  bool attack(const sf::Color& col1, int index1);
 
   bool isGameFinish() const { return mPlayer.size() == 1; }
   sf::Color getWinner() const;

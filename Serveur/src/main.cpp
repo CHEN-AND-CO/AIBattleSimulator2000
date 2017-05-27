@@ -7,20 +7,20 @@ int main() {
   sf::RenderWindow window;
 
   unsigned currentId = 0;
+  std::shared_ptr<Game> game = std::make_shared<Game>();
 
-  Game game;
-
-  if (!game.loadFile("ressources/GreatLake.txt")) {
+  if (!game->loadFile("ressources/GreatLake.txt")) {
     std::cout << "Error loading file" << std::endl;
     return -1;
   }
 
-  game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 8));
-  game.addPlayer(sf::Color::Red, sf::Vector2f(35, 35));
-
   auto map = game.getMap();
   unsigned n = map.size();
   unsigned m = map[0].size();
+  
+  game->addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
+  game->addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
+  GameServer gameServer(53000, game);
 
   std::vector<sf::RectangleShape> rects;
 
