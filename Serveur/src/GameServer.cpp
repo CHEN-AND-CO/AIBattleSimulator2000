@@ -86,7 +86,13 @@ void GameServer::action(const std::string id, std::string msg) {
   if (!cmd.command.compare("auth")) {
     authentification(id, cmd.args, cmd.arglen);
   } else if (!cmd.command.compare("getTerrainMap")) {
-    auto map = gamePtr->getMap();
+    if (cmd.arglen < 3) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 getTerrainMap fail"));
+      return;
+    }
+    auto map = gamePtr->getVisibleMap(
+        sf::Color(std::atoi(cmd.args[0].c_str()), std::atoi(cmd.args[1].c_str()), std::atoi(cmd.args[2].c_str()), 255));
     send(cmd.id, std::string(SERVER_ID) + std::string("@terrain:") +
                      std::to_string(map.size() * map[0].size()) +
                      std::string(" ") + map_to_string(map));
@@ -220,7 +226,8 @@ std::string GameServer::buildings_to_string(std::vector<Building> buildings,
   return out;
 }
 
-std::string GameServer::entities_to_string(std::vector<Entity> entities, int& argn) {
+std::string GameServer::entities_to_string(std::vector<Entity> entities,
+                                           int& argn) {
   std::string out;
   argn = 0;
 
