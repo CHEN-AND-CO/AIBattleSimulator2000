@@ -13,7 +13,7 @@
 
 		### Envoi ###
 
-		id@getTerrainMap:0 //Demande la map du terrain
+		id@getTerrainMap:3 r g b //Demande la map du terrain
 
 		id@getEntitysMap:3 r g b //Demande la map des entités
 
