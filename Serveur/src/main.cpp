@@ -93,19 +93,67 @@ int main() {
                                        currentId);
               game.putRessourcesInTown(Direction::Right, sf::Color::Blue,
                                        currentId);
+              std::cout << "food : "
+                        << game.getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Food)
+                        << std::endl;
+              std::cout << "wood : "
+                        << game.getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Wood)
+                        << std::endl;
+              std::cout << "gold : "
+                        << game.getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Gold)
+                        << std::endl;
               break;
               
             case sf::Keyboard::B:
               game.addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
               break;
 
-            case sf::Keyboard::V:
-              game.addEntity(EntityType::Villager, sf::Color::Blue, 0);
+            case sf::Keyboard::S:
+              game.addBuilding(BuildingType::Stable, sf::Color::Blue,
+                               currentId);
               break;
 
-            case sf::Keyboard::W:
-              game.addEntity(EntityType::Warrior, sf::Color::Blue, 1);
-              break;
+            case sf::Keyboard::V: {
+              for (unsigned i{0};
+                   i < game.getPlayer(sf::Color::Blue).getBuildings().size();
+                   i++) {
+                if (game.getPlayer(sf::Color::Blue)
+                        .getBuildings()[i]
+                        .getType() == BuildingType::TownCenter) {
+                  game.addEntity(EntityType::Villager, sf::Color::Blue, i);
+                  break;
+                }
+              }
+            } break;
+
+            case sf::Keyboard::W: {
+              for (unsigned i{0};
+                   i < game.getPlayer(sf::Color::Blue).getBuildings().size();
+                   i++) {
+                if (game.getPlayer(sf::Color::Blue)
+                        .getBuildings()[i]
+                        .getType() == BuildingType::Fort) {
+                  game.addEntity(EntityType::Warrior, sf::Color::Blue, i);
+                  break;
+                }
+              }
+            } break;
+
+            case sf::Keyboard::H: {
+              for (unsigned i{0};
+                   i < game.getPlayer(sf::Color::Blue).getBuildings().size();
+                   i++) {
+                if (game.getPlayer(sf::Color::Blue)
+                        .getBuildings()[i]
+                        .getType() == BuildingType::Stable) {
+                  game.addEntity(EntityType::Horse, sf::Color::Blue, i);
+                  break;
+                }
+              }
+            } break;
 
             case sf::Keyboard::A:
               game.attack(sf::Color::Blue, currentId, Direction::Up);
