@@ -61,6 +61,8 @@ class GameServer {
   std::string entity_to_string(Entity entity);
   std::string entityType_to_string(EntityType type);
   std::string RessourceType_to_string(Ressource ressource);
+  
+  Direction string_to_direction(std::string dir);
 
  private:
   std::string message;
