@@ -106,14 +106,28 @@ void GameServer::action(
                      std::to_string(map.size() * map[0].size()) +
                      std::string(" ") + map_to_string(map));
   } else if (!cmd.command.compare("getBuildingsMap")) {
-    auto buildings = gamePtr->getBuildings();
+    if (cmd.arglen < 3) {
+      send(cmd.id, std::string(SERVER_ID) +
+                       std::string("@reply:2 getBuildingsMap fail"));
+      return;
+    }
     int arglen;
+    auto buildings = gamePtr->getVisibleBuildings(sf::Color(
+        std::atoi(cmd.args[0].c_str()), std::atoi(cmd.args[1].c_str()),
+        std::atoi(cmd.args[2].c_str()), 255));
     std::string args = buildings_to_string(buildings, arglen);
     send(cmd.id, std::string(SERVER_ID) + std::string("@buildings:") +
                      std::to_string(arglen) + std::string(" ") + args);
   } else if (!cmd.command.compare("getEntitysMap")) {
-    auto entities = gamePtr->getEntities();
+    if (cmd.arglen < 3) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 getEntitysMap fail"));
+      return;
+    }
     int arglen;
+    auto entities = gamePtr->getVisibleEntities(sf::Color(
+        std::atoi(cmd.args[0].c_str()), std::atoi(cmd.args[1].c_str()),
+        std::atoi(cmd.args[2].c_str()), 255));
     std::string args = entities_to_string(entities, arglen);
     send(cmd.id, std::string(SERVER_ID) + std::string("@entitys:") +
                      std::to_string(arglen) + std::string(" ") + args);
@@ -130,6 +144,7 @@ void GameServer::action(
     std::string args = playerRessources_to_string(player, arglen);
     send(cmd.id, std::string(SERVER_ID) + std::string("@player:") +
                      std::to_string(arglen) + std::string(" ") + args);
+  } else if (!cmd.command.compare("move")) {
   }
   printCommand(cmd);
 }
