@@ -7,7 +7,7 @@ Game::Game(const sf::IpAddress& ip, unsigned short port, std::string name, const
   }
 }
 
-std::vector<std::vector<int>> Game::getMap(cons sf::Color& col) {
+std::vector<std::vector<int>> Game::getMap(const sf::Color& col) {
   std::string data;
   std::vector<std::vector<int>> output;
 
