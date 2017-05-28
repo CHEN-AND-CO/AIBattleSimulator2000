@@ -35,7 +35,7 @@ struct Player {
 class Game {
  public:
   Game(const sf::IpAddress& ip, unsigned short port, std::string name, const sf::Color& col);
-  std::vector<std::vector<int>> getMap();
+  std::vector<std::vector<int>> getMap(const sf::Color& col);
   std::vector<Building> getBuildings(const sf::Color& col);
   std::vector<Entity> getEntities(const sf::Color& col);
   Player getPlayer(const sf::Color& col);
