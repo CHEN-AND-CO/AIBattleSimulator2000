@@ -54,11 +54,13 @@ class GameServer {
   std::string map_to_string(std::vector<std::vector<int>> map);
   std::string buildings_to_string(std::vector<Building> buildings, int& argn);
   std::string entities_to_string(std::vector<Entity> entities, int& argn);
+  std::string playerRessources_to_string(Player player, int& argn );
 
   std::string building_to_string(Building building);
   std::string buildingType_to_string(BuildingType type);
   std::string entity_to_string(Entity entity);
   std::string entityType_to_string(EntityType type);
+  std::string RessourceType_to_string(Ressource ressource);
 
  private:
   std::string message;

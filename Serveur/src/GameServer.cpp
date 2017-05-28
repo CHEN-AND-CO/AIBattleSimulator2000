@@ -117,6 +117,19 @@ void GameServer::action(
     std::string args = entities_to_string(entities, arglen);
     send(cmd.id, std::string(SERVER_ID) + std::string("@entitys:") +
                      std::to_string(arglen) + std::string(" ") + args);
+  } else if (!cmd.command.compare("getPlayer")) {
+    if (cmd.arglen < 3) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 getPlayer fail"));
+      return;
+    }
+    auto player = gamePtr->getPlayer(sf::Color(
+        std::atoi(cmd.args[0].c_str()), std::atoi(cmd.args[1].c_str()),
+        std::atoi(cmd.args[2].c_str()), 255));
+    int arglen;
+    std::string args = playerRessources_to_string(player, arglen);
+    send(cmd.id, std::string(SERVER_ID) + std::string("@player:") +
+                     std::to_string(arglen) + std::string(" ") + args);
   }
   printCommand(cmd);
 }
@@ -252,6 +265,19 @@ std::string GameServer::entities_to_string(std::vector<Entity> entities,
   return out;
 }
 
+std::string GameServer::playerRessources_to_string(Player player, int& argn) {
+  std::string out;
+  argn = 0;
+  std::map<Ressource, int> ressources = player.getRessources();
+  for (auto i = ressources.begin(); i != ressources.end(); ++i) {
+    out += RessourceType_to_string(i->first) + std::string(" ");
+    out += std::to_string(i->second) + std::string(" ");
+  }
+  out.pop_back();
+
+  return out;
+}
+
 std::string GameServer::building_to_string(Building building) {
   std::string out;
   out += std::to_string(building.getPosition().x) + std::string(" ");  // x
@@ -302,6 +328,20 @@ std::string GameServer::entityType_to_string(EntityType type) {
     return "Warrior";
   } else if (type == EntityType::MaxEntityType) {
     return "MaxEntityType";
+  } else {
+    return "";
+  }
+}
+
+std::string GameServer::RessourceType_to_string(Ressource ressource) {
+  if (Ressource::Wood == ressource) {
+    return "Wood";
+  } else if (Ressource::Food == ressource) {
+    return "Food";
+  } else if (Ressource::Gold == ressource) {
+    return "Gold";
+  } else if (Ressource::MaxRessources == ressource) {
+    return "MaxRessources";
   } else {
     return "";
   }
