@@ -7,11 +7,11 @@ Game::Game(const sf::IpAddress& ip, unsigned short port, std::string name, const
   }
 }
 
-std::vector<std::vector<int>> Game::getMap() {
+std::vector<std::vector<int>> Game::getMap(cons sf::Color& col) {
   std::string data;
   std::vector<std::vector<int>> output;
 
-  mClient.send(mClient.getName() + "@getTerrainMap:0");
+  mClient.send(mClient.getName() + "@getTerrainMap:3 " + std::to_string(col.r) + " " + std::to_string(col.g) + " " + std::to_string(col.b) + " ");
 
   while ((data = mClient.receive()) == "Error") {
   }
