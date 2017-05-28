@@ -64,43 +64,40 @@ int main() {
             case sf::Keyboard::Space:
               game->collectRessource(Direction::Up, sf::Color::Blue, currentId);
               game->collectRessource(Direction::Down, sf::Color::Blue,
-                                    currentId);
+                                     currentId);
               game->collectRessource(Direction::Left, sf::Color::Blue,
-                                    currentId);
+                                     currentId);
               game->collectRessource(Direction::Right, sf::Color::Blue,
-                                    currentId);
+                                     currentId);
               break;
 
             case sf::Keyboard::Return:
               game->putRessourcesInTown(Direction::Up, sf::Color::Blue,
-                                       currentId);
+                                        currentId);
               game->putRessourcesInTown(Direction::Down, sf::Color::Blue,
-                                       currentId);
+                                        currentId);
               game->putRessourcesInTown(Direction::Left, sf::Color::Blue,
-                                       currentId);
+                                        currentId);
               game->putRessourcesInTown(Direction::Right, sf::Color::Blue,
-                                       currentId);
+                                        currentId);
               std::cout << "food : "
                         << game->getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Food)
-                        << std::endl;
+                               .getRessources(Ressource::Food) << std::endl;
               std::cout << "wood : "
                         << game->getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
+                               .getRessources(Ressource::Wood) << std::endl;
               std::cout << "gold : "
                         << game->getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Gold)
-                        << std::endl;
+                               .getRessources(Ressource::Gold) << std::endl;
               break;
-              
+
             case sf::Keyboard::B:
               game->addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::S:
               game->addBuilding(BuildingType::Stable, sf::Color::Blue,
-                               currentId);
+                                currentId);
               break;
 
             case sf::Keyboard::V: {

@@ -149,10 +149,12 @@ void GameServer::action(
       send(cmd.id, std::string(SERVER_ID) + std::string("@reply:2 move fail"));
       return;
     }
-    auto dir = string_to_direction(cmd.args[4]);
-    if (gamePtr->moveEntity(dir, sf::Color(std::atoi(cmd.args[0].c_str()),
-                                           std::atoi(cmd.args[1].c_str()),
-                                           std::atoi(cmd.args[2].c_str()), 255),
+    auto dir = cmd.args[4];
+    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    if (gamePtr->moveEntity(string_to_direction(dir),
+                            sf::Color(std::atoi(cmd.args[0].c_str()),
+                                      std::atoi(cmd.args[1].c_str()),
+                                      std::atoi(cmd.args[2].c_str()), 255),
                             std::atoi(cmd.args[3].c_str()))) {
       send(cmd.id, std::string(SERVER_ID) + std::string("@reply:2 move ok"));
     } else {
@@ -379,15 +381,17 @@ std::string GameServer::RessourceType_to_string(Ressource ressource) {
 }
 
 Direction GameServer::string_to_direction(std::string dir) {
-  if (!dir.compare("Up")) {
+  if (!dir.compare("up")) {
     return Direction::Up;
-  } else if (!dir.compare("Down")) {
-    return Direction::Down;
-  } else if (!dir.compare("Left")) {
-    return Direction::Left;
-  } else if (!dir.compare("Right")) {
-    return Direction::Right;
-  } else {
-    return Direction::MaxDirection;
   }
+  if (!dir.compare("down")) {
+    return Direction::Down;
+  }
+  if (!dir.compare("left")) {
+    return Direction::Left;
+  }
+  if (!dir.compare("right")) {
+    return Direction::Right;
+  }
+  return Direction::MaxDirection;
 }
