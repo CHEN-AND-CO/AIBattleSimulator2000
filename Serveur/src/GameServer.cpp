@@ -160,6 +160,63 @@ void GameServer::action(
     } else {
       send(cmd.id, std::string(SERVER_ID) + std::string("@reply:2 move fail"));
     }
+  } else if (!cmd.command.compare("collect")) {
+    if (cmd.arglen < 5) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 collect fail"));
+      return;
+    }
+    auto dir = cmd.args[4];
+    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    if (gamePtr->collectRessource(
+            string_to_direction(dir),
+            sf::Color(std::atoi(cmd.args[0].c_str()),
+                      std::atoi(cmd.args[1].c_str()),
+                      std::atoi(cmd.args[2].c_str()), 255),
+            std::atoi(cmd.args[3].c_str()))) {
+      send(cmd.id, std::string(SERVER_ID) + std::string("@reply:2 collect ok"));
+    } else {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 collect fail"));
+    }
+  } else if (!cmd.command.compare("putInTown")) {
+    if (cmd.arglen < 5) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 putInTown fail"));
+      return;
+    }
+    auto dir = cmd.args[4];
+    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    if (gamePtr->putRessourcesInTown(
+            string_to_direction(dir),
+            sf::Color(std::atoi(cmd.args[0].c_str()),
+                      std::atoi(cmd.args[1].c_str()),
+                      std::atoi(cmd.args[2].c_str()), 255),
+            std::atoi(cmd.args[3].c_str()))) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 putInTown ok"));
+    } else {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 putInTown fail"));
+    }
+  } else if (!cmd.command.compare("attack")) {
+    if (cmd.arglen < 5) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 attack fail"));
+      return;
+    }
+    auto dir = cmd.args[4];
+    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    if (gamePtr->attack(sf::Color(std::atoi(cmd.args[0].c_str()),
+                                  std::atoi(cmd.args[1].c_str()),
+                                  std::atoi(cmd.args[2].c_str()), 255),
+                        std::atoi(cmd.args[3].c_str()),
+                        string_to_direction(dir))) {
+      send(cmd.id, std::string(SERVER_ID) + std::string("@reply:2 attack ok"));
+    } else {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 attack fail"));
+    }
   } else {
     send(cmd.id, std::string(SERVER_ID) + std::string("@reply:2 ") +
                      cmd.command + std::string(" fail"));
