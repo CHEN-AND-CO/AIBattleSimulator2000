@@ -12,7 +12,10 @@ void GameServer::receivePackets() {
   char buffer[MAX_NET_BUFFER_LENGTH];
   size_t length;
   sf::Socket::Status status;
-  for (auto it = clients.begin(); it != clients.end();) {
+  std::vector<std::map<std::string, std::shared_ptr<sf::TcpSocket>>::iterator>
+      list;
+
+  for (auto it = clients.begin(); it != clients.end(); ++it) {
     status = it->second->receive(buffer, MAX_NET_BUFFER_LENGTH, length);
 
     switch (status) {
@@ -20,27 +23,25 @@ void GameServer::receivePackets() {
         message = buffer;
         std::cout << it->first << ": " << message << "\n";
         if (message.length() > 0) {
-          action(it->first, message);
+          action(it->first, message, list);
           message.clear();
           for (int i = 0; i < MAX_NET_BUFFER_LENGTH; i++) {
             buffer[i] = 0;
           }
         }
-        if (it == clients.end()) return;
-        ++it;
         break;
       case sf::Socket::Disconnected:
         std::cout << it->first << " has been disconnected\n";
-        clients.erase(it);
-        if (it == clients.end()) return;
+        list.push_back(it);
         break;
 
       default:
-        if (it == clients.end()) return;
-
-        ++it;
         break;
     }
+  }
+
+  for (auto i = 0; i < (int)list.size(); i++) {
+    clients.erase(list[i]);
   }
 }
 
@@ -84,11 +85,14 @@ void GameServer::receive() {
   receivePackets();
 }
 
-void GameServer::action(const std::string id, std::string msg) {
+void GameServer::action(
+    const std::string id, std::string msg,
+    std::vector<std::map<
+        std::string, std::shared_ptr<sf::TcpSocket>>::iterator>& removelist) {
   command cmd = parseCommand(msg);
 
   if (!cmd.command.compare("auth")) {
-    authentification(id, cmd.args, cmd.arglen);
+    authentification(id, cmd.args, cmd.arglen, removelist);
   } else if (!cmd.command.compare("getTerrainMap")) {
     if (cmd.arglen < 3) {
       send(cmd.id,
@@ -175,14 +179,17 @@ void GameServer::clearCommand(command& cmd) {
   cmd.valid = false;
 }
 
-void GameServer::authentification(const std::string id,
-                                  std::vector<std::string> args, int arglen) {
+void GameServer::authentification(
+    const std::string id, std::vector<std::string> args, int arglen,
+    std::vector<std::map<
+        std::string, std::shared_ptr<sf::TcpSocket>>::iterator>& removelist) {
   if (arglen <= 0 && args.size() <= 0) return;
-  if (clients.find(args[0]) != clients.end() && clients.find(id)==clients.end()) {
+  if (clients.find(args[0]) != clients.end() &&
+      clients.find(id) == clients.end()) {
     send(id, std::string(SERVER_ID) + std::string("@auth:1 fail"));
   } else {
     clients.insert(std::make_pair(args[0], clients.find(id)->second));
-    clients.erase(id);
+    removelist.push_back(clients.find(id));
     send(clients.find(args[0])->first,
          std::string(SERVER_ID) + std::string("@auth:1 ok"));
   }

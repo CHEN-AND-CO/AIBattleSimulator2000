@@ -37,26 +37,28 @@ class GameServer {
   void broadCast(const std::string& msg);
   void receivePackets();
 
-  void action(const std::string id, std::string msg);
+  void action(
+      const std::string id, std::string msg,
+      std::vector<std::map<
+          std::string, std::shared_ptr<sf::TcpSocket>>::iterator>& removelist);
   command parseCommand(std::string entry);
   void printCommand(command cmd);
   void clearCommand(command& cmd);
-  void authentification(const std::string id, std::vector<std::string> args,
-                        int arglen);
-  
+  void authentification(
+      const std::string id, std::vector<std::string> args, int arglen,
+      std::vector<std::map<
+          std::string, std::shared_ptr<sf::TcpSocket>>::iterator>& removelist);
+
   std::vector<std::string> split(const std::string& in, const char& token);
 
   std::string map_to_string(std::vector<std::vector<int>> map);
-  std::string buildings_to_string(std::vector<Building> buildings,
-                                              int& argn);
-  std::string entities_to_string(std::vector<Entity> entities,
-                                              int& argn);
+  std::string buildings_to_string(std::vector<Building> buildings, int& argn);
+  std::string entities_to_string(std::vector<Entity> entities, int& argn);
 
   std::string building_to_string(Building building);
   std::string buildingType_to_string(BuildingType type);
   std::string entity_to_string(Entity entity);
   std::string entityType_to_string(EntityType type);
-
 
  private:
   std::string message;
