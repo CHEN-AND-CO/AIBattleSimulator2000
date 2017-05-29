@@ -21,8 +21,6 @@
 
 		id@move:5 r g b int direction
 
-		id@update:3 x y hp
-
 		id@auth:2 name r g b
 
 		id@attack:5 r g b int direction
