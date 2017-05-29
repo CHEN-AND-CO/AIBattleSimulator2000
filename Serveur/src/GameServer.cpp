@@ -224,12 +224,12 @@ void GameServer::action(
       return;
     }
     auto ent = cmd.args[4];
-    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    std::transform(ent.begin(), ent.end(), ent.begin(), ::tolower);
     if (gamePtr->addEntity(string_to_entityType(ent),
                            sf::Color(std::atoi(cmd.args[0].c_str()),
                                      std::atoi(cmd.args[1].c_str()),
                                      std::atoi(cmd.args[2].c_str()), 255),
-                           std::atoi(cmd.args[3]))) {
+                           std::atoi(cmd.args[3].c_str()))) {
       send(cmd.id,
            std::string(SERVER_ID) + std::string("@reply:2 addEntity ok"));
     } else {
@@ -243,12 +243,12 @@ void GameServer::action(
       return;
     }
     auto build = cmd.args[4];
-    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    std::transform(build.begin(), build.end(), build.begin(), ::tolower);
     if (gamePtr->addBuilding(string_to_buildingType(build),
                              sf::Color(std::atoi(cmd.args[0].c_str()),
                                        std::atoi(cmd.args[1].c_str()),
                                        std::atoi(cmd.args[2].c_str()), 255),
-                             std::atoi(cmd.args[3]))) {
+                             std::atoi(cmd.args[3].c_str()))) {
       send(cmd.id,
            std::string(SERVER_ID) + std::string("@reply:2 addBuilding ok"));
     } else {

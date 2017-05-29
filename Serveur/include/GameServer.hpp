@@ -64,7 +64,7 @@ class GameServer {
   
   Direction string_to_direction(std::string dir);
   EntityType string_to_entityType(std::string ent);
-  
+  BuildingType string_to_buildingType(std::string build);
 
  private:
   std::string message;
