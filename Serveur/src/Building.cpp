@@ -20,37 +20,55 @@ Building::Building(BuildingType bT, sf::Color color, sf::Vector2f pos, int id)
       mSize = sf::Vector2f(1, 1);
       break;
 
-    case BuildingType::MaxBuildingType:
+    case BuildingType::Stable:
+      mSize = sf::Vector2f(2, 1);
+      break;
+
     default:
       break;
   }
 }
 
-void Building::addEntity(Player& player, const EntityType& entT) {
+bool Building::addEntity(const Game& game, Player& player,
+                         const EntityType& entT, entMap ressourceMap) {
   switch (mType) {
     case BuildingType::TownCenter:
       switch (entT) {
         case EntityType::Villager:
-          player.addEntity(entT, mPos + sf::Vector2f(mSize.x, 0));
+          return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0),
+                                  ressourceMap);
           break;
 
         default:
           std::cout << "Town cannot create this entity\n";
+          return false;
+          break;
       }
       break;
 
     case BuildingType::Fort:
       switch (entT) {
         case EntityType::Warrior:
-          player.addEntity(entT, mPos + sf::Vector2f(mSize.x, 0));
+          return player.addEntity(game, entT, mPos + sf::Vector2f(mSize.x, 0),
+                                  ressourceMap);
           break;
 
         default:
           std::cout << "Fort cannot create this entity\n";
+          return false;
+          break;
       }
       break;
 
     default:
+      return false;
       break;
   }
+}
+
+bool operator==(const Building& left, const Building& right) {
+  return left.getID() == right.getID() && left.getColor() == right.getColor();
+}
+bool operator!=(const Building& left, const Building& right) {
+  return !(left == right);
 }

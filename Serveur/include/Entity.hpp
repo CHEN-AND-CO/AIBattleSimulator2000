@@ -20,7 +20,7 @@ class Entity {
  public:
   Entity(const EntityType& entT, sf::Color col, sf::Vector2f pos, int id);
 
-  void addBuilding(Player& player, const BuildingType& buildT);
+  bool addBuilding(const Game&, Player& player, const BuildingType& buildT, buildMap ressourceMap);
 
   EntityType getType() const { return mType; }
   sf::Color getColor() const { return mColor; }
