@@ -33,7 +33,7 @@
 
 		id@addEntity:5 r g b int entType
 
-		id@addBuildind:5 r g b int buildType
+		id@addBuilding:5 r g b int buildType
 
 		id@getPlayer:3 r g b
 

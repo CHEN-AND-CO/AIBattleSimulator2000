@@ -217,6 +217,44 @@ void GameServer::action(
       send(cmd.id,
            std::string(SERVER_ID) + std::string("@reply:2 attack fail"));
     }
+  } else if (!cmd.command.compare("addEntity")) {
+    if (cmd.arglen < 5) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 addEntity fail"));
+      return;
+    }
+    auto ent = cmd.args[4];
+    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    if (gamePtr->addEntity(string_to_entityType(ent),
+                           sf::Color(std::atoi(cmd.args[0].c_str()),
+                                     std::atoi(cmd.args[1].c_str()),
+                                     std::atoi(cmd.args[2].c_str()), 255),
+                           std::atoi(cmd.args[3]))) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 addEntity ok"));
+    } else {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 addEntity fail"));
+    }
+  } else if (!cmd.command.compare("addBuilding")) {
+    if (cmd.arglen < 5) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 addBuilding fail"));
+      return;
+    }
+    auto build = cmd.args[4];
+    std::transform(dir.begin(), dir.end(), dir.begin(), ::tolower);
+    if (gamePtr->addBuilding(string_to_buildingType(build),
+                             sf::Color(std::atoi(cmd.args[0].c_str()),
+                                       std::atoi(cmd.args[1].c_str()),
+                                       std::atoi(cmd.args[2].c_str()), 255),
+                             std::atoi(cmd.args[3]))) {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 addBuilding ok"));
+    } else {
+      send(cmd.id,
+           std::string(SERVER_ID) + std::string("@reply:2 addBuilding fail"));
+    }
   } else {
     send(cmd.id, std::string(SERVER_ID) + std::string("@reply:2 ") +
                      cmd.command + std::string(" fail"));
@@ -416,6 +454,8 @@ std::string GameServer::entityType_to_string(EntityType type) {
     return "Villager";
   } else if (type == EntityType::Warrior) {
     return "Warrior";
+  } else if (type == EntityType::Horse) {
+    return "Horse";
   } else if (type == EntityType::MaxEntityType) {
     return "MaxEntityType";
   } else {
@@ -451,4 +491,30 @@ Direction GameServer::string_to_direction(std::string dir) {
     return Direction::Right;
   }
   return Direction::MaxDirection;
+}
+
+EntityType GameServer::string_to_entityType(std::string ent) {
+  if (!ent.compare("villager")) {
+    return EntityType::Villager;
+  }
+  if (!ent.compare("warrior")) {
+    return EntityType::Warrior;
+  }
+  if (!ent.compare("horse")) {
+    return EntityType::Horse;
+  }
+  return EntityType::MaxEntityType;
+}
+
+BuildingType GameServer::string_to_buildingType(std::string build) {
+  if (!build.compare("towncenter")) {
+    return BuildingType::TownCenter;
+  }
+  if (!build.compare("fort")) {
+    return BuildingType::Fort;
+  }
+  if (!build.compare("stable")) {
+    return BuildingType::Stable;
+  }
+  return BuildingType::MaxBuildingType;
 }
