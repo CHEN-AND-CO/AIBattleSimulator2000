@@ -34,13 +34,8 @@ struct Player {
 
 class Game {
  public:
-<<<<<<< HEAD
   Game(const sf::IpAddress& ip, unsigned short port, std::string name, const sf::Color& col);
   std::vector<std::vector<int>> getMap(const sf::Color& col);
-=======
-  Game(const sf::IpAddress& ip, unsigned short port, std::string name);
-  std::vector<std::vector<int>> getMap();
->>>>>>> advancedServerImplement
   std::vector<Building> getBuildings(const sf::Color& col);
   std::vector<Entity> getEntities(const sf::Color& col);
   Player getPlayer(const sf::Color& col);
