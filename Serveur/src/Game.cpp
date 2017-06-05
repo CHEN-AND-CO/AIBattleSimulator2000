@@ -2,6 +2,39 @@
 #include <algorithm>
 #include <iostream>
 
+Game::Game() {
+  std::map<Ressource, int> r;
+  r[Ressource::Wood] = 600;
+  r[Ressource::Gold] = 100;
+  r[Ressource::Food] = 0;
+  mBuildingCost[BuildingType::TownCenter] = r;
+
+  r[Ressource::Wood] = 200;
+  r[Ressource::Gold] = 50;
+  r[Ressource::Food] = 0;
+  mBuildingCost[BuildingType::Fort] = r;
+
+  r[Ressource::Wood] = 300;
+  r[Ressource::Gold] = 100;
+  r[Ressource::Food] = 0;
+  mBuildingCost[BuildingType::Stable] = r;
+
+  r[Ressource::Wood] = 0;
+  r[Ressource::Gold] = 0;
+  r[Ressource::Food] = 50;
+  mEntityCost[EntityType::Villager] = r;
+
+  r[Ressource::Wood] = 0;
+  r[Ressource::Gold] = 10;
+  r[Ressource::Food] = 60;
+  mEntityCost[EntityType::Warrior] = r;
+
+  r[Ressource::Wood] = 10;
+  r[Ressource::Gold] = 20;
+  r[Ressource::Food] = 100;
+  mEntityCost[EntityType::Horse] = r;
+}
+
 bool Game::loadFile(const std::string& fileName) {
   std::ifstream file(fileName, std::ios::binary);
   if (!file.is_open()) {
@@ -20,7 +53,65 @@ bool Game::loadFile(const std::string& fileName) {
   return true;
 }
 
-bool Game::isGameFinish() const { return mPlayer.size() == 1; }
+
+std::vector<std::vector<int>> Game::getVisibleMap(const sf::Color& col) const {
+  auto output = mMap;
+  std::vector<std::vector<int>> cache;
+  for (const auto& play : mPlayer) {
+    if (play.getColor() == col) {
+      cache = play.getCache();
+      break;
+    }
+  }
+  for (unsigned x{0}; x < mMap.size(); x++) {
+    for (unsigned y{0}; y < mMap.size(); y++) {
+      if (cache[y][x] == 0) {
+        output[y][x] = 0;
+      }
+    }
+  }
+  return output;
+}
+
+std::vector<Building> Game::getVisibleBuildings(const sf::Color& col) const {
+  std::vector<std::vector<int>> cache;
+  for (const auto& play : mPlayer) {
+    if (play.getColor() == col) {
+      cache = play.getCache();
+      break;
+    }
+  }
+
+  std::vector<Building> output;
+
+  for (const auto& build : getBuildings()) {
+    if (cache[build.getPosition().y][build.getPosition().x]) {
+      output.push_back(build);
+    }
+  }
+
+  return output;
+}
+
+std::vector<Entity> Game::getVisibleEntities(const sf::Color& col) const {
+  std::vector<std::vector<int>> cache;
+  for (const auto& play : mPlayer) {
+    if (play.getColor() == col) {
+      cache = play.getCache();
+      break;
+    }
+  }
+
+  std::vector<Entity> output;
+
+  for (const auto& ent : getEntities()) {
+    if (cache[ent.getPosition().y][ent.getPosition().x]) {
+      output.push_back(ent);
+    }
+  }
+
+  return output;
+}
 
 sf::Color Game::getWinner() const {
   if (isGameFinish()) {
@@ -57,7 +148,8 @@ Player Game::getPlayer(const sf::Color& col) const {
       return mPlayer[i];
     }
   }
-  return Player(sf::Color::Black, sf::Vector2f(0, 0));
+  return Player(*this, sf::Color::Black, sf::Vector2f(0, 0), mBuildingCost,
+                mEntityCost, 0);
 }
 
 std::vector<Building> Game::getBuildings(const sf::Color& col) const {
@@ -170,7 +262,7 @@ bool Game::putRessourcesInTown(const Direction& dir, const sf::Color& col,
   return false;
 }
 
-bool Game::attack(const sf::Color& col, int index) {
+bool Game::attack(const sf::Color& col, int index, const Direction& dir) {
   for (auto& player1 : mPlayer) {
     sf::Color pCol = player1.getColor();
     if (pCol != col) {
@@ -182,28 +274,42 @@ bool Game::attack(const sf::Color& col, int index) {
         continue;
       }
 
+      sf::Vector2f pos = player1.getEntities()[index].getPosition();
+      switch (dir) {
+        case Direction::Up:
+          pos.y--;
+          break;
+
+        case Direction::Down:
+          pos.y++;
+          break;
+
+        case Direction::Left:
+          pos.x--;
+          break;
+
+        case Direction::Right:
+          pos.x++;
+          break;
+
+        default:
+          break;
+      }
+
       for (unsigned i{0}; i < player2.getEntities().size(); i++) {
-        if (rectCollide(
-                player1.getEntities()[index].getPosition() + sf::Vector2f(1, 0),
-                player2.getEntities()[i].getPosition())) {
+        if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(-1, 0),
-                               player2.getEntities()[i].getPosition())) {
+        } else if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, 1),
-                               player2.getEntities()[i].getPosition())) {
+        } else if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;
-        } else if (rectCollide(player1.getEntities()[index].getPosition() +
-                                   sf::Vector2f(0, -1),
-                               player2.getEntities()[i].getPosition())) {
+        } else if (rectCollide(pos, player2.getEntities()[i].getPosition())) {
           player2.receiveDamageEntity(player1.getEntities()[index].getDamage(),
                                       i);
           return true;

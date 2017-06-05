@@ -35,6 +35,20 @@
 
 		id@getPlayer:3 r g b
 
+		id@auth:2 name r g b
+
+		id@attack:5 r g b int direction
+
+		id@collect:5 r g b int direction
+
+		id@putInTown:5 r g b int direction
+
+		id@addEntity:5 r g b int entType
+
+		id@addBuilding:5 r g b int buildType
+
+		id@getPlayer:3 r g b
+
 		### Reception ###
 
 		id@reply:1 command (ok/fail)

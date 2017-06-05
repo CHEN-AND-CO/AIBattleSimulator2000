@@ -5,6 +5,7 @@
 
 int main() {
   sf::RenderWindow window;
+<<<<<<< HEAD
 
   unsigned currentId = 0;
 
@@ -14,9 +15,20 @@ int main() {
   game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
   GameServer gameServer(53000);
 
+=======
+
+  unsigned currentId = 0;
+
+  std::shared_ptr<Game> game = std::make_shared<Game>();
+  game->loadFile("ressources/GreatLake.txt");
+  game->addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
+  game->addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
+  GameServer gameServer(53000, game);
+
+>>>>>>> advancedServerImplement
   std::vector<sf::RectangleShape> rects;
 
-  auto map = game.getMap();
+  auto map = game->getMap();
   auto n = map.size();
   auto m = map[0].size();
   for (unsigned i{0}; i < n; i++) {
@@ -25,12 +37,18 @@ int main() {
       if (map[j][i] == 1) rect.setFillColor(sf::Color(70, 190, 70));
       if (map[j][i] == 2) rect.setFillColor(sf::Color(0, 50, 10));
       if (map[j][i] == 3) rect.setFillColor(sf::Color(0, 100, 255));
+      if (map[j][i] == 4) rect.setFillColor(sf::Color(0, 100, 10));
+      if (map[j][i] == 5) rect.setFillColor(sf::Color(193, 172, 81));
       rect.setPosition(sf::Vector2f(i * TILESIZE, j * TILESIZE));
       rects.push_back(rect);
     }
   }
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
+<<<<<<< HEAD
+=======
+  std::string input;
+>>>>>>> advancedServerImplement
 
   while (window.isOpen()) {
     sf::Event event;
@@ -43,62 +61,61 @@ int main() {
         case sf::Event::KeyPressed:
           switch (event.key.code) {
             case sf::Keyboard::Up:
-              game.moveEntity(Direction::Up, sf::Color::Blue, currentId);
+              game->moveEntity(Direction::Up, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Down:
-              game.moveEntity(Direction::Down, sf::Color::Blue, currentId);
+              game->moveEntity(Direction::Down, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Left:
-              game.moveEntity(Direction::Left, sf::Color::Blue, currentId);
+              game->moveEntity(Direction::Left, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Right:
-              game.moveEntity(Direction::Right, sf::Color::Blue, currentId);
+              game->moveEntity(Direction::Right, sf::Color::Blue, currentId);
               break;
 
             case sf::Keyboard::Space:
-              game.collectRessource(Direction::Up, sf::Color::Blue, currentId);
-              game.collectRessource(Direction::Down, sf::Color::Blue,
-                                    currentId);
-              game.collectRessource(Direction::Left, sf::Color::Blue,
-                                    currentId);
-              game.collectRessource(Direction::Right, sf::Color::Blue,
-                                    currentId);
+              game->collectRessource(Direction::Up, sf::Color::Blue, currentId);
+              game->collectRessource(Direction::Down, sf::Color::Blue,
+                                     currentId);
+              game->collectRessource(Direction::Left, sf::Color::Blue,
+                                     currentId);
+              game->collectRessource(Direction::Right, sf::Color::Blue,
+                                     currentId);
               break;
 
             case sf::Keyboard::Return:
-              game.putRessourcesInTown(Direction::Up, sf::Color::Blue,
-                                       currentId);
-              game.putRessourcesInTown(Direction::Down, sf::Color::Blue,
-                                       currentId);
-              game.putRessourcesInTown(Direction::Left, sf::Color::Blue,
-                                       currentId);
-              game.putRessourcesInTown(Direction::Right, sf::Color::Blue,
-                                       currentId);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
+              game->putRessourcesInTown(Direction::Up, sf::Color::Blue,
+                                        currentId);
+              game->putRessourcesInTown(Direction::Down, sf::Color::Blue,
+                                        currentId);
+              game->putRessourcesInTown(Direction::Left, sf::Color::Blue,
+                                        currentId);
+              game->putRessourcesInTown(Direction::Right, sf::Color::Blue,
+                                        currentId);
+              std::cout << "food : "
+                        << game->getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Food) << std::endl;
+              std::cout << "wood : "
+                        << game->getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Wood) << std::endl;
+              std::cout << "gold : "
+                        << game->getPlayer(sf::Color::Blue)
+                               .getRessources(Ressource::Gold) << std::endl;
               break;
 
             case sf::Keyboard::B:
-              game.addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
+              game->addBuilding(BuildingType::Fort, sf::Color::Blue, currentId);
               break;
 
-            case sf::Keyboard::V:
-              game.addEntity(EntityType::Villager, sf::Color::Blue, 0);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
+            case sf::Keyboard::S:
+              game->addBuilding(BuildingType::Stable, sf::Color::Blue,
+                                currentId);
               break;
 
+<<<<<<< HEAD
             case sf::Keyboard::W:
               game.addEntity(EntityType::Warrior, sf::Color::Blue, 1);
               std::cout << "player wood : "
@@ -106,15 +123,58 @@ int main() {
                                .getRessources(Ressource::Wood)
                         << std::endl;
               break;
+=======
+            case sf::Keyboard::V: {
+              for (unsigned i{0};
+                   i < game->getPlayer(sf::Color::Blue).getBuildings().size();
+                   i++) {
+                if (game->getPlayer(sf::Color::Blue)
+                        .getBuildings()[i]
+                        .getType() == BuildingType::TownCenter) {
+                  game->addEntity(EntityType::Villager, sf::Color::Blue, i);
+                  break;
+                }
+              }
+            } break;
+
+            case sf::Keyboard::W: {
+              for (unsigned i{0};
+                   i < game->getPlayer(sf::Color::Blue).getBuildings().size();
+                   i++) {
+                if (game->getPlayer(sf::Color::Blue)
+                        .getBuildings()[i]
+                        .getType() == BuildingType::Fort) {
+                  game->addEntity(EntityType::Warrior, sf::Color::Blue, i);
+                  break;
+                }
+              }
+            } break;
+
+            case sf::Keyboard::H: {
+              for (unsigned i{0};
+                   i < game->getPlayer(sf::Color::Blue).getBuildings().size();
+                   i++) {
+                if (game->getPlayer(sf::Color::Blue)
+                        .getBuildings()[i]
+                        .getType() == BuildingType::Stable) {
+                  game->addEntity(EntityType::Horse, sf::Color::Blue, i);
+                  break;
+                }
+              }
+            } break;
+>>>>>>> advancedServerImplement
 
             case sf::Keyboard::A:
-              game.attack(sf::Color::Blue, currentId);
+              game->attack(sf::Color::Blue, currentId, Direction::Up);
+              game->attack(sf::Color::Blue, currentId, Direction::Down);
+              game->attack(sf::Color::Blue, currentId, Direction::Left);
+              game->attack(sf::Color::Blue, currentId, Direction::Right);
               break;
 
             case sf::Keyboard::Add:
               currentId++;
               if (currentId >=
-                  game.getPlayer(sf::Color::Blue).getEntities().size()) {
+                  game->getPlayer(sf::Color::Blue).getEntities().size()) {
                 currentId = 0;
               }
               break;
@@ -123,7 +183,7 @@ int main() {
               currentId--;
               if (currentId < 0) {
                 currentId =
-                    game.getPlayer(sf::Color::Blue).getEntities().size() - 1;
+                    game->getPlayer(sf::Color::Blue).getEntities().size() - 1;
               }
               break;
 
@@ -144,7 +204,7 @@ int main() {
       window.draw(r);
     }
 
-    auto buildings = game.getBuildings();
+    auto buildings = game->getBuildings();
     for (auto& b : buildings) {
       sf::RectangleShape r(
           sf::Vector2f(b.getSize().x * TILESIZE, b.getSize().y * TILESIZE));
@@ -153,7 +213,7 @@ int main() {
       window.draw(r);
     }
 
-    auto enttity = game.getEntities();
+    auto enttity = game->getEntities();
     for (auto& e : enttity) {
       sf::CircleShape c(TILESIZE / 2);
       c.setFillColor(e.getColor());
@@ -162,8 +222,9 @@ int main() {
     }
 
     window.display();
-
-    game.clearPlayer();
+    game->updateCachePlayer();
+    game->clearPlayer();
   }
+
   return 0;
 }

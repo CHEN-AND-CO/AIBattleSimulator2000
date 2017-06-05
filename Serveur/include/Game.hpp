@@ -6,31 +6,28 @@
 #include <string>
 #include "Player.hpp"
 
-/*
-                CONVENTION MAP
-
-1: Herbe, Franchissable
-2: Foret, Infranchissable, Ressource
-3: Riviere, Infranchissable
-*/
 
 class Game {
  public:
+  Game();
   bool loadFile(const std::string& fileName);
+  std::vector<Player> getPlayer() const { return mPlayer; }
+  Player getPlayer(const sf::Color&) const;
 
   std::vector<std::vector<int>> getMap() const { return mMap; }
-  std::vector<Player> getPlayer() const { return mPlayer; }
   std::vector<Building> getBuildings() const;
   std::vector<Entity> getEntities() const;
 
-  Player getPlayer(const sf::Color&) const;
+  std::vector<std::vector<int>> getVisibleMap(const sf::Color& col) const;
+  std::vector<Building> getVisibleBuildings(const sf::Color& col) const;
+  std::vector<Entity> getVisibleEntities(const sf::Color& col) const;
   std::vector<Building> getBuildings(const sf::Color&) const;
   std::vector<Entity> getEntities(const sf::Color&) const;
 
   bool addEntity(const EntityType& entT, const sf::Color& col, int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addEntity(entT, index);
+        player.addEntity(*this, entT, index, mEntityCost);
         return true;
       }
     }
@@ -41,7 +38,7 @@ class Game {
                    int index) {
     for (auto& player : mPlayer) {
       if (player.getColor() == col) {
-        player.addBuilding(buildT, index);
+        player.addBuilding(*this, buildT, index, mBuildingCost);
         return true;
       }
     }
@@ -54,10 +51,12 @@ class Game {
         return false;
       }
     }
-    mPlayer.push_back(Player(col, pos));
+    mPlayer.push_back(
+        Player(*this, col, pos, mBuildingCost, mEntityCost, mMap.size()));
     return true;
   }
 
+  bool attack(const sf::Color& col1, int index1, const Direction& dir);
   bool moveEntity(const Direction& dir, const sf::Color& col, int i);
   bool collectRessource(const Direction& dir, const sf::Color& col, int index) {
     for (auto& p : mPlayer) {
@@ -68,16 +67,21 @@ class Game {
     return false;
   }
   bool putRessourcesInTown(const Direction& dir, const sf::Color& col,
-                           int index);
+                               int index);
 
   void clearPlayer();
+  void updateCachePlayer() {
+    for (auto& play : mPlayer) {
+      play.updateCache();
+    }
+  }
 
-  bool attack(const sf::Color& col1, int index1);
-
-  bool isGameFinish() const;
+  bool isGameFinish() const { return mPlayer.size() == 1; }
   sf::Color getWinner() const;
 
  private:
+  buildMap mBuildingCost;
+  entMap mEntityCost;
   std::vector<std::vector<int>> mMap;
   std::vector<Player> mPlayer;
 };

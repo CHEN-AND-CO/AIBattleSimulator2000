@@ -1,5 +1,6 @@
 #include "Client.hpp"
 #include "Define.hpp"
+<<<<<<< HEAD
 
 sf::Socket::Status Client::connect(const sf::IpAddress& IP, unsigned short port,
                                    const sf::Color& col) {
@@ -29,6 +30,36 @@ sf::Socket::Status Client::connect(const sf::IpAddress& IP, unsigned short port,
     return sf::Socket::Error;
   }
 
+=======
+
+sf::Socket::Status Client::connect(const sf::IpAddress& IP,
+                                   unsigned short port) {
+  sf::Socket::Status stat = mSocket.connect(IP, port);
+  mSocket.setBlocking(false);
+
+  std::string data;
+  while ((data = receive()) == "Error") {
+  }
+
+  data = getData(data).second.second;
+
+  send(data + "@auth:1 " + mName);
+
+  while ((data = receive()) == "Error") {
+  }
+
+  auto datas = getData(data);
+
+  if (datas.first != "auth") {
+    std::cout << "Wrong command received" << std::endl;
+    std::cout << "Received " << data << std::endl;
+  }
+
+  if(datas.second.second != "ok"){
+    return sf::Socket::Error;
+  }
+
+>>>>>>> advancedServerImplement
   return stat;
 }
 
