@@ -5,17 +5,6 @@
 
 int main() {
   sf::RenderWindow window;
-<<<<<<< HEAD
-
-  unsigned currentId = 0;
-
-  Game game;
-  game.loadFile("ressources/level.txt");
-  game.addPlayer(sf::Color::Blue, sf::Vector2f(2, 7));
-  game.addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
-  GameServer gameServer(53000);
-
-=======
 
   unsigned currentId = 0;
 
@@ -25,7 +14,6 @@ int main() {
   game->addPlayer(sf::Color::Red, sf::Vector2f(28, 28));
   GameServer gameServer(53000, game);
 
->>>>>>> advancedServerImplement
   std::vector<sf::RectangleShape> rects;
 
   auto map = game->getMap();
@@ -45,10 +33,7 @@ int main() {
   }
 
   window.create(sf::VideoMode(n * TILESIZE, m * TILESIZE), "Serveur");
-<<<<<<< HEAD
-=======
   std::string input;
->>>>>>> advancedServerImplement
 
   while (window.isOpen()) {
     sf::Event event;
@@ -115,15 +100,6 @@ int main() {
                                 currentId);
               break;
 
-<<<<<<< HEAD
-            case sf::Keyboard::W:
-              game.addEntity(EntityType::Warrior, sf::Color::Blue, 1);
-              std::cout << "player wood : "
-                        << game.getPlayer(sf::Color::Blue)
-                               .getRessources(Ressource::Wood)
-                        << std::endl;
-              break;
-=======
             case sf::Keyboard::V: {
               for (unsigned i{0};
                    i < game->getPlayer(sf::Color::Blue).getBuildings().size();
@@ -162,7 +138,6 @@ int main() {
                 }
               }
             } break;
->>>>>>> advancedServerImplement
 
             case sf::Keyboard::A:
               game->attack(sf::Color::Blue, currentId, Direction::Up);
