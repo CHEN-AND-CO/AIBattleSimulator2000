@@ -8,7 +8,7 @@ int main() {
   Game game("172.17.3.250", 53000, data);
 
   while (getchar() != 'q') {
-    auto map = game.getMap();
+    auto map = game.getMap(sf::Color::Blue);
     for (auto& i : map) {
       for (auto& h : i) {
         std::cout << h;
